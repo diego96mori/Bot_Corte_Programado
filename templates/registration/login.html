@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ingresar — Lecturas eléctricas</title>
+  <style>
+    body { min-height: 100vh; margin: 0; display: grid; place-items: center; font-family: system-ui, sans-serif; background: #f5f7fb; color: #172033; }
+    main { width: min(360px, calc(100% - 2rem)); background: white; padding: 2rem; border-radius: 14px; box-shadow: 0 8px 30px #17203320; }
+    label { display: block; margin-top: 1rem; } input { width: 100%; box-sizing: border-box; padding: .7rem; margin-top: .3rem; }
+    button { width: 100%; margin-top: 1.25rem; padding: .75rem; background: #174ea6; color: white; border: 0; border-radius: 6px; }
+    .error { color: #a12432; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Lecturas eléctricas</h1>
+    <p>Ingresa para consultar la grilla.</p>
+    {% if form.errors %}<p class="error">Usuario o contraseña incorrectos.</p>{% endif %}
+    <form method="post">
+      {% csrf_token %}
+      <label>Usuario {{ form.username }}</label>
+      <label>Contraseña {{ form.password }}</label>
+      {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+      <button type="submit">Ingresar</button>
+    </form>
+  </main>
+</body>
+</html>

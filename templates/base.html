@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}GESTIÓN DE LECTURAS{% endblock %}</title>
+  <style>
+    :root { --nav:#172033; --bg:#f5f7fb; --line:#dde3ee; --muted:#647089; }
+    * { box-sizing:border-box; }
+    body { font-family:system-ui,sans-serif; margin:0; color:#172033; background:var(--bg); }
+    main { margin-left:238px; padding:2rem; min-height:100vh; }
+    .sidebar { position:fixed; left:0; top:0; bottom:0; width:238px; padding:1.4rem 1rem; background:var(--nav); color:white; display:flex; flex-direction:column; z-index:10; }
+    .sidebar h2 { font-size:1rem; margin:.2rem .7rem 1.5rem; }
+    .sidebar a { color:#dbe7ff; text-decoration:none; padding:.8rem .9rem; border-radius:8px; margin-bottom:.4rem; }
+    .sidebar a:hover,.sidebar a.active { background:#2d4268; color:white; }
+    .sidebar .bottom { margin-top:auto; }
+    .sidebar form { margin:0; }
+    .sidebar button { width:100%; padding:.75rem; color:#dbe7ff; background:transparent; border:1px solid #50617e; border-radius:8px; cursor:pointer; }
+    header.page-header { display:flex; justify-content:space-between; gap:1rem; align-items:end; margin-bottom:1.25rem; }
+    h1 { margin:.1rem 0; } .subtitle { color:var(--muted); margin:.4rem 0 0; }
+    .card { background:white; padding:1rem; border-radius:12px; box-shadow:0 2px 12px #17203312; }
+    .table-wrap { overflow:auto; max-width:100%; }
+    table { width:100%; border-collapse:separate; border-spacing:0; }
+    th,td { text-align:left; padding:.7rem; border-bottom:1px solid var(--line); white-space:nowrap; }
+    th { color:#526078; font-size:.82rem; }
+    select,input,button { padding:.55rem; border:1px solid #b9c3d3; border-radius:5px; }
+    .action-button { display:inline-flex; align-items:center; justify-content:center; padding:.55rem .85rem; border:1px solid #b9c3d3; border-radius:5px; text-decoration:none; font-size:.9rem; cursor:pointer; }
+    .action-button.primary { background:#174ea6; border-color:#174ea6; color:white; }
+    .action-button.secondary { background:white; color:#526078; }
+    .filters { display:flex; flex-wrap:wrap; align-items:end; gap:.7rem; margin-bottom:1rem; }
+    .filters label { display:grid; gap:.25rem; color:#526078; font-size:.85rem; }
+    .PENDING, .PENDING_READING { color:#a15c00; } .PENDING_FOLLOW_UP { color:#6d3bb8; } .COMPLETED { color:#08783e; } .CANCELLED { color:#8a2432; }
+    .evidence { width:70px; max-height:55px; object-fit:cover; border-radius:5px; }
+    .notification-center { position:fixed; top:18px; right:24px; z-index:30; }
+    .notification-center summary { list-style:none; width:48px; height:48px; border-radius:50%; background:white; box-shadow:0 4px 18px #1720332b; display:grid; place-items:center; cursor:pointer; font-size:1.35rem; position:relative; }
+    .notification-center summary::-webkit-details-marker { display:none; }
+    .notification-count { position:absolute; top:-4px; right:-5px; min-width:21px; height:21px; padding:0 5px; border-radius:11px; background:#d92d3f; color:white; font:bold .72rem/21px system-ui; text-align:center; }
+    .notification-panel { position:absolute; right:0; top:57px; width:min(390px,calc(100vw - 2rem)); max-height:70vh; overflow:auto; background:white; border:1px solid var(--line); border-radius:12px; box-shadow:0 14px 38px #17203335; }
+    .notification-panel h3 { margin:0; padding:1rem; border-bottom:1px solid var(--line); }
+    .notification-item { display:block; padding:.85rem 1rem; color:#172033; text-decoration:none; border-bottom:1px solid #edf0f5; }
+    .notification-item:hover { background:#f7f9fc; }
+    .notification-item strong,.notification-item span { display:block; }
+    .notification-item span { color:var(--muted); font-size:.84rem; margin-top:.2rem; }
+    .notification-item.overdue { border-left:4px solid #d92d3f; }
+    .notification-item.upcoming { border-left:4px solid #e59b16; }
+    .notification-empty { padding:1rem; color:var(--muted); }
+    @media (max-width:800px) { main { margin-left:0; padding:1rem; padding-bottom:11rem; } .sidebar { top:auto; right:0; width:100%; height:auto; } .sidebar h2 { display:none; } .sidebar .bottom { margin-top:.4rem; } }
+    {% block extra_css %}{% endblock %}
+  </style>
+</head>
+<body>
+  <details class="notification-center">
+    <summary aria-label="Abrir notificaciones">🔔{% if web_notification_count %}<span class="notification-count">{{ web_notification_count }}</span>{% endif %}</summary>
+    <div class="notification-panel">
+      <h3>Notificaciones</h3>
+      {% for item in web_notifications %}
+        <a class="notification-item {% if item.is_overdue %}overdue{% else %}upcoming{% endif %}" href="{% url 'readings:grid' %}?node={{ item.node.id }}">
+          <strong>{{ item.node.name }} · {{ item.kind_label }}</strong>
+          <span>{{ item.status_label }} — {{ item.due_date|date:"d/m/Y" }}</span>
+        </a>
+      {% empty %}<div class="notification-empty">No hay lecturas próximas ni atrasadas.</div>{% endfor %}
+    </div>
+  </details>
+  <aside class="sidebar">
+    <h2>Control de lecturas</h2>
+    <a href="{% url 'readings:grid' %}" class="{% if active_page == 'records' %}active{% endif %}">GESTIÓN DE LECTURAS</a>
+    <a href="{% url 'readings:annual_grid' %}" class="{% if active_page == 'annual' %}active{% endif %}">LECTURAS WI-NET</a>
+    <div class="bottom">
+      {% if user.is_staff %}<a href="/admin/" style="display:block">Administración</a>{% endif %}
+      <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button type="submit">Cerrar sesión</button></form>
+    </div>
+  </aside>
+  <main>{% block content %}{% endblock %}</main>
+</body>
+</html>

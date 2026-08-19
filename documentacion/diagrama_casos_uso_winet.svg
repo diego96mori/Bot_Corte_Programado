@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1050" viewBox="0 0 1600 1050">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#17324d" flood-opacity="0.16"/>
+    </filter>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#577590"/>
+    </marker>
+    <style>
+      .title { font: 700 28px 'Segoe UI', Arial, sans-serif; fill: #ffffff; }
+      .subtitle { font: 400 15px 'Segoe UI', Arial, sans-serif; fill: #dcecff; }
+      .boundary-title { font: 700 19px 'Segoe UI', Arial, sans-serif; fill: #17324d; }
+      .case-text { font: 600 15px 'Segoe UI', Arial, sans-serif; fill: #17324d; text-anchor: middle; }
+      .actor-text { font: 700 17px 'Segoe UI', Arial, sans-serif; fill: #17324d; text-anchor: middle; }
+      .relation-text { font: 600 12px 'Segoe UI', Arial, sans-serif; fill: #577590; text-anchor: middle; }
+      .case { fill: #eef6ff; stroke: #2c6da4; stroke-width: 2; }
+      .main-case { fill: #dceeff; stroke: #155d96; stroke-width: 2.5; }
+      .association { fill: none; stroke: #17324d; stroke-width: 2; }
+      .include { fill: none; stroke: #577590; stroke-width: 1.8; stroke-dasharray: 7 6; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1050" fill="#f4f7fb"/>
+  <rect x="35" y="25" width="1530" height="82" rx="16" fill="#174d7a" filter="url(#shadow)"/>
+  <text x="800" y="62" class="title" text-anchor="middle">DIAGRAMA DE CASOS DE USO</text>
+  <text x="800" y="88" class="subtitle" text-anchor="middle">Sistema de Gestión de Lecturas Eléctricas WI-NET</text>
+
+  <!-- System boundary -->
+  <rect x="300" y="140" width="1225" height="850" rx="18" fill="#ffffff" stroke="#174d7a" stroke-width="3" filter="url(#shadow)"/>
+  <rect x="300" y="140" width="1225" height="52" rx="16" fill="#e5f0fa"/>
+  <path d="M300 176 V158 Q300 140 318 140 H1507 Q1525 140 1525 158 V192 H300 Z" fill="#e5f0fa"/>
+  <text x="912" y="174" class="boundary-title" text-anchor="middle">PLATAFORMA WI-NET</text>
+
+  <!-- Administrator actor -->
+  <circle cx="135" cy="360" r="28" fill="#ffffff" stroke="#174d7a" stroke-width="5"/>
+  <line x1="135" y1="388" x2="135" y2="475" stroke="#174d7a" stroke-width="6"/>
+  <line x1="82" y1="420" x2="188" y2="420" stroke="#174d7a" stroke-width="6"/>
+  <line x1="135" y1="475" x2="90" y2="535" stroke="#174d7a" stroke-width="6"/>
+  <line x1="135" y1="475" x2="180" y2="535" stroke="#174d7a" stroke-width="6"/>
+  <text x="135" y="570" class="actor-text">Administrador /</text>
+  <text x="135" y="592" class="actor-text">Operador</text>
+
+  <!-- Viewer actor -->
+  <circle cx="135" cy="790" r="28" fill="#ffffff" stroke="#5b7f65" stroke-width="5"/>
+  <line x1="135" y1="818" x2="135" y2="895" stroke="#5b7f65" stroke-width="6"/>
+  <line x1="82" y1="850" x2="188" y2="850" stroke="#5b7f65" stroke-width="6"/>
+  <line x1="135" y1="895" x2="95" y2="945" stroke="#5b7f65" stroke-width="6"/>
+  <line x1="135" y1="895" x2="175" y2="945" stroke="#5b7f65" stroke-width="6"/>
+  <text x="135" y="975" class="actor-text">Usuario de consulta</text>
+  <text x="135" y="997" class="actor-text">(Infraestructura)</text>
+
+  <!-- Use cases: first column -->
+  <ellipse cx="485" cy="245" rx="142" ry="45" class="main-case"/>
+  <text x="485" y="251" class="case-text">Iniciar sesión</text>
+
+  <ellipse cx="485" cy="365" rx="142" ry="48" class="main-case"/>
+  <text x="485" y="360" class="case-text">Registrar lectura</text>
+  <text x="485" y="381" class="case-text">por Telegram</text>
+
+  <ellipse cx="485" cy="505" rx="142" ry="45" class="case"/>
+  <text x="485" y="511" class="case-text">Seleccionar nodo</text>
+
+  <ellipse cx="485" cy="635" rx="142" ry="48" class="case"/>
+  <text x="485" y="630" class="case-text">Enviar fotografía</text>
+  <text x="485" y="651" class="case-text">del medidor</text>
+
+  <ellipse cx="485" cy="775" rx="142" ry="48" class="case"/>
+  <text x="485" y="770" class="case-text">Escribir lectura</text>
+  <text x="485" y="791" class="case-text">manualmente</text>
+
+  <ellipse cx="485" cy="910" rx="142" ry="48" class="main-case"/>
+  <text x="485" y="905" class="case-text">Recibir recordatorios</text>
+  <text x="485" y="926" class="case-text">de lectura</text>
+
+  <!-- Use cases: second column -->
+  <ellipse cx="900" cy="285" rx="150" ry="48" class="case"/>
+  <text x="900" y="280" class="case-text">Detectar número</text>
+  <text x="900" y="301" class="case-text">de la fotografía</text>
+
+  <ellipse cx="900" cy="430" rx="150" ry="48" class="case"/>
+  <text x="900" y="425" class="case-text">Confirmar o corregir</text>
+  <text x="900" y="446" class="case-text">la lectura</text>
+
+  <ellipse cx="900" cy="575" rx="150" ry="48" class="case"/>
+  <text x="900" y="570" class="case-text">Registrar fecha</text>
+  <text x="900" y="591" class="case-text">de lectura</text>
+
+  <ellipse cx="900" cy="720" rx="150" ry="48" class="main-case"/>
+  <text x="900" y="715" class="case-text">Consultar lecturas</text>
+  <text x="900" y="736" class="case-text">por Telegram</text>
+
+  <ellipse cx="900" cy="865" rx="150" ry="48" class="case"/>
+  <text x="900" y="860" class="case-text">Revisar pendientes,</text>
+  <text x="900" y="881" class="case-text">evidencias e historial</text>
+
+  <!-- Use cases: third column -->
+  <ellipse cx="1310" cy="270" rx="155" ry="48" class="main-case"/>
+  <text x="1310" y="265" class="case-text">Ver Gestión</text>
+  <text x="1310" y="286" class="case-text">de Lecturas</text>
+
+  <ellipse cx="1310" cy="425" rx="155" ry="45" class="case"/>
+  <text x="1310" y="431" class="case-text">Editar una lectura</text>
+
+  <ellipse cx="1310" cy="575" rx="155" ry="48" class="case"/>
+  <text x="1310" y="570" class="case-text">Configurar nodos</text>
+  <text x="1310" y="591" class="case-text">y fechas programadas</text>
+
+  <ellipse cx="1310" cy="755" rx="155" ry="48" class="main-case"/>
+  <text x="1310" y="750" class="case-text">Ver LECTURAS</text>
+  <text x="1310" y="771" class="case-text">WI-NET</text>
+
+  <!-- Actor associations -->
+  <path d="M190 390 L343 257" class="association"/>
+  <path d="M190 415 L343 370" class="association"/>
+  <path d="M190 440 L343 900" class="association"/>
+  <path d="M190 425 C420 410, 580 685, 750 715" class="association"/>
+  <path d="M190 420 C500 305, 930 245, 1155 265" class="association"/>
+  <path d="M190 430 C570 430, 920 425, 1155 425" class="association"/>
+  <path d="M190 445 C540 530, 900 570, 1155 575" class="association"/>
+  <path d="M190 455 C500 690, 900 760, 1155 755" class="association"/>
+
+  <path d="M190 835 C390 710, 690 275, 750 250" class="association"/>
+  <path d="M190 850 C510 865, 900 790, 1155 755" class="association"/>
+
+  <!-- Include and option relationships -->
+  <path d="M485 413 L485 459" class="include"/>
+  <text x="545" y="444" class="relation-text">«incluye»</text>
+
+  <path d="M625 365 C720 365, 745 400, 750 420" class="include"/>
+  <text x="690" y="385" class="relation-text">«incluye»</text>
+
+  <path d="M625 380 C710 460, 735 535, 750 563" class="include"/>
+  <text x="692" y="510" class="relation-text">«incluye»</text>
+
+  <path d="M625 625 C740 585, 750 355, 782 320" class="include"/>
+  <text x="715" y="495" class="relation-text">«incluye»</text>
+
+  <path d="M485 587 L485 418" class="include"/>
+  <text x="430" y="570" class="relation-text">«opción»</text>
+
+  <path d="M485 727 L485 418" class="include"/>
+  <text x="430" y="710" class="relation-text">«opción»</text>
+
+  <!-- Legend -->
+  <rect x="1080" y="900" width="390" height="62" rx="10" fill="#f7fafc" stroke="#b8c8d8"/>
+  <line x1="1105" y1="922" x2="1170" y2="922" class="association"/>
+  <text x="1185" y="927" font-family="Segoe UI, Arial" font-size="13" fill="#17324d">Acción disponible para el usuario</text>
+  <line x1="1105" y1="944" x2="1170" y2="944" class="include"/>
+  <text x="1185" y="949" font-family="Segoe UI, Arial" font-size="13" fill="#17324d">Parte del proceso de registro</text>
+</svg>
