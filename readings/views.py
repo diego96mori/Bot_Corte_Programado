@@ -1,9 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch
+from django.http import JsonResponse
 from django.shortcuts import render
+from django.utils import timezone
 
 from .authorized_nodes import AUTHORIZED_NODES
 from .models import Node, Reading, ReadingSchedule
+from .services.calendar import get_calendar_events
+from .services.notifications import get_follow_up_cutoff
 
 
 @login_required
@@ -28,6 +32,13 @@ def reading_grid(request):
         schedules = schedules.filter(node_id=int(node_id))
     if provider:
         schedules = schedules.filter(node__provider=provider)
+    today = timezone.localdate()
+    for schedule in schedules:
+        schedule.grid_status_label = schedule.management_status_label_for(today)
+        if schedule.status == ReadingSchedule.Status.PENDING and schedule.is_follow_up:
+            cutoff = get_follow_up_cutoff(schedule.node, schedule.due_date)
+            if cutoff and today >= cutoff:
+                schedule.grid_status_label = "Seguimiento no registrado · ciclo cerrado por nueva lectura mensual"
     nodes = Node.objects.filter(active=True).order_by("name")
     providers = (
         Node.objects.filter(active=True).exclude(provider="")
@@ -92,4 +103,24 @@ def annual_grid(request):
             "months": ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
             "active_page": "annual",
         },
+    )
+
+
+@login_required
+def calendar_events(request):
+    today = timezone.localdate()
+    try:
+        year = int(request.GET.get("year", today.year))
+        month = int(request.GET.get("month", today.month))
+        if not 2020 <= year <= 2100 or not 1 <= month <= 12:
+            raise ValueError
+    except (TypeError, ValueError):
+        return JsonResponse({"error": "Mes o año no válido."}, status=400)
+    return JsonResponse(
+        {
+            "year": year,
+            "month": month,
+            "today": today.isoformat(),
+            "events": get_calendar_events(year, month, today),
+        }
     )

@@ -1,5 +1,6 @@
 from datetime import date, datetime, timedelta
 from decimal import Decimal
+from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
@@ -29,7 +30,8 @@ from .services.ocr import (
     select_direct_recognition,
     select_meter_value,
 )
-from .services.notifications import ReadingNotification, get_reading_notifications
+from .services.notifications import ReadingNotification, get_node_obligation, get_reading_notifications
+from .services.calendar import get_calendar_events
 from .services.reminders import prepare_reminder_jobs, reminder_text
 
 
@@ -121,6 +123,98 @@ class GridAccessTests(TestCase):
         self.assertContains(response, "Fecha de lectura")
         self.assertContains(response, "Fecha bot")
         self.assertContains(response, "Fecha de registro")
+
+    def test_grid_switches_from_follow_up_to_monthly_three_days_before_reading_day(self):
+        self.node.reading_day = 14
+        self.node.save(update_fields=["reading_day"])
+        self.node.schedules.all().delete()
+        monthly = ReadingSchedule.objects.create(
+            node=self.node,
+            due_date=date(2026, 8, 14),
+            status=ReadingSchedule.Status.COMPLETED,
+            notes="Lectura mensual",
+        )
+        Reading.objects.create(
+            schedule=monthly,
+            reading_date=date(2026, 9, 5),
+            detected_value=100,
+            confirmed_value=100,
+            status=Reading.Status.CONFIRMED,
+        )
+        ReadingSchedule.objects.create(
+            node=self.node,
+            due_date=date(2026, 9, 15),
+            status=ReadingSchedule.Status.PENDING,
+            notes="Seguimiento de 10 días",
+        )
+        ReadingSchedule.objects.create(
+            node=self.node,
+            due_date=date(2026, 9, 14),
+            status=ReadingSchedule.Status.PENDING,
+            notes="Lectura mensual",
+        )
+        user = get_user_model().objects.create_user(username="prioridad", password="prueba-segura")
+        self.client.force_login(user)
+
+        with patch("readings.views.timezone.localdate", return_value=date(2026, 9, 10)):
+            response = self.client.get(reverse("readings:grid"), {"status": "PENDING_FOLLOW_UP"})
+        self.assertEqual([schedule.due_date for schedule in response.context["schedules"]], [date(2026, 9, 15)])
+        self.assertNotContains(response, "Seguimiento no registrado · ciclo cerrado por nueva lectura mensual")
+
+        with patch("readings.views.timezone.localdate", return_value=date(2026, 9, 11)):
+            response = self.client.get(reverse("readings:grid"), {"status": "PENDING_FOLLOW_UP"})
+        self.assertNotContains(response, "Seguimiento no registrado · ciclo cerrado por nueva lectura mensual")
+
+        with patch("readings.views.timezone.localdate", return_value=date(2026, 9, 12)):
+            follow_up_response = self.client.get(reverse("readings:grid"), {"status": "PENDING_FOLLOW_UP"})
+            monthly_response = self.client.get(reverse("readings:grid"), {"status": "PENDING_READING"})
+        self.assertEqual(
+            [schedule.due_date for schedule in follow_up_response.context["schedules"]],
+            [date(2026, 9, 15)],
+        )
+        self.assertContains(
+            follow_up_response,
+            "Seguimiento no registrado · ciclo cerrado por nueva lectura mensual",
+        )
+        self.assertEqual(
+            [schedule.due_date for schedule in monthly_response.context["schedules"]],
+            [date(2026, 9, 14)],
+        )
+
+    def test_follow_up_stops_counting_overdue_on_first_of_month_for_reading_day_three(self):
+        self.node.reading_day = 3
+        self.node.save(update_fields=["reading_day"])
+        self.node.schedules.all().delete()
+        monthly = ReadingSchedule.objects.create(
+            node=self.node,
+            due_date=date(2026, 8, 3),
+            status=ReadingSchedule.Status.COMPLETED,
+            notes="Lectura mensual",
+        )
+        Reading.objects.create(
+            schedule=monthly,
+            reading_date=date(2026, 8, 8),
+            detected_value=100,
+            confirmed_value=100,
+            status=Reading.Status.CONFIRMED,
+        )
+        ReadingSchedule.objects.create(
+            node=self.node,
+            due_date=date(2026, 8, 18),
+            status=ReadingSchedule.Status.PENDING,
+            notes="Seguimiento de 10 días",
+        )
+        user = get_user_model().objects.create_user(username="corte_dia_tres", password="prueba-segura")
+        self.client.force_login(user)
+
+        with patch("readings.views.timezone.localdate", return_value=date(2026, 8, 31)):
+            response = self.client.get(reverse("readings:grid"), {"status": "PENDING_FOLLOW_UP"})
+        self.assertContains(response, "Seguimiento atrasado 13 días")
+
+        with patch("readings.views.timezone.localdate", return_value=date(2026, 9, 1)):
+            response = self.client.get(reverse("readings:grid"), {"status": "PENDING_FOLLOW_UP"})
+        self.assertContains(response, "Seguimiento no registrado · ciclo cerrado por nueva lectura mensual")
+        self.assertNotContains(response, "Seguimiento atrasado 14 días")
 
 
 class OCRSelectionTests(TestCase):
@@ -265,14 +359,14 @@ class NotificationTests(TestCase):
         )
 
     def test_monthly_notification_starts_three_days_before(self):
-        node = self.create_node("MENSUAL", 20)
+        node = self.create_node("MENSUAL", 19)
         item = get_reading_notifications(self.today)[0]
         self.assertEqual(item.node, node)
         self.assertEqual(item.kind, "MONTHLY")
-        self.assertEqual(item.days_until, 3)
+        self.assertEqual(item.days_until, 2)
 
     def test_monthly_notification_is_hidden_before_three_day_window(self):
-        self.create_node("AUN-NO", 21)
+        self.create_node("AUN-NO", 20)
         self.assertEqual(get_reading_notifications(self.today), [])
 
     def test_follow_up_starts_one_day_before_ten_days(self):
@@ -289,6 +383,152 @@ class NotificationTests(TestCase):
         item = get_reading_notifications(self.today)[0]
         self.assertTrue(item.is_overdue)
         self.assertEqual(item.days_until, -2)
+
+
+class CalendarTests(TestCase):
+    today = date(2026, 8, 17)
+
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(username="calendario", password="prueba-segura")
+        self.node = Node.objects.create(code="CAL-001", name="Zárate", reading_day=20, active=True)
+
+    def add_reading(self, reading_date, value=1234):
+        schedule = ReadingSchedule.objects.create(
+            node=self.node, due_date=reading_date, status=ReadingSchedule.Status.COMPLETED
+        )
+        return Reading.objects.create(
+            schedule=schedule,
+            reading_date=reading_date,
+            detected_value=value,
+            confirmed_value=value,
+            status=Reading.Status.CONFIRMED,
+        )
+
+    def test_calendar_marks_three_day_warning_in_orange(self):
+        self.node.reading_day = 19
+        self.node.save(update_fields=["reading_day"])
+        event = get_calendar_events(2026, 8, self.today)[0]
+        self.assertEqual(event["date"], "2026-08-19")
+        self.assertEqual(event["node_name"], "Zárate")
+        self.assertEqual(event["state"], "warning")
+        self.assertEqual(event["status_label"], "Faltan 2 días")
+
+    def test_calendar_shows_record_and_follow_up(self):
+        self.node.reading_day = 2
+        self.node.save(update_fields=["reading_day"])
+        self.add_reading(date(2026, 8, 8), 9876)
+        events = get_calendar_events(2026, 8, self.today)
+        record = next(event for event in events if event["type"] == "record")
+        task = next(event for event in events if event["type"] == "task")
+        self.assertEqual(record["state"], "completed")
+        self.assertEqual(record["value"], "9876")
+        self.assertEqual(task["date"], "2026-08-18")
+        self.assertEqual(task["kind_label"], "Seguimiento de 10 días")
+        self.assertEqual(task["state"], "warning")
+
+    def test_follow_up_only_turns_orange_one_day_before(self):
+        self.node.reading_day = 2
+        self.node.save(update_fields=["reading_day"])
+        self.add_reading(date(2026, 8, 8), 9876)
+        two_days_before = get_calendar_events(2026, 8, date(2026, 8, 16))
+        one_day_before = get_calendar_events(2026, 8, date(2026, 8, 17))
+        self.assertEqual(next(event for event in two_days_before if event["type"] == "task")["state"], "planned")
+        self.assertEqual(next(event for event in one_day_before if event["type"] == "task")["state"], "warning")
+
+    def test_calendar_endpoint_requires_login_and_returns_events(self):
+        url = reverse("readings:calendar_events")
+        self.assertEqual(self.client.get(url).status_code, 302)
+        self.client.force_login(self.user)
+        response = self.client.get(url, {"year": 2026, "month": 8})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["events"][0]["node_name"], "Zárate")
+
+    def test_grid_contains_calendar_button_and_dialog(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse("readings:grid"))
+        self.assertContains(response, 'id="calendar-trigger"')
+        self.assertContains(response, 'id="calendar-modal"')
+
+    def test_late_monthly_reading_can_create_follow_up_in_next_month(self):
+        self.node.reading_day = 15
+        self.node.save(update_fields=["reading_day"])
+        self.add_reading(date(2026, 8, 25), 2500)
+
+        september = get_calendar_events(2026, 9, date(2026, 9, 1))
+        follow_up = next(
+            event for event in september
+            if event["type"] == "task" and event["kind_label"] == "Seguimiento de 10 días"
+        )
+        monthly = next(
+            event for event in september
+            if event["type"] == "task" and event["kind_label"] == "Lectura mensual"
+        )
+        self.assertEqual(follow_up["date"], "2026-09-04")
+        self.assertEqual(monthly["date"], "2026-09-15")
+        self.assertEqual(get_node_obligation(self.node, date(2026, 9, 3)), (date(2026, 9, 4), "FOLLOW_UP"))
+
+    def test_completed_follow_up_does_not_create_a_second_follow_up(self):
+        self.node.reading_day = 15
+        self.node.save(update_fields=["reading_day"])
+        self.add_reading(date(2026, 8, 25), 2500)
+        follow_up_schedule = ReadingSchedule.objects.create(
+            node=self.node,
+            due_date=date(2026, 9, 4),
+            status=ReadingSchedule.Status.COMPLETED,
+            notes="Seguimiento de 10 días",
+        )
+        Reading.objects.create(
+            schedule=follow_up_schedule,
+            reading_date=date(2026, 9, 6),
+            detected_value=2600,
+            confirmed_value=2600,
+            status=Reading.Status.CONFIRMED,
+        )
+
+        september = get_calendar_events(2026, 9, date(2026, 9, 6))
+        pending_follow_ups = [
+            event for event in september
+            if event["type"] == "task" and event["kind_label"] == "Seguimiento de 10 días"
+        ]
+        self.assertEqual(pending_follow_ups, [])
+        self.assertTrue(any(event["kind_label"] == "Seguimiento registrado" for event in september))
+        self.assertEqual(get_node_obligation(self.node, date(2026, 9, 6)), (date(2026, 9, 15), "MONTHLY"))
+
+    def test_calendar_stops_follow_up_overdue_count_when_new_monthly_window_starts(self):
+        self.node.reading_day = 3
+        self.node.save(update_fields=["reading_day"])
+        self.add_reading(date(2026, 8, 8), 3000)
+
+        before_cutoff = get_calendar_events(2026, 8, date(2026, 8, 31))
+        active = next(event for event in before_cutoff if event["type"] == "task")
+        self.assertEqual(active["date"], "2026-08-18")
+        self.assertEqual(active["state"], "danger")
+        self.assertEqual(active["status_label"], "Seguimiento atrasado 13 días")
+
+        after_cutoff = get_calendar_events(2026, 8, date(2026, 9, 1))
+        closed = next(event for event in after_cutoff if event["type"] == "task")
+        self.assertEqual(closed["state"], "closed")
+        self.assertEqual(
+            closed["status_label"],
+            "Seguimiento no registrado · ciclo cerrado por nueva lectura mensual",
+        )
+
+    def test_calendar_closes_missing_monthly_reading_when_next_cycle_starts(self):
+        self.node.reading_day = 20
+        self.node.save(update_fields=["reading_day"])
+
+        still_active = get_calendar_events(2026, 7, date(2026, 8, 17))
+        overdue = next(event for event in still_active if event["type"] == "task")
+        self.assertEqual(overdue["date"], "2026-07-20")
+        self.assertEqual(overdue["state"], "danger")
+
+        next_cycle = get_calendar_events(2026, 7, date(2026, 8, 18))
+        closed = next(event for event in next_cycle if event["type"] == "task")
+        self.assertEqual(closed["state"], "closed")
+        self.assertEqual(
+            closed["status_label"],
+            "Lectura no registrada · ciclo cerrado por nueva lectura mensual",
+        )
 
 
 class ManagementStatusLabelTests(TestCase):
@@ -369,7 +609,7 @@ class TelegramConversationTests(TestCase):
 class ReminderDeliveryTests(TestCase):
     def setUp(self):
         self.node = Node.objects.create(
-            code="AVISO", name="Nodo Aviso", reading_day=20, active=True,
+            code="AVISO", name="Nodo Aviso", reading_day=19, active=True,
             telegram_chat_id=8463146362, supply_number="12345", provider="PLUZ",
         )
         self.now = timezone.make_aware(datetime(2026, 8, 17, 10, 0))

@@ -31,8 +31,12 @@
     .filters label { display:grid; gap:.25rem; color:#526078; font-size:.85rem; }
     .PENDING, .PENDING_READING { color:#a15c00; } .PENDING_FOLLOW_UP { color:#6d3bb8; } .COMPLETED { color:#08783e; } .CANCELLED { color:#8a2432; }
     .evidence { width:70px; max-height:55px; object-fit:cover; border-radius:5px; }
-    .notification-center { position:fixed; top:18px; right:24px; z-index:30; }
-    .notification-center summary { list-style:none; width:48px; height:48px; border-radius:50%; background:white; box-shadow:0 4px 18px #1720332b; display:grid; place-items:center; cursor:pointer; font-size:1.35rem; position:relative; }
+    .top-actions { position:fixed; top:18px; right:24px; z-index:30; display:flex; gap:.65rem; align-items:flex-start; }
+    .calendar-trigger,.notification-center summary { list-style:none; width:48px; height:48px; padding:0; border:0; border-radius:50%; color:#26354f; background:white; box-shadow:0 4px 18px #1720332b; display:grid; place-items:center; cursor:pointer; position:relative; }
+    .calendar-trigger:hover,.notification-center summary:hover { background:#f7f9fc; transform:translateY(-1px); }
+    .calendar-trigger svg { width:23px; height:23px; }
+    .notification-center { position:relative; }
+    .notification-center summary { font-size:1.35rem; }
     .notification-center summary::-webkit-details-marker { display:none; }
     .notification-count { position:absolute; top:-4px; right:-5px; min-width:21px; height:21px; padding:0 5px; border-radius:11px; background:#d92d3f; color:white; font:bold .72rem/21px system-ui; text-align:center; }
     .notification-panel { position:absolute; right:0; top:57px; width:min(390px,calc(100vw - 2rem)); max-height:70vh; overflow:auto; background:white; border:1px solid var(--line); border-radius:12px; box-shadow:0 14px 38px #17203335; }
@@ -44,23 +48,92 @@
     .notification-item.overdue { border-left:4px solid #d92d3f; }
     .notification-item.upcoming { border-left:4px solid #e59b16; }
     .notification-empty { padding:1rem; color:var(--muted); }
-    @media (max-width:800px) { main { margin-left:0; padding:1rem; padding-bottom:11rem; } .sidebar { top:auto; right:0; width:100%; height:auto; } .sidebar h2 { display:none; } .sidebar .bottom { margin-top:.4rem; } }
+    body.calendar-open { overflow:hidden; }
+    .calendar-modal[hidden] { display:none; }
+    .calendar-modal { position:fixed; inset:0; z-index:60; display:grid; place-items:center; padding:2.25rem; background:#10182799; backdrop-filter:blur(2px); }
+    .calendar-dialog { width:calc(100vw - 4.5rem); height:calc(100vh - 4.5rem); max-width:none; max-height:none; overflow:auto; background:white; border-radius:14px; box-shadow:0 24px 70px #10182766; }
+    .calendar-header { position:sticky; top:0; z-index:2; display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1rem 1.2rem; border-bottom:1px solid var(--line); background:white; }
+    .calendar-header h2 { margin:0; font-size:1.4rem; text-transform:capitalize; }
+    .calendar-nav { display:flex; align-items:center; gap:.45rem; }
+    .calendar-nav button { min-width:40px; border:1px solid #cbd3df; background:white; color:#26354f; cursor:pointer; }
+    .calendar-nav .calendar-close { border:0; font-size:1.35rem; }
+    .calendar-body { padding:1.15rem 1.4rem 1.4rem; }
+    .calendar-legend { display:flex; flex-wrap:wrap; gap:1.25rem; margin-bottom:1rem; color:#526078; font-size:.9rem; }
+    .legend-dot { display:inline-block; width:10px; height:10px; margin-right:.35rem; border-radius:50%; }
+    .legend-dot.completed { background:#168653; } .legend-dot.warning { background:#e59b16; }
+    .legend-dot.danger { background:#d92d3f; } .legend-dot.planned { background:#3976c7; }
+    .legend-dot.closed { background:#6f7785; }
+    .calendar-weekdays,.calendar-grid { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); }
+    .calendar-weekdays div { padding:.6rem; color:#647089; text-align:center; font-size:.85rem; font-weight:700; text-transform:uppercase; }
+    .calendar-grid { border-top:1px solid var(--line); border-left:1px solid var(--line); }
+    .calendar-day,.calendar-blank { min-height:clamp(128px,14vh,170px); border:0; border-right:1px solid var(--line); border-bottom:1px solid var(--line); background:white; }
+    .calendar-day { padding:.55rem; text-align:left; color:#172033; border-radius:0; cursor:pointer; overflow:hidden; }
+    .calendar-day:hover { background:#f7f9fc; }
+    .calendar-day.selected { outline:2px solid #174ea6; outline-offset:-2px; background:#f5f8ff; }
+    .calendar-day.today .day-number { display:grid; place-items:center; width:25px; height:25px; border-radius:50%; background:#174ea6; color:white; }
+    .day-number { display:block; margin-bottom:.35rem; font-size:.9rem; font-weight:700; }
+    .calendar-event { display:block; width:100%; margin:.22rem 0; padding:.3rem .4rem; border-radius:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:white; font-size:.78rem; font-weight:650; }
+    .calendar-event.completed { background:#168653; } .calendar-event.warning { background:#e59b16; }
+    .calendar-event.danger { background:#d92d3f; } .calendar-event.planned { background:#3976c7; }
+    .calendar-event.closed { background:#6f7785; }
+    .calendar-more { color:#526078; font-size:.7rem; font-weight:700; }
+    .calendar-day-details { margin-top:1.15rem; padding:1.15rem; border:1px solid var(--line); border-radius:10px; background:#f8fafd; }
+    .calendar-day-details h3 { margin:0 0 .7rem; font-size:1rem; text-transform:capitalize; }
+    .calendar-detail-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(235px,1fr)); gap:.65rem; }
+    .calendar-detail { padding:.7rem .8rem; border-left:5px solid; border-radius:7px; background:white; box-shadow:0 1px 4px #17203312; color:#172033; text-decoration:none; }
+    .calendar-detail.completed { border-color:#168653; } .calendar-detail.warning { border-color:#e59b16; }
+    .calendar-detail.danger { border-color:#d92d3f; } .calendar-detail.planned { border-color:#3976c7; }
+    .calendar-detail.closed { border-color:#6f7785; }
+    .calendar-detail strong,.calendar-detail span { display:block; }
+    .calendar-detail span { margin-top:.2rem; color:#647089; font-size:.82rem; }
+    .calendar-loading { min-height:360px; display:grid; place-items:center; color:#647089; }
+    @media (max-width:800px) { main { margin-left:0; padding:1rem; padding-bottom:11rem; } .sidebar { top:auto; right:0; width:100%; height:auto; } .sidebar h2 { display:none; } .sidebar .bottom { margin-top:.4rem; } .top-actions { top:10px; right:12px; } .calendar-modal { padding:.2rem; } .calendar-dialog { width:calc(100vw - .4rem); height:calc(100vh - .4rem); max-height:none; } .calendar-body { padding:.75rem; } .calendar-day,.calendar-blank { min-height:72px; } .calendar-event { height:8px; padding:0; font-size:0; border-radius:5px; } }
     {% block extra_css %}{% endblock %}
   </style>
 </head>
 <body>
-  <details class="notification-center">
-    <summary aria-label="Abrir notificaciones">🔔{% if web_notification_count %}<span class="notification-count">{{ web_notification_count }}</span>{% endif %}</summary>
-    <div class="notification-panel">
-      <h3>Notificaciones</h3>
-      {% for item in web_notifications %}
-        <a class="notification-item {% if item.is_overdue %}overdue{% else %}upcoming{% endif %}" href="{% url 'readings:grid' %}?node={{ item.node.id }}">
-          <strong>{{ item.node.name }} · {{ item.kind_label }}</strong>
-          <span>{{ item.status_label }} — {{ item.due_date|date:"d/m/Y" }}</span>
-        </a>
-      {% empty %}<div class="notification-empty">No hay lecturas próximas ni atrasadas.</div>{% endfor %}
-    </div>
-  </details>
+  <div class="top-actions">
+    <button class="calendar-trigger" id="calendar-trigger" type="button" aria-label="Abrir calendario" title="Calendario de lecturas">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>
+    </button>
+    <details class="notification-center">
+      <summary aria-label="Abrir notificaciones">🔔{% if web_notification_count %}<span class="notification-count">{{ web_notification_count }}</span>{% endif %}</summary>
+      <div class="notification-panel">
+        <h3>Notificaciones</h3>
+        {% for item in web_notifications %}
+          <a class="notification-item {% if item.is_overdue %}overdue{% else %}upcoming{% endif %}" href="{% url 'readings:grid' %}?node={{ item.node.id }}">
+            <strong>{{ item.node.name }} · {{ item.kind_label }}</strong>
+            <span>{{ item.status_label }} — {{ item.due_date|date:"d/m/Y" }}</span>
+          </a>
+        {% empty %}<div class="notification-empty">No hay lecturas próximas ni atrasadas.</div>{% endfor %}
+      </div>
+    </details>
+  </div>
+  <div class="calendar-modal" id="calendar-modal" hidden>
+    <section class="calendar-dialog" role="dialog" aria-modal="true" aria-labelledby="calendar-title">
+      <header class="calendar-header">
+        <h2 id="calendar-title">Calendario de lecturas</h2>
+        <nav class="calendar-nav" aria-label="Navegación del calendario">
+          <button type="button" id="calendar-prev" aria-label="Mes anterior">‹</button>
+          <button type="button" id="calendar-today">Hoy</button>
+          <button type="button" id="calendar-next" aria-label="Mes siguiente">›</button>
+          <button type="button" class="calendar-close" id="calendar-close" aria-label="Cerrar">×</button>
+        </nav>
+      </header>
+      <div class="calendar-body">
+        <div class="calendar-legend">
+          <span><i class="legend-dot completed"></i>Lectura registrada</span>
+          <span><i class="legend-dot warning"></i>Próxima · lectura 2 días antes / seguimiento 1 día antes</span>
+          <span><i class="legend-dot danger"></i>Hoy o atrasada</span>
+          <span><i class="legend-dot planned"></i>Programada</span>
+          <span><i class="legend-dot closed"></i>No registrada · ciclo cerrado</span>
+        </div>
+        <div class="calendar-weekdays" aria-hidden="true"><div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div><div>Dom</div></div>
+        <div id="calendar-content" class="calendar-loading">Cargando calendario…</div>
+        <section class="calendar-day-details" id="calendar-details" aria-live="polite"></section>
+      </div>
+    </section>
+  </div>
   <aside class="sidebar">
     <h2>Control de lecturas</h2>
     <a href="{% url 'readings:grid' %}" class="{% if active_page == 'records' %}active{% endif %}">GESTIÓN DE LECTURAS</a>
@@ -71,5 +144,141 @@
     </div>
   </aside>
   <main>{% block content %}{% endblock %}</main>
+  <script>
+    (() => {
+      const modal = document.getElementById('calendar-modal');
+      const content = document.getElementById('calendar-content');
+      const details = document.getElementById('calendar-details');
+      const title = document.getElementById('calendar-title');
+      const endpoint = "{% url 'readings:calendar_events' %}";
+      const monthNames = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+      let shown = new Date();
+      let payload = null;
+      let selectedDate = null;
+
+      const isoDate = (year, month, day) => `${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+      const prettyDate = value => {
+        const [year, month, day] = value.split('-').map(Number);
+        return new Intl.DateTimeFormat('es-PE', {weekday:'long', day:'numeric', month:'long', year:'numeric'}).format(new Date(year, month - 1, day));
+      };
+      const eventText = event => event.type === 'record'
+        ? `✓ ${event.node_name}${event.value ? `: ${event.value}` : ''}`
+        : `${event.kind_label.startsWith('Seguimiento') ? 'Seguimiento' : 'Lectura'} · ${event.node_name}`;
+
+      function showDetails(dateValue) {
+        selectedDate = dateValue;
+        document.querySelectorAll('.calendar-day').forEach(day => day.classList.toggle('selected', day.dataset.date === dateValue));
+        details.replaceChildren();
+        const heading = document.createElement('h3');
+        heading.textContent = prettyDate(dateValue);
+        details.append(heading);
+        const events = payload.events.filter(event => event.date === dateValue);
+        if (!events.length) {
+          const empty = document.createElement('span');
+          empty.className = 'notification-empty';
+          empty.textContent = 'No hay lecturas ni tareas programadas para este día.';
+          details.append(empty);
+          return;
+        }
+        const list = document.createElement('div');
+        list.className = 'calendar-detail-list';
+        events.forEach(event => {
+          const item = document.createElement('a');
+          item.className = `calendar-detail ${event.state}`;
+          item.href = `{% url 'readings:grid' %}?node=${event.node_id}`;
+          const strong = document.createElement('strong');
+          strong.textContent = `${event.node_name} · ${event.kind_label}`;
+          const status = document.createElement('span');
+          status.textContent = event.type === 'record' && event.value ? `Lectura: ${event.value}` : event.status_label;
+          item.append(strong, status);
+          list.append(item);
+        });
+        details.append(list);
+      }
+
+      function renderCalendar() {
+        title.textContent = `${monthNames[payload.month - 1]} ${payload.year}`;
+        content.className = 'calendar-grid';
+        content.replaceChildren();
+        const firstWeekday = (new Date(payload.year, payload.month - 1, 1).getDay() + 6) % 7;
+        const totalDays = new Date(payload.year, payload.month, 0).getDate();
+        const eventsByDay = {};
+        payload.events.forEach(event => (eventsByDay[event.date] ||= []).push(event));
+        for (let index = 0; index < firstWeekday; index += 1) {
+          const blank = document.createElement('div');
+          blank.className = 'calendar-blank';
+          content.append(blank);
+        }
+        for (let day = 1; day <= totalDays; day += 1) {
+          const dateValue = isoDate(payload.year, payload.month, day);
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'calendar-day';
+          button.dataset.date = dateValue;
+          button.setAttribute('aria-label', prettyDate(dateValue));
+          if (dateValue === payload.today) button.classList.add('today');
+          const number = document.createElement('span');
+          number.className = 'day-number';
+          number.textContent = day;
+          button.append(number);
+          const events = eventsByDay[dateValue] || [];
+          events.slice(0, 3).forEach(event => {
+            const chip = document.createElement('span');
+            chip.className = `calendar-event ${event.state}`;
+            chip.textContent = eventText(event);
+            chip.title = eventText(event);
+            button.append(chip);
+          });
+          if (events.length > 3) {
+            const more = document.createElement('span');
+            more.className = 'calendar-more';
+            more.textContent = `+${events.length - 3} más`;
+            button.append(more);
+          }
+          button.addEventListener('click', () => showDetails(dateValue));
+          content.append(button);
+        }
+        const preferred = payload.today.startsWith(`${payload.year}-${String(payload.month).padStart(2,'0')}`)
+          ? payload.today
+          : (payload.events[0]?.date || isoDate(payload.year, payload.month, 1));
+        showDetails(selectedDate?.startsWith(`${payload.year}-${String(payload.month).padStart(2,'0')}`) ? selectedDate : preferred);
+      }
+
+      async function loadCalendar() {
+        content.className = 'calendar-loading';
+        content.textContent = 'Cargando calendario…';
+        details.replaceChildren();
+        try {
+          const response = await fetch(`${endpoint}?year=${shown.getFullYear()}&month=${shown.getMonth() + 1}`, {headers:{'X-Requested-With':'XMLHttpRequest'}});
+          if (!response.ok) throw new Error('No se pudo cargar el calendario.');
+          payload = await response.json();
+          shown = new Date(payload.year, payload.month - 1, 1);
+          renderCalendar();
+        } catch (error) {
+          content.textContent = error.message;
+        }
+      }
+
+      function openCalendar() {
+        modal.hidden = false;
+        document.body.classList.add('calendar-open');
+        document.querySelector('.notification-center').open = false;
+        loadCalendar();
+        document.getElementById('calendar-close').focus();
+      }
+      function closeCalendar() {
+        modal.hidden = true;
+        document.body.classList.remove('calendar-open');
+        document.getElementById('calendar-trigger').focus();
+      }
+      document.getElementById('calendar-trigger').addEventListener('click', openCalendar);
+      document.getElementById('calendar-close').addEventListener('click', closeCalendar);
+      document.getElementById('calendar-prev').addEventListener('click', () => { shown.setMonth(shown.getMonth() - 1); selectedDate = null; loadCalendar(); });
+      document.getElementById('calendar-next').addEventListener('click', () => { shown.setMonth(shown.getMonth() + 1); selectedDate = null; loadCalendar(); });
+      document.getElementById('calendar-today').addEventListener('click', () => { shown = new Date(); selectedDate = null; loadCalendar(); });
+      modal.addEventListener('click', event => { if (event.target === modal) closeCalendar(); });
+      document.addEventListener('keydown', event => { if (event.key === 'Escape' && !modal.hidden) closeCalendar(); });
+    })();
+  </script>
 </body>
 </html>

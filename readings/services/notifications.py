@@ -36,58 +36,134 @@ def monthly_due_date(node, today):
     return date(today.year, today.month, min(node.reading_day, last_day))
 
 
-def get_node_obligation(node, today=None):
-    today = today or timezone.localdate()
-    month_start = today.replace(day=1)
-    latest = (
-        Reading.objects.filter(
+def shift_month(value, offset):
+    month_index = value.year * 12 + value.month - 1 + offset
+    year, zero_based_month = divmod(month_index, 12)
+    return date(year, zero_based_month + 1, 1)
+
+
+def cycle_due_for_reading(node, reading_date):
+    """Assign a monthly reading to the closest fixed reading day."""
+    month = reading_date.replace(day=1)
+    candidates = [
+        monthly_due_date(node, shift_month(month, offset))
+        for offset in (-1, 0, 1)
+    ]
+    return min(candidates, key=lambda due: (abs((reading_date - due).days), due))
+
+
+def _reading_cycle_due(reading):
+    if reading.schedule.notes.casefold().startswith("lectura mensual"):
+        return reading.schedule.due_date
+    return cycle_due_for_reading(reading.schedule.node, reading.reading_date)
+
+
+def get_cycle_state(node, cycle_due):
+    """Return the monthly reading and its single 10-day follow-up state."""
+    next_due = monthly_due_date(node, shift_month(cycle_due, 1))
+    cutoff = next_due - timedelta(days=2)
+    candidates = (
+        Reading.objects.select_related("schedule__node")
+        .filter(
             schedule__node=node,
             status=Reading.Status.CONFIRMED,
             confirmed_value__isnull=False,
-            reading_date__gte=month_start,
-            reading_date__lte=today,
+            reading_date__gte=cycle_due - timedelta(days=3),
+            reading_date__lt=cutoff,
         )
-        .order_by("-reading_date", "-id")
+        .exclude(schedule__notes__istartswith="Seguimiento")
+        .order_by("reading_date", "id")
+    )
+    monthly_reading = next(
+        (reading for reading in candidates if _reading_cycle_due(reading) == cycle_due),
+        None,
+    )
+    follow_up_due = None
+    follow_up_completed = False
+    if monthly_reading:
+        follow_up_due = monthly_reading.reading_date + timedelta(days=10)
+        follow_up_completed = Reading.objects.filter(
+            schedule__node=node,
+            schedule__due_date=follow_up_due,
+            schedule__notes__istartswith="Seguimiento",
+            status=Reading.Status.CONFIRMED,
+            confirmed_value__isnull=False,
+        ).exists()
+    return {
+        "cycle_due": cycle_due,
+        "next_due": next_due,
+        "cutoff": cutoff,
+        "monthly_reading": monthly_reading,
+        "follow_up_due": follow_up_due,
+        "follow_up_completed": follow_up_completed,
+    }
+
+
+def get_follow_up_cutoff(node, follow_up_due):
+    """Return when an unfinished follow-up yields priority to the next monthly reading."""
+    source_date = follow_up_due - timedelta(days=10)
+    source_reading = (
+        Reading.objects.select_related("schedule__node")
+        .filter(
+            schedule__node=node,
+            status=Reading.Status.CONFIRMED,
+            confirmed_value__isnull=False,
+            reading_date=source_date,
+        )
+        .exclude(schedule__notes__istartswith="Seguimiento")
+        .order_by("id")
         .first()
     )
-    if latest:
-        return latest.reading_date + timedelta(days=10), "FOLLOW_UP"
-    return monthly_due_date(node, today), "MONTHLY"
+    if not source_reading:
+        return None
+    cycle_due = _reading_cycle_due(source_reading)
+    next_due = monthly_due_date(node, shift_month(cycle_due, 1))
+    return next_due - timedelta(days=2)
+
+
+def get_node_obligation(node, today=None):
+    today = today or timezone.localdate()
+    current_due = monthly_due_date(node, today)
+    previous_due = monthly_due_date(node, shift_month(today, -1))
+    cutoff = current_due - timedelta(days=2)
+    cycle_due = previous_due if today < cutoff else current_due
+    state = get_cycle_state(node, cycle_due)
+    if not state["monthly_reading"]:
+        return cycle_due, "MONTHLY"
+    if state["follow_up_due"] and not state["follow_up_completed"]:
+        return state["follow_up_due"], "FOLLOW_UP"
+    if cycle_due == previous_due:
+        return current_due, "MONTHLY"
+    return monthly_due_date(node, shift_month(current_due, 1)), "MONTHLY"
 
 
 def get_reading_notifications(today=None):
     today = today or timezone.localdate()
-    month_start = today.replace(day=1)
     nodes = list(Node.objects.filter(active=True, reading_day__isnull=False).order_by("location", "name"))
-    readings = (
-        Reading.objects.select_related("schedule")
-        .filter(
-            schedule__node__in=nodes,
-            status=Reading.Status.CONFIRMED,
-            confirmed_value__isnull=False,
-            reading_date__gte=month_start,
-            reading_date__lte=today,
-        )
-        .order_by("reading_date", "id")
-    )
-    latest_by_node = {}
-    for reading in readings:
-        latest_by_node[reading.schedule.node_id] = reading
-
     notifications = []
     for node in nodes:
-        latest = latest_by_node.get(node.id)
-        if latest:
-            due_date = latest.reading_date + timedelta(days=10)
-            lead_days = 1
-            kind = "FOLLOW_UP"
+        current_due = monthly_due_date(node, today)
+        previous_due = monthly_due_date(node, shift_month(today, -1))
+        cutoff = current_due - timedelta(days=2)
+        cycle_due = previous_due if today < cutoff else current_due
+        state = get_cycle_state(node, cycle_due)
+
+        if not state["monthly_reading"]:
+            if cycle_due == previous_due:
+                continue
+            days_until = (cycle_due - today).days
+            if days_until <= 2:
+                notifications.append(
+                    ReadingNotification(node=node, due_date=cycle_due, kind="MONTHLY", days_until=days_until)
+                )
         else:
-            due_date = monthly_due_date(node, today)
-            lead_days = 3
-            kind = "MONTHLY"
-        days_until = (due_date - today).days
-        if days_until <= lead_days:
-            notifications.append(
-                ReadingNotification(node=node, due_date=due_date, kind=kind, days_until=days_until)
-            )
+            due_date = state["follow_up_due"]
+            if due_date and not state["follow_up_completed"]:
+                days_until = (due_date - today).days
+            else:
+                days_until = 2
+            if days_until <= 1:
+                notifications.append(
+                    ReadingNotification(node=node, due_date=due_date, kind="FOLLOW_UP", days_until=days_until)
+                )
     return sorted(notifications, key=lambda item: (not item.is_overdue, item.due_date, item.node.name))
