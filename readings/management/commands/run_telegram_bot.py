@@ -146,7 +146,14 @@ def get_authorized_node(node_id, chat_id):
 
 
 def validated_ocr_values(node, ocr):
-    previous_value = (
+    previous_value = previous_confirmed_value(node)
+    if ocr.value is not None and previous_value is not None and ocr.value <= previous_value:
+        return None, f"{ocr.raw_text} | RECHAZADA: no supera la lectura anterior {previous_value}", None
+    return ocr.value, ocr.raw_text, ocr.confidence
+
+
+def previous_confirmed_value(node):
+    return (
         Reading.objects.filter(
             schedule__node=node,
             status=Reading.Status.CONFIRMED,
@@ -156,9 +163,6 @@ def validated_ocr_values(node, ocr):
         .values_list("confirmed_value", flat=True)
         .first()
     )
-    if ocr.value is not None and previous_value is not None and ocr.value < previous_value:
-        return None, f"{ocr.raw_text} | RECHAZADA: menor que lectura anterior {previous_value}", None
-    return ocr.value, ocr.raw_text, ocr.confidence
 
 
 def prepare_pending_schedule(node):
@@ -190,7 +194,7 @@ def create_reading(node_id, image_bytes, filename, telegram_user, chat_id):
         temp.write(image_bytes)
         temp_path = Path(temp.name)
     try:
-        ocr = read_meter(temp_path)
+        ocr = read_meter(temp_path, previous_value=previous_confirmed_value(node))
     finally:
         temp_path.unlink(missing_ok=True)
     detected_value, ocr_text, ocr_confidence = validated_ocr_values(node, ocr)
@@ -241,7 +245,10 @@ def get_pending_node_reading(node_id, chat_id, telegram_user_id):
         .first()
     )
     if reading and reading.photo:
-        ocr = read_meter(reading.photo.path)
+        ocr = read_meter(
+            reading.photo.path,
+            previous_value=previous_confirmed_value(reading.schedule.node),
+        )
         reading.detected_value, reading.ocr_text, reading.ocr_confidence = validated_ocr_values(
             reading.schedule.node, ocr
         )
@@ -521,7 +528,9 @@ async def receive_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("Primero elige «Ingresar lectura» y selecciona el nodo.", reply_markup=main_menu_markup())
         return
     mark_conversation_active(context, update.effective_chat.id)
-    status = await update.message.reply_text("⏳ Procesando la imagen localmente…")
+    status = await update.message.reply_text(
+        "⏳ Analizando primero con OCR local; si no hay una lectura segura se probará el respaldo…"
+    )
     photo = update.message.photo[-1]
     telegram_file = await context.bot.get_file(photo.file_id)
     image_bytes = bytes(await telegram_file.download_as_bytearray())
@@ -535,14 +544,27 @@ async def receive_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data["reading_id"] = reading.id
     detected = format_reading_value(reading.detected_value)
     confidence = f"{reading.ocr_confidence:.0%}" if reading.ocr_confidence is not None else "no disponible"
-    await status.edit_text(
-        f"🔍 ANÁLISIS COMPLETADO\n\n🏢 Nodo: {reading.schedule.node.name}\n"
-        f"⚡ Lectura detectada: {detected}\n🎯 Confianza OCR: {confidence}\n\n¿Confirmas esta lectura?",
-        reply_markup=cancel_registration_markup([
-            [InlineKeyboardButton("✅ Confirmar", callback_data=f"reading:confirm:{reading.id}")],
-            [InlineKeyboardButton("✏️ Corregir", callback_data=f"reading:correct:{reading.id}")],
-        ]),
-    )
+    if reading.detected_value is None:
+        context.user_data[STATE] = WAIT_CORRECTION
+        await status.edit_text(
+            f"⚠️ NO SE PUDO RECONOCER LA LECTURA\n\n🏢 Nodo: {reading.schedule.node.name}\n\n"
+            "El OCR local y el respaldo no obtuvieron un resultado suficientemente seguro. "
+            "Ingresa la lectura manualmente para continuar.",
+            reply_markup=cancel_registration_markup([
+                [InlineKeyboardButton("⌨️ Ingresar lectura manual", callback_data=f"reading:correct:{reading.id}")],
+            ]),
+        )
+    else:
+        method = "Cloudflare" if reading.ocr_text.startswith("CLOUDFLARE:") else "OCR local"
+        await status.edit_text(
+            f"🔍 ANÁLISIS COMPLETADO\n\n🏢 Nodo: {reading.schedule.node.name}\n"
+            f"⚡ Lectura detectada: {detected}\n🎯 Confianza: {confidence}\n🧠 Método: {method}"
+            "\n\n¿Confirmas esta lectura?",
+            reply_markup=cancel_registration_markup([
+                [InlineKeyboardButton("✅ Confirmar", callback_data=f"reading:confirm:{reading.id}")],
+                [InlineKeyboardButton("✏️ Corregir", callback_data=f"reading:correct:{reading.id}")],
+            ]),
+        )
 
 
 async def show_history(message, node_id, chat_id, current_month):

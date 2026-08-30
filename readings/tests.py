@@ -23,10 +23,16 @@ from .management.commands.run_telegram_bot import (
     parse_reading_value,
 )
 from .services.ocr import (
+    OCRCandidate,
     OCRResult,
+    choose_consistent_candidate,
     detect_red_decimal,
     find_display_crop,
+    find_display_regions,
     find_kba_display_crop,
+    generate_display_variants,
+    read_meter,
+    read_meter_cloudflare,
     select_direct_recognition,
     select_meter_value,
 )
@@ -316,6 +322,116 @@ class OCRSelectionTests(TestCase):
             FakeEngine(),
         )
         self.assertIsNone(selected)
+
+    def test_contour_locator_finds_rectangular_display_without_text_anchor(self):
+        import cv2
+        import numpy as np
+
+        image = np.full((500, 800, 3), 235, dtype=np.uint8)
+        cv2.rectangle(image, (180, 150), (620, 270), (35, 35, 35), 8)
+        cv2.rectangle(image, (190, 160), (610, 260), (150, 165, 145), -1)
+        cv2.putText(image, "123456.7", (215, 230), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (25, 25, 25), 4)
+
+        regions = find_display_regions(image, full_ocr=[])
+
+        self.assertTrue(regions)
+        self.assertTrue(any(region.label.startswith("contorno") for region in regions))
+
+    def test_display_variants_include_contrast_threshold_inverse_and_reflection_reduction(self):
+        import numpy as np
+
+        display = np.full((80, 300, 3), 180, dtype=np.uint8)
+        names = {name for name, _image in generate_display_variants(display)}
+
+        self.assertTrue({"gris", "clahe", "sin-reflejo", "adaptativo", "otsu"}.issubset(names))
+        self.assertIn("adaptativo-invertido", names)
+        self.assertIn("otsu-invertido", names)
+
+    def test_consensus_preserves_decimal_seen_by_one_trusted_variant(self):
+        candidates = [
+            OCRCandidate(Decimal("1575192"), 0.99, "rapidocr", "clahe"),
+            OCRCandidate(Decimal("1575192"), 0.98, "rapidocr", "otsu"),
+            OCRCandidate(Decimal("157519.2"), 0.94, "rapidocr-deteccion", "gris"),
+        ]
+
+        selected = choose_consistent_candidate(candidates, previous_value=Decimal("150000"))
+
+        self.assertEqual(selected.value, Decimal("157519.2"))
+
+    def test_consensus_rejects_value_that_does_not_exceed_previous_reading(self):
+        candidates = [
+            OCRCandidate(Decimal("999"), 0.99, "rapidocr", "gris"),
+            OCRCandidate(Decimal("999"), 0.98, "rapidocr", "clahe"),
+        ]
+
+        selected = choose_consistent_candidate(candidates, previous_value=Decimal("1000"))
+
+        self.assertIsNone(selected.value)
+
+    @patch("readings.services.ocr.read_meter_cloudflare")
+    @patch("readings.services.ocr.read_meter_local")
+    def test_cloudflare_is_only_used_after_local_ocr_fails(self, local_mock, cloudflare_mock):
+        import numpy as np
+
+        image = np.zeros((50, 100, 3), dtype=np.uint8)
+        local_mock.return_value = (OCRResult(None, "sin consenso", None), [], image)
+        cloudflare_mock.return_value = OCRResult(
+            Decimal("1234.5"), "CLOUDFLARE: visor reconocido", 0.91, "cloudflare"
+        )
+
+        selected = read_meter("foto.jpg", previous_value=Decimal("1200"))
+
+        self.assertEqual(selected.value, Decimal("1234.5"))
+        cloudflare_mock.assert_called_once()
+
+    @patch("readings.services.ocr.read_meter_cloudflare")
+    @patch("readings.services.ocr.read_meter_local")
+    def test_local_result_prevents_external_request(self, local_mock, cloudflare_mock):
+        local_mock.return_value = (
+            OCRResult(Decimal("1234.5"), "LOCAL", 0.95),
+            [],
+            None,
+        )
+
+        selected = read_meter("foto.jpg", previous_value=Decimal("1200"))
+
+        self.assertEqual(selected.source, "local")
+        cloudflare_mock.assert_not_called()
+
+    def test_cloudflare_response_is_parsed_and_validated(self):
+        import json
+        import os
+        import numpy as np
+
+        class FakeResponse:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_args):
+                return False
+
+            def read(self):
+                return json.dumps({
+                    "success": True,
+                    "result": {"result": {"answer": "170269.6"}},
+                }).encode("utf-8")
+
+        image = np.zeros((80, 300, 3), dtype=np.uint8)
+        environment = {
+            "CLOUDFLARE_ACCOUNT_ID": "cuenta-prueba",
+            "CLOUDFLARE_API_TOKEN": "token-prueba",
+            "CLOUDFLARE_VISION_MODEL": "@cf/moondream/moondream3.1-9B-A2B",
+        }
+        with patch.dict(os.environ, environment), patch(
+            "readings.services.ocr.urllib.request.urlopen", return_value=FakeResponse()
+        ) as urlopen_mock:
+            selected = read_meter_cloudflare(image, previous_value=Decimal("160000"))
+
+        self.assertEqual(selected.value, Decimal("170269.6"))
+        self.assertEqual(selected.source, "cloudflare")
+        request = urlopen_mock.call_args.args[0]
+        payload = json.loads(request.data.decode("utf-8"))
+        self.assertTrue(payload["image"].startswith("data:image/jpeg;base64,"))
 
 
 class AuthorizedNodesTests(TestCase):

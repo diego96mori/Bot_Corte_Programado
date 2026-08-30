@@ -7,7 +7,8 @@ MVP gratuito para programar lecturas, enviar recordatorios por Telegram, recibir
 - Python y Django: aplicación web y reglas del negocio.
 - SQLite: base de datos inicial sin servidor ni licencia.
 - Telegram Bot API: recepción de fotos y avisos.
-- RapidOCR + ONNX Runtime: reconocimiento local; las fotos no se envían a servicios de IA.
+- RapidOCR + ONNX Runtime: reconocimiento local principal.
+- Cloudflare Workers AI: respaldo opcional; recibe el recorte del visor cuando el OCR local no logra un resultado confiable. Solo si no fue posible localizar el visor, recibe la foto para ubicarlo visualmente.
 - OpenPyXL: futura importación y exportación de Excel.
 
 Telegram no cobra por crear y utilizar un bot. La computadora donde se ejecute el proyecto debe permanecer encendida para recibir fotos y enviar recordatorios.
@@ -35,6 +36,18 @@ python manage.py createsuperuser
 4. Pegar el token después de `TELEGRAM_BOT_TOKEN=` en `.env`.
 
 Nunca compartir ni subir el archivo `.env`.
+
+### Respaldo opcional con Cloudflare
+
+El reconocimiento funciona localmente aunque Cloudflare no esté configurado. Para habilitar el respaldo automático, crear un token de Workers AI y completar en `.env`:
+
+```text
+CLOUDFLARE_ACCOUNT_ID=identificador-de-la-cuenta
+CLOUDFLARE_API_TOKEN=token-secreto
+CLOUDFLARE_VISION_MODEL=@cf/moondream/moondream3.1-9B-A2B
+```
+
+Moondream 3.1 está especializado en visión y OCR. El token nunca debe guardarse en Git ni enviarse por Telegram.
 
 ## 4. Cargar datos iniciales
 
