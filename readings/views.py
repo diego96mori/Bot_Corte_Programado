@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch
 from django.http import JsonResponse
@@ -7,7 +9,7 @@ from django.utils import timezone
 from .authorized_nodes import AUTHORIZED_NODES
 from .models import Node, Reading, ReadingSchedule
 from .services.calendar import get_calendar_events
-from .services.notifications import get_follow_up_cutoff
+from .services.notifications import get_follow_up_cutoff, get_reading_notifications, monthly_due_date, shift_month
 
 
 @login_required
@@ -33,12 +35,36 @@ def reading_grid(request):
     if provider:
         schedules = schedules.filter(node__provider=provider)
     today = timezone.localdate()
+    schedules = list(schedules)
+    # Upcoming obligations must be visible even if the Telegram worker is stopped
+    # or the node has no chat. These are projected schedules, never fake readings.
+    existing = set(ReadingSchedule.objects.filter(node__active=True).values_list("node_id", "due_date"))
+    for item in get_reading_notifications(today):
+        if (item.node.pk, item.due_date) in existing:
+            continue
+        upcoming = ReadingSchedule(node=item.node, due_date=item.due_date, notes=item.kind_label)
+        if status and status not in {ReadingSchedule.Status.PENDING, upcoming.management_status_class}:
+            continue
+        if node_id.isdigit() and item.node.pk != int(node_id):
+            continue
+        if provider and item.node.provider != provider:
+            continue
+        upcoming.latest_readings = []
+        schedules.append(upcoming)
+    schedules.sort(key=lambda schedule: (-schedule.due_date.toordinal(), schedule.node.name))
     for schedule in schedules:
         schedule.grid_status_label = schedule.management_status_label_for(today)
+        schedule.grid_status_class = schedule.management_status_class
         if schedule.status == ReadingSchedule.Status.PENDING and schedule.is_follow_up:
             cutoff = get_follow_up_cutoff(schedule.node, schedule.due_date)
             if cutoff and today >= cutoff:
                 schedule.grid_status_label = "Seguimiento no registrado · ciclo cerrado por nueva lectura mensual"
+                schedule.grid_status_class = "CLOSED"
+        elif schedule.status == ReadingSchedule.Status.PENDING and schedule.node.reading_day:
+            next_due = monthly_due_date(schedule.node, shift_month(schedule.due_date, 1))
+            if today >= next_due - timedelta(days=2):
+                schedule.grid_status_label = "Lectura no registrada · ciclo cerrado por nueva lectura mensual"
+                schedule.grid_status_class = "CLOSED"
     nodes = Node.objects.filter(active=True).order_by("name")
     providers = (
         Node.objects.filter(active=True).exclude(provider="")

@@ -24,7 +24,7 @@
           <td>{{ reading.detected_value|reading_value }}</td><td>{{ reading.confirmed_value|reading_value }}</td>
           <td>{{ reading.telegram_username|default:"—" }}</td>
           <td>{% if reading.photo %}<a href="{{ reading.photo.url }}" target="_blank"><img class="evidence" src="{{ reading.photo.url }}" alt="Medidor"></a>{% else %}—{% endif %}</td>
-          <td class="{{ schedule.management_status_class }}">{{ schedule.grid_status_label }}</td>
+          <td class="{{ schedule.grid_status_class }}">{{ schedule.grid_status_label }}</td>
         </tr>
       {% endwith %}{% empty %}<tr><td colspan="11">No hay registros.</td></tr>{% endfor %}
       </tbody>

@@ -57,7 +57,7 @@ python manage.py runserver
 
 Abrir http://127.0.0.1:8000/admin/ y crear, en este orden:
 
-1. Un nodo con código, nombre y chat de Telegram.
+1. Un nodo con código, nombre, día de lectura (1 a 31) y chat de Telegram. Si falta el día, el bot solicita configurarlo antes de permitir un registro.
 2. Una programación de lectura pendiente para ese nodo.
 
 Para conocer el identificador del chat, iniciar el bot y enviarle `/id`. Copiar el número que responde en el campo **chat de Telegram** del nodo.
@@ -71,6 +71,16 @@ python manage.py import_readings_excel "RUTA\LECTURAS WIN 2026.xlsx" --telegram-
 ```
 
 Puede ejecutarse nuevamente sobre el mismo archivo sin duplicar las lecturas ya importadas.
+
+### Punto de partida: agosto de 2026
+
+Por decisión operativa, los registros confirmados existentes de agosto se toman como base: la primera fecha de cada nodo es su lectura mensual y, si hay una segunda, es su seguimiento. No se reclasifican esos registros a partir del manejo manual de julio. Se conservan fechas reales, valores, fotos, origen y responsables; las fechas programadas se alinean con el día mensual configurado y con los diez días desde la primera lectura.
+
+Esta excepción se limita a agosto de 2026. Pelitres toma el 05/08 como mensual y el 19/08 como seguimiento completado: no corresponde ningún recordatorio hasta el 21/09, inicio de su ventana del día 23. Santa Fe toma el 03/08 como mensual y el 25/08 como seguimiento completado: vuelve a avisar el 15/09 para su lectura del día 17. Desde septiembre se aplica el ciclo normal; no se clasifica automáticamente cualquier primera fecha del mes como lectura mensual por esta excepción.
+
+Los nodos que todavía no tienen una lectura de agosto, como Las Palmeras al preparar esta base, permanecen pendientes: no se inventa un registro ni se reutiliza una lectura de julio. Cuando se registre su lectura mensual, se conserva la fecha real indicada y el seguimiento se calcula diez días después, sujeto al cierre por la siguiente ventana mensual.
+
+Para revisar esa base sin modificar datos, ejecutar `python manage.py normalize_august_baseline`. Para aplicarla, detener primero el bot y ejecutar `python manage.py normalize_august_baseline --apply`; genera un respaldo SQLite y un informe en `backups/`. Omite nodos inactivos y rechaza casos con más de dos lecturas o destinos con otros registros. Esta es una conciliación histórica específica, no una regla para reiniciar la clasificación en cada mes.
 
 ## Usuarios y permisos
 
@@ -95,7 +105,15 @@ python manage.py runserver
 python manage.py run_telegram_bot
 ```
 
-En Telegram, enviar `/start`. El bot muestra dos opciones: **Ingresar lectura** y **Consultar lectura**. Para ingresar, se puede escribir el nombre del nodo (tolera errores de escritura) o abrir la lista de los 33 nodos. Después solicita la foto, detecta el valor y pide confirmarlo o corregirlo. Antes de guardar solicita la fecha: se puede elegir **Hoy** o escribirla como `DÍA/MES/AÑO`. La consulta permite ver el mes actual o las últimas lecturas.
+En Telegram, enviar `/start`. El bot muestra dos opciones: **Ingresar lectura** y **Consultar lectura**. Para ingresar, se puede escribir el nombre del nodo (tolera errores de escritura) o abrir la lista de nodos autorizados. Después solicita la foto, detecta el valor y pide confirmarlo o corregirlo. Antes de guardar solicita elegir **Hoy** o **Escribir fecha**; esta última opción acepta una fecha real con formato `DD/MM/AAAA`, por ejemplo `31/08/2026`. La consulta permite ver el mes actual o las últimas lecturas.
+
+Para ingresar sin fotografía es obligatorio pulsar **Escribir lectura manualmente** antes de enviar el número. Si no se reconoce la foto, hay que elegir **Ingresar lectura manual** o **Cancelar registro**. El valor admite enteros o decimales con punto o coma, hasta 12 dígitos enteros y 3 decimales, sin signos, letras ni unidades. Cada paso repite su pregunta y sus botones cuando recibe texto, fotos, audios u otros mensajes que no corresponden. Los botones de preguntas anteriores no permiten saltar pasos ni confirmar otro registro. Tras registrar o cancelar, vuelve al menú inicial.
+
+La programación definitiva se asigna al confirmar la fecha real de la lectura, incluso si corresponde a un ciclo anterior; no se completan otras programaciones solo por ser más antiguas.
+
+Antes de pedir la fotografía o el valor, el bot revisa las lecturas confirmadas del ciclo activo y explica si corresponde una **lectura mensual** o un **seguimiento**, con sus fechas. Si ya existen ambos registros, bloquea otro ingreso e indica cuándo se abre el siguiente ciclo. Por ejemplo, Huacho, con día mensual 3 y su ciclo de agosto completo, no admite otra lectura el 31/08: vuelve a permitirla desde el 01/09. Guardia Peruana, con día mensual 2, ya admite la lectura mensual de septiembre desde el 31/08; el seguimiento pendiente de agosto deja de ser la obligación activa.
+
+La validación se repite al crear el borrador y al confirmar, para impedir un tercer registro incluso si otro operador completó el ciclo durante la conversación. No se aceptan fechas futuras ni fechas antiguas que oculten registros ya confirmados para reabrir un ciclo completo. Un seguimiento no puede tener fecha anterior a la lectura mensual existente. Los registros históricos se conservan y la consulta continúa disponible aunque el ingreso esté bloqueado.
 
 La grilla se encuentra en http://127.0.0.1:8000/ y exige iniciar sesión.
 
@@ -114,14 +132,18 @@ python manage.py send_reminders
 
 Cada aviso corresponde a un nodo e incluye el botón **Registrar lectura**, que inicia directamente el flujo de fotografía para ese nodo.
 
-Mientras un chat está seleccionando el nodo, enviando la foto, confirmando o corrigiendo el valor, o indicando la fecha, sus recordatorios quedan pausados para no interrumpir el proceso. Al finalizar se reanudan; una conversación abandonada pierde la pausa automáticamente después de una hora.
+Mientras un chat está seleccionando el nodo, consultando, enviando la foto, confirmando o corrigiendo el valor, o indicando la fecha, sus recordatorios quedan pausados para no interrumpir el proceso. Después de **8 minutos sin mensajes ni pulsaciones**, el bot cancela el borrador sin confirmar y muestra automáticamente el menú inicial. Si sigue sin respuesta, vuelve a mostrarlo cada 8 minutos mientras el proceso del bot esté encendido. Cada nueva interacción renueva el plazo; el tiempo de procesamiento del OCR no cuenta como inactividad. Al finalizar o volver al menú se reanudan los recordatorios.
 
 La campana de la esquina superior derecha y Telegram comparten estas reglas:
 
-- Si todavía no existe una lectura del mes, avisan desde tres días antes del día de lectura configurado para el nodo.
-- Después de registrar una lectura, la siguiente vence diez días después y se avisa un día antes.
-- Si no se registra a tiempo, el aviso permanece como atrasado en la web y Telegram continúa enviándolo cada cinco horas mientras el bot esté funcionando.
-- Al confirmar una nueva lectura se completan las programaciones pendientes que esa lectura satisface.
+- La ventana mensual comprende tres días contando el día de lectura: para el día 11 comienza el día 9.
+- La ventana puede comenzar en el mes o año anterior: para el 2 de septiembre empieza el 31 de agosto. Desde ese día, la grilla muestra la lectura próxima (por ejemplo, **Lectura: faltan 2 días**) y los avisos corresponden al nuevo ciclo.
+- La grilla calcula las próximas obligaciones aunque el bot no esté ejecutándose o el nodo no tenga chat. No crea lecturas ficticias ni duplica programaciones ya guardadas. Los ciclos anteriores permanecen como historial en gris, con la indicación **ciclo cerrado**.
+- Después de registrar la lectura mensual, su único seguimiento vence diez días después de la fecha real de lectura y se avisa un día antes.
+- Al comenzar la nueva ventana mensual, el seguimiento anterior deja de ser la obligación activa. Para una lectura mensual del 11 de agosto registrada el 31, el seguimiento vence el 10 de septiembre, pero solo puede registrarse como seguimiento hasta el 8; desde el 9 corresponde a la lectura mensual de septiembre.
+- Una lectura mensual atrasada continúa generando avisos aunque cambie el mes, hasta el inicio de la siguiente ventana mensual. Telegram conserva el intervalo de cinco horas mientras el bot esté funcionando.
+- Al confirmar una lectura se completa únicamente la programación correspondiente a su fecha y ciclo.
+- Cada envío exitoso se registra antes de intentar el siguiente. Si Telegram rechaza un destinatario, se registra el error y se continúa con los demás.
 
 ## Siguiente etapa
 

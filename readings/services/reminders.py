@@ -1,13 +1,17 @@
+import logging
 from datetime import timedelta
 
+from asgiref.sync import sync_to_async
 from django.utils import timezone
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.error import TelegramError
 
-from readings.models import ReadingSchedule, ReminderLog
+from readings.models import Reading, ReadingSchedule, ReminderLog
 from readings.services.notifications import get_reading_notifications
 
 
 REMINDER_INTERVAL = timedelta(hours=5)
+logger = logging.getLogger(__name__)
 
 
 def prepare_reminder_jobs(now=None, force=False):
@@ -23,6 +27,16 @@ def prepare_reminder_jobs(now=None, force=False):
             due_date=item.due_date,
             defaults={"status": ReadingSchedule.Status.PENDING, "notes": item.kind_label},
         )
+        if schedule.status == ReadingSchedule.Status.CANCELLED:
+            continue
+        if schedule.readings.filter(
+            status=Reading.Status.CONFIRMED, confirmed_value__isnull=False,
+        ).exists():
+            # A reminder must never reopen a schedule with a confirmed reading.
+            if schedule.status != ReadingSchedule.Status.COMPLETED:
+                schedule.status = ReadingSchedule.Status.COMPLETED
+                schedule.save(update_fields=["status"])
+            continue
         if schedule.status != ReadingSchedule.Status.PENDING:
             schedule.status = ReadingSchedule.Status.PENDING
             schedule.notes = item.kind_label
@@ -55,16 +69,23 @@ def reminder_text(item):
 
 
 async def send_reminder_jobs(bot, jobs):
+    """Persist each successful delivery before attempting the next recipient."""
     results = []
     for job in jobs:
         item = job["item"]
         keyboard = InlineKeyboardMarkup(
             [[InlineKeyboardButton("📷 Registrar lectura", callback_data=f"reminder_register:{item.node.id}")]]
         )
-        message = await bot.send_message(
-            chat_id=job["chat_id"], text=reminder_text(item), reply_markup=keyboard
-        )
-        results.append((job, message.message_id))
+        try:
+            message = await bot.send_message(
+                chat_id=job["chat_id"], text=reminder_text(item), reply_markup=keyboard
+            )
+        except TelegramError:
+            logger.exception("No se pudo enviar el recordatorio de la programación %s", job["schedule"].pk)
+            continue
+        result = (job, message.message_id)
+        await sync_to_async(record_reminder_results)([result])
+        results.append(result)
     return results
 
 

@@ -1,43 +1,56 @@
 import asyncio
 import logging
 import re
+import secrets
 import tempfile
 import unicodedata
 from datetime import datetime, timedelta
 from decimal import Decimal, InvalidOperation
 from difflib import SequenceMatcher
+from functools import wraps
 from pathlib import Path
 
 from asgiref.sync import sync_to_async
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand, CommandError
+from django.db import transaction
 from django.utils import timezone
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.error import Forbidden, TelegramError
 from telegram.ext import Application, CallbackQueryHandler, CommandHandler, ContextTypes, MessageHandler, filters
 
 from readings.models import Node, Reading, ReadingSchedule
-from readings.services.notifications import get_node_obligation
+from readings.services.registration import get_registration_plan
 from readings.services.ocr import read_meter
-from readings.services.reminders import prepare_reminder_jobs, record_reminder_results, send_reminder_jobs
+from readings.services.reminders import prepare_reminder_jobs, send_reminder_jobs
 
 logger = logging.getLogger(__name__)
 STATE = "state"
+MAIN_MENU = "MAIN_MENU"
 SELECT_NODE = "SELECT_NODE"
+SELECT_PERIOD = "SELECT_PERIOD"
 CONFIRM_NODE = "CONFIRM_NODE"
 WAIT_PHOTO = "WAIT_PHOTO"
 WAIT_MANUAL_VALUE = "WAIT_MANUAL_VALUE"
 CONFIRM_MANUAL_VALUE = "CONFIRM_MANUAL_VALUE"
 WAIT_CORRECTION = "WAIT_CORRECTION"
 WAIT_DATE = "WAIT_DATE"
+CHOOSE_DATE = "CHOOSE_DATE"
+OCR_FAILED = "OCR_FAILED"
+CONFIRM_READING = "CONFIRM_READING"
 MODE = "mode"
 ENTER = "ENTER"
 CONSULT = "CONSULT"
 ACTIVE_CHAT_ID = "active_chat_id"
 ACTIVE_UNTIL = "active_until"
+ACTIVE_USER_ID = "active_user_id"
+CONVERSATION_TIMEOUT = timedelta(minutes=8)
 ACTIVE_STATES = {
     SELECT_NODE, CONFIRM_NODE, WAIT_PHOTO, WAIT_MANUAL_VALUE,
-    CONFIRM_MANUAL_VALUE, WAIT_CORRECTION, WAIT_DATE,
+    CONFIRM_MANUAL_VALUE, WAIT_CORRECTION, WAIT_DATE, CHOOSE_DATE,
+    OCR_FAILED, CONFIRM_READING, SELECT_PERIOD,
 }
 
 
@@ -59,7 +72,7 @@ def find_best_node_name(query, choices):
         for item in choices
     ]
     score, best = max(scored, default=(0, None), key=lambda pair: pair[0])
-    return best if score >= 0.42 else None
+    return best if score >= 0.65 else None
 
 
 def format_reading_value(value):
@@ -81,7 +94,7 @@ def parse_reading_date(value, today=None):
 
 def parse_reading_value(value):
     normalized = (value or "").strip().replace(",", ".")
-    if not re.fullmatch(r"\d{1,12}(?:\.\d{1,3})?", normalized):
+    if not re.fullmatch(r"[0-9]{1,12}(?:\.[0-9]{1,3})?", normalized):
         return None
     try:
         return Decimal(normalized)
@@ -92,7 +105,7 @@ def parse_reading_value(value):
 def mark_conversation_active(context, chat_id, now=None):
     now = now or timezone.now()
     context.user_data[ACTIVE_CHAT_ID] = chat_id
-    context.user_data[ACTIVE_UNTIL] = now + timedelta(hours=1)
+    context.user_data[ACTIVE_UNTIL] = now + CONVERSATION_TIMEOUT
 
 
 def is_conversation_active(data, now=None):
@@ -165,17 +178,23 @@ def previous_confirmed_value(node):
     )
 
 
-def prepare_pending_schedule(node):
-    due_date, kind = get_node_obligation(node)
+def validate_node_schedule(node):
+    if node.reading_day is None or not 1 <= node.reading_day <= 31:
+        raise ValidationError(
+            "Este nodo no tiene configurado un día de lectura válido. "
+            "Pide al administrador que configure un día entre 1 y 31."
+        )
+
+
+def prepare_pending_schedule(node, reading_date=None):
+    plan = get_registration_plan(node, reading_date)
+    due_date, kind = plan.due_date, plan.kind
     schedule, _ = ReadingSchedule.objects.get_or_create(
         node=node, due_date=due_date,
         defaults={"status": ReadingSchedule.Status.PENDING,
                   "notes": "Lectura mensual" if kind == "MONTHLY" else "Seguimiento de 10 días"},
     )
     schedule.node = node
-    if schedule.status != ReadingSchedule.Status.PENDING:
-        schedule.status = ReadingSchedule.Status.PENDING
-        schedule.save(update_fields=["status"])
     return schedule
 
 
@@ -184,7 +203,10 @@ def create_reading(node_id, image_bytes, filename, telegram_user, chat_id):
     node = Node.objects.filter(id=node_id, active=True, telegram_chat_id=chat_id).first()
     if not node:
         return None, "Este chat no está autorizado para registrar lecturas de ese nodo."
-    schedule = prepare_pending_schedule(node)
+    try:
+        schedule = prepare_pending_schedule(node)
+    except ValidationError as error:
+        return None, " ".join(error.messages)
     Reading.objects.filter(
         schedule=schedule, telegram_chat_id=chat_id, telegram_user_id=telegram_user.id,
         status=Reading.Status.REVIEW,
@@ -214,7 +236,10 @@ def create_manual_reading(node_id, value, telegram_user, chat_id):
     node = Node.objects.filter(id=node_id, active=True, telegram_chat_id=chat_id).first()
     if not node:
         return None, "Este chat no está autorizado para registrar lecturas de ese nodo."
-    schedule = prepare_pending_schedule(node)
+    try:
+        schedule = prepare_pending_schedule(node)
+    except ValidationError as error:
+        return None, " ".join(error.messages)
     Reading.objects.filter(
         schedule=schedule, telegram_chat_id=chat_id, telegram_user_id=telegram_user.id,
         status=Reading.Status.REVIEW,
@@ -269,25 +294,32 @@ def cancel_pending_reading(reading_id, telegram_user_id):
 
 
 @sync_to_async
+@transaction.atomic
 def confirm_reading(reading_id, telegram_user_id, reading_date, corrected_value=None):
-    reading = Reading.objects.select_related("schedule__node").filter(pk=reading_id).first()
+    reading = Reading.objects.select_for_update().select_related("schedule__node").filter(pk=reading_id).first()
     if not reading or reading.telegram_user_id != telegram_user_id or reading.status != Reading.Status.REVIEW:
         return None
     value = corrected_value if corrected_value is not None else reading.detected_value
     if value is None:
         return None
+    node = Node.objects.select_for_update().get(pk=reading.schedule.node_id)
+    if not node.active or node.telegram_chat_id != reading.telegram_chat_id:
+        raise ValidationError("Este chat ya no está autorizado para registrar lecturas de ese nodo.")
+    if reading_date > timezone.localdate():
+        raise ValidationError("No puedes registrar una lectura con fecha futura. Corrige la fecha o cancela el registro.")
+    # Recheck capacity at save time, including drafts started before another
+    # operator completed the cycle. The actual date still chooses its cycle.
+    get_registration_plan(node)
+    # The draft was created before the operator supplied the actual reading date.
+    reading.schedule = prepare_pending_schedule(reading.schedule.node, reading_date)
     reading.confirmed_value = value
     reading.status = Reading.Status.CONFIRMED
     reading.reading_date = reading_date
     reading.confirmed_at = timezone.now()
-    reading.save(update_fields=["confirmed_value", "status", "reading_date", "confirmed_at"])
+    reading.save(update_fields=["schedule", "confirmed_value", "status", "reading_date", "confirmed_at"])
     if reading.schedule.status != ReadingSchedule.Status.COMPLETED:
         reading.schedule.status = ReadingSchedule.Status.COMPLETED
         reading.schedule.save(update_fields=["status"])
-    ReadingSchedule.objects.filter(
-        node=reading.schedule.node, status=ReadingSchedule.Status.PENDING,
-        due_date__lte=reading.reading_date,
-    ).update(status=ReadingSchedule.Status.COMPLETED)
     return reading
 
 
@@ -306,142 +338,258 @@ def reading_history(node_id, chat_id, current_month=False):
     return node, list(readings.values_list("reading_date", "confirmed_value")[:15])
 
 
+def node_selection_markup():
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton("📋 Ver opciones de nodos", callback_data="nodes:list")],
+        [InlineKeyboardButton("↩️ Volver al inicio", callback_data="menu:home")],
+    ])
+
+
+def current_prompt(data):
+    """One source for the initial question and every retry of that question."""
+    state = data.get(STATE, MAIN_MENU)
+    node_name = data.get("node_name", "")
+    reading_id = data.get("reading_id")
+    if state == SELECT_NODE:
+        label = "registrar" if data.get(MODE) == ENTER else "consultar"
+        return (
+            f"Escribe el nombre del nodo que deseas {label}, aunque no lo recuerdes exactamente.\n"
+            "También puedes ver la lista completa:", node_selection_markup(),
+        )
+    if state == CONFIRM_NODE:
+        return (
+            f"Encontré este nodo:\n🏢 {data['candidate_name']}\n\n¿Es el nodo correcto?",
+            cancel_registration_markup([[
+                InlineKeyboardButton("✅ Sí", callback_data="node:yes"),
+                InlineKeyboardButton("❌ No", callback_data="node:no"),
+            ]]),
+        )
+    if state == SELECT_PERIOD:
+        return (
+            f"🔎 Consulta de lecturas\n🏢 Nodo: {node_name}\n\n¿Qué deseas ver?",
+            InlineKeyboardMarkup([
+                [InlineKeyboardButton("📅 Lecturas del mes actual", callback_data=f"query:current:{data['node_id']}")],
+                [InlineKeyboardButton("🗂 Últimas lecturas registradas", callback_data=f"query:recent:{data['node_id']}")],
+                [InlineKeyboardButton("↩️ Volver al inicio", callback_data="menu:home")],
+            ]),
+        )
+    if state == WAIT_PHOTO:
+        return (
+            f"📷 Registro de lectura\n🏢 Nodo: {node_name}\n\n"
+            f"{data.get('registration_explanation', '')}\n\n"
+            "Ahora envía una fotografía clara del medidor. Analizaré el número localmente.\n\n"
+            "Si no tienes una fotografía, pulsa «Escribir lectura manualmente» para ingresar el número.",
+            cancel_registration_markup([[
+                InlineKeyboardButton("⌨️ Escribir lectura manualmente", callback_data="reading:manual:start"),
+            ]]),
+        )
+    if state == OCR_FAILED:
+        return (
+            f"⚠️ NO SE PUDO RECONOCER LA LECTURA\n\n🏢 Nodo: {node_name}\n\n"
+            "No se obtuvo un resultado suficientemente seguro. "
+            "Elige «Ingresar lectura manual» o «Cancelar registro».",
+            cancel_registration_markup([[
+                InlineKeyboardButton("⌨️ Ingresar lectura manual", callback_data=f"reading:correct:{reading_id}"),
+            ]]),
+        )
+    if state in {WAIT_MANUAL_VALUE, WAIT_CORRECTION}:
+        return (
+            "⌨️ Escribe el valor correcto de la lectura.\n\n"
+            "Solo se aceptan números enteros o decimales, sin letras ni unidades.\n"
+            "Ejemplos: 170269, 170269.6 o 170269,6.\n"
+            "Máximo 12 dígitos enteros y 3 decimales; no se aceptan números negativos.",
+            cancel_registration_markup(),
+        )
+    if state == CONFIRM_MANUAL_VALUE:
+        return (
+            "⌨️ LECTURA INGRESADA MANUALMENTE\n\n"
+            f"⚡ Lectura: {format_reading_value(data['display_value'])}\n\n¿El número es correcto?",
+            cancel_registration_markup([
+                [InlineKeyboardButton("✅ Sí, continuar", callback_data=f"reading:manual:confirm:{reading_id}")],
+                [InlineKeyboardButton("✏️ Corregir número", callback_data=f"reading:manual:correct:{reading_id}")],
+            ]),
+        )
+    if state == CONFIRM_READING:
+        return (
+            f"🔍 LECTURA POR CONFIRMAR\n\n🏢 Nodo: {node_name}\n"
+            f"⚡ Lectura detectada: {format_reading_value(data['display_value'])}\n"
+            f"{data.get('ocr_details', '')}\n¿Confirmas esta lectura?",
+            cancel_registration_markup([
+                [InlineKeyboardButton("✅ Confirmar", callback_data=f"reading:confirm:{reading_id}")],
+                [InlineKeyboardButton("✏️ Corregir", callback_data=f"reading:correct:{reading_id}")],
+            ]),
+        )
+    if state == CHOOSE_DATE:
+        return (
+            "📅 ¿Qué fecha corresponde a esta lectura?\n\n"
+            "Elige «Hoy» para usar la fecha actual o «Escribir fecha» para indicar otra fecha.",
+            cancel_registration_markup([
+                [InlineKeyboardButton("📅 Hoy", callback_data="date:today")],
+                [InlineKeyboardButton("✍️ Escribir fecha", callback_data="date:manual")],
+            ]),
+        )
+    if state == WAIT_DATE:
+        return (
+            "📅 Escribe la fecha con el formato DÍA/MES/AÑO (DD/MM/AAAA).\n"
+            "Ejemplo: 31/08/2026. Usa dos dígitos para el día y el mes, y cuatro para el año.",
+            cancel_registration_markup(),
+        )
+    return welcome_text(), main_menu_markup()
+
+
+def prompt_payload(data, text, markup):
+    # Buttons from previous questions must never confirm a new node or draft.
+    token = secrets.token_hex(4)
+    data["prompt_token"] = token
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton(button.text, callback_data=f"{button.callback_data}|{token}") for button in row]
+        for row in markup.inline_keyboard
+    ])
+    return text, keyboard
+
+
+async def repeat_prompt(message, context, prefix=None):
+    text, markup = current_prompt(context.user_data)
+    if prefix:
+        text = f"{prefix}\n\n{text}"
+    text, markup = prompt_payload(context.user_data, text, markup)
+    await message.reply_text(text, reply_markup=markup)
+
+
+def conversation_lock(data):
+    return data.setdefault("conversation_lock", asyncio.Lock())
+
+
+async def reset_conversation(data, chat_id, now=None):
+    lock = conversation_lock(data)
+    user_id = data.get(ACTIVE_USER_ID)
+    await cancel_pending_reading(data.get("reading_id"), user_id)
+    data.clear()
+    data.update({
+        "conversation_lock": lock, STATE: MAIN_MENU, ACTIVE_USER_ID: user_id,
+        ACTIVE_CHAT_ID: chat_id, ACTIVE_UNTIL: (now or timezone.now()) + CONVERSATION_TIMEOUT,
+    })
+
+
 async def show_main_menu(message, context):
-    context.user_data.clear()
-    await message.reply_text(welcome_text(), reply_markup=main_menu_markup())
+    await reset_conversation(context.user_data, message.chat.id)
+    await repeat_prompt(message, context)
 
 
+def conversation_handler(handler):
+    @wraps(handler)
+    async def wrapped(update, context):
+        data = context.user_data
+        async with conversation_lock(data):
+            data[ACTIVE_USER_ID] = update.effective_user.id
+            expires = data.get(ACTIVE_UNTIL)
+            if expires is not None and expires <= timezone.now():
+                query = getattr(update, "callback_query", None)
+                if query:
+                    await query.answer()
+                message = query.message if query else update.message
+                await show_main_menu(message, context)
+                return
+            mark_conversation_active(context, update.effective_chat.id)
+            try:
+                await handler(update, context)
+            finally:
+                # Processing time (including OCR) is not user inactivity.
+                mark_conversation_active(context, update.effective_chat.id)
+    return wrapped
+
+
+@conversation_handler
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await show_main_menu(update.message, context)
 
 
+@conversation_handler
 async def chat_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(f"El identificador de este chat es: {update.effective_chat.id}")
+    await repeat_prompt(update.message, context)
 
 
 async def begin_node_selection(message, context, mode):
-    context.user_data.clear()
-    context.user_data[MODE] = mode
-    context.user_data[STATE] = SELECT_NODE
-    mark_conversation_active(context, message.chat.id)
-    label = "registrar" if mode == ENTER else "consultar"
-    keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("📋 Ver opciones de nodos", callback_data="nodes:list")],
-        [InlineKeyboardButton("↩️ Volver al inicio", callback_data="menu:home")],
-    ])
-    await message.reply_text(
-        f"Escribe el nombre del nodo que deseas {label}, aunque no lo recuerdes exactamente.\n"
-        "También puedes ver la lista completa:", reply_markup=keyboard
-    )
+    await reset_conversation(context.user_data, message.chat.id)
+    context.user_data.update({MODE: mode, STATE: SELECT_NODE})
+    await repeat_prompt(message, context)
 
 
 async def show_node_list(message, context, edit=False):
     nodes = await authorized_nodes(message.chat.id)
     if not nodes:
-        await message.reply_text("Este chat todavía no tiene nodos autorizados.")
+        await repeat_prompt(message, context, "Este chat todavía no tiene nodos autorizados.")
         return
     keyboard = [[InlineKeyboardButton(name, callback_data=f"node:select:{node_id}")]
                 for node_id, name, _code in nodes]
     keyboard.append([InlineKeyboardButton("↩️ Volver al inicio", callback_data="menu:home")])
-    text = "📋 Selecciona uno de los nodos WI-NET:"
-    if edit:
-        await message.edit_text(text, reply_markup=InlineKeyboardMarkup(keyboard))
-    else:
-        await message.reply_text(text, reply_markup=InlineKeyboardMarkup(keyboard))
+    text, markup = prompt_payload(context.user_data, "📋 Selecciona uno de los nodos WI-NET:", InlineKeyboardMarkup(keyboard))
+    await message.reply_text(text, reply_markup=markup)
 
 
 async def select_node(message, context, node_id, telegram_user_id):
     node = await get_authorized_node(node_id, message.chat.id)
     if not node:
-        await message.reply_text("Ese nodo no está disponible para este chat.")
+        await repeat_prompt(message, context, "Ese nodo no está disponible para este chat.")
         return
-    context.user_data["node_id"] = node.id
+    context.user_data.update({"node_id": node.id, "node_name": node.name})
     if context.user_data.get(MODE) == CONSULT:
-        context.user_data[STATE] = None
-        keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("📅 Lecturas del mes actual", callback_data=f"query:current:{node.id}")],
-            [InlineKeyboardButton("🗂 Últimas lecturas registradas", callback_data=f"query:recent:{node.id}")],
-            [InlineKeyboardButton("↩️ Volver al inicio", callback_data="menu:home")],
-        ])
-        await message.reply_text(f"🔎 Consulta de lecturas\n🏢 Nodo: {node.name}\n\n¿Qué deseas ver?", reply_markup=keyboard)
+        context.user_data[STATE] = SELECT_PERIOD
     else:
-        mark_conversation_active(context, message.chat.id)
+        try:
+            plan = await sync_to_async(get_registration_plan)(node)
+        except ValidationError as error:
+            await message.reply_text(" ".join(error.messages))
+            await show_main_menu(message, context)
+            return
+        context.user_data["registration_explanation"] = plan.explanation
         pending = await get_pending_node_reading(node.id, message.chat.id, telegram_user_id)
         if pending:
-            context.user_data["reading_id"] = pending.id
-            pending_description = (
-                "una lectura manual pendiente" if pending.source == Reading.Source.MANUAL
-                else "una fotografía ya procesada"
+            context.user_data.update({"reading_id": pending.id, "display_value": pending.detected_value})
+            context.user_data[STATE] = (
+                OCR_FAILED if pending.detected_value is None else
+                CONFIRM_MANUAL_VALUE if pending.source == Reading.Source.MANUAL else CONFIRM_READING
             )
-            correction_callback = (
-                f"reading:manual:correct:{pending.id}" if pending.source == Reading.Source.MANUAL
-                else f"reading:correct:{pending.id}"
-            )
-            await message.reply_text(
-                f"🔄 Encontré {pending_description} para este nodo.\n\n"
-                f"🏢 Nodo: {node.name}\n"
-                f"⚡ Lectura detectada: {format_reading_value(pending.detected_value)}\n\n"
-                "¿Confirmas esta lectura?",
-                reply_markup=cancel_registration_markup([
-                    [InlineKeyboardButton("✅ Confirmar", callback_data=f"reading:confirm:{pending.id}")],
-                    [InlineKeyboardButton("✏️ Corregir", callback_data=correction_callback)],
-                ]),
-            )
-            return
-        context.user_data[STATE] = WAIT_PHOTO
-        await message.reply_text(
-            f"📷 Registro de lectura\n🏢 Nodo: {node.name}\n\n"
-            "Ahora envía una fotografía clara del medidor. Analizaré el número localmente.\n\n"
-            "Si no tienes una fotografía, puedes escribir el número de la lectura.",
-            reply_markup=cancel_registration_markup([[
-                InlineKeyboardButton("⌨️ Escribir lectura manualmente", callback_data="reading:manual:start")
-            ]]),
-        )
+        else:
+            context.user_data[STATE] = WAIT_PHOTO
+    mark_conversation_active(context, message.chat.id)
+    await repeat_prompt(message, context)
 
 
 async def ask_reading_date(message, context):
-    context.user_data[STATE] = WAIT_DATE
+    context.user_data[STATE] = CHOOSE_DATE
     mark_conversation_active(context, message.chat.id)
-    await message.reply_text(
-        "📅 ¿Qué fecha corresponde a esta lectura?\n\n"
-        "Pulsa «Hoy» para usar la fecha actual o escribe la fecha con el formato:\n"
-        "DÍA/MES/AÑO — ejemplo: 17/08/2026",
-        reply_markup=cancel_registration_markup([
-            [InlineKeyboardButton("📅 Hoy", callback_data="date:today")],
-            [InlineKeyboardButton("✍️ Escribir otra fecha", callback_data="date:manual")],
-        ]),
-    )
+    await repeat_prompt(message, context)
 
 
 async def finish_reading(message, context, telegram_user_id, reading_date, edit=False):
-    reading = await confirm_reading(
-        context.user_data.get("reading_id"), telegram_user_id, reading_date,
-        context.user_data.get("corrected_value"),
-    )
+    try:
+        reading = await confirm_reading(
+            context.user_data.get("reading_id"), telegram_user_id, reading_date,
+            context.user_data.get("corrected_value"),
+        )
+    except ValidationError as error:
+        await repeat_prompt(message, context, " ".join(error.messages))
+        return
     if reading:
-        context.user_data.clear()
         text = (
             f"✅ LECTURA REGISTRADA\n\n🏢 Nodo: {reading.schedule.node.name}\n"
+            f"📋 Tipo: {'Seguimiento' if reading.schedule.is_follow_up else 'Lectura mensual'}\n"
             f"⚡ Lectura: {format_reading_value(reading.confirmed_value)}\n"
             f"📅 Fecha: {reading.reading_date:%d/%m/%Y}\n\n"
             "La información ya aparece en LECTURAS WI-NET."
         )
     else:
-        context.user_data.clear()
         text = "No se pudo registrar. La lectura ya fue procesada o no tiene un valor válido."
-    if edit:
-        await message.edit_text(text, reply_markup=None if reading else main_menu_markup())
-    else:
-        await message.reply_text(text, reply_markup=None if reading else main_menu_markup())
-    if reading:
-        await message.reply_text(welcome_text(), reply_markup=main_menu_markup())
+    await message.reply_text(text)
+    await show_main_menu(message, context)
 
 
+@conversation_handler
 async def receive_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = (update.message.text or "").strip()
-    state = context.user_data.get(STATE)
-    if state in ACTIVE_STATES:
-        mark_conversation_active(context, update.effective_chat.id)
+    state = context.user_data.get(STATE, MAIN_MENU)
     if state == SELECT_NODE:
         if normalize_node_name(text) in {"opciones", "ver opciones", "lista"}:
             await show_node_list(update.message, context)
@@ -449,85 +597,46 @@ async def receive_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
         nodes = await authorized_nodes(update.effective_chat.id)
         best = find_best_node_name(text, nodes)
         if not best:
-            await update.message.reply_text("No encontré un nodo parecido. Escribe otro nombre o pulsa «Ver opciones de nodos».")
+            await repeat_prompt(update.message, context, "No se reconoce ese nombre. Verifica la lista de nodos o escribe otro nombre.")
             return
-        context.user_data["candidate_id"] = best[0]
-        context.user_data[STATE] = CONFIRM_NODE
-        await update.message.reply_text(
-            f"Encontré este nodo:\n🏢 {best[1]}\n\n¿Es el nodo correcto?",
-            reply_markup=cancel_registration_markup([
-                [InlineKeyboardButton("✅ Sí", callback_data="node:yes"),
-                 InlineKeyboardButton("❌ No", callback_data="node:no")]
-            ]),
-        )
+        context.user_data.update({"candidate_id": best[0], "candidate_name": best[1], STATE: CONFIRM_NODE})
+        await repeat_prompt(update.message, context)
         return
-    if state == WAIT_CORRECTION:
+    if state in {WAIT_MANUAL_VALUE, WAIT_CORRECTION}:
         value = parse_reading_value(text)
         if value is None:
-            await update.message.reply_text("Escribe solo un número positivo. Ejemplo: 170269.6")
-            return
-        context.user_data["corrected_value"] = value
-        await ask_reading_date(update.message, context)
-        return
-    if state == WAIT_MANUAL_VALUE:
-        value = parse_reading_value(text)
-        if value is None:
-            await update.message.reply_text(
-                "El valor no es válido. Escribe únicamente la lectura.\nEjemplo: 170269.6"
-            )
+            await repeat_prompt(update.message, context, "El valor no es válido. Solo se acepta un número; escribe el valor correcto.")
             return
         reading_id = context.user_data.get("reading_id")
         if reading_id:
             context.user_data["corrected_value"] = value
         else:
             reading, error = await create_manual_reading(
-                context.user_data.get("node_id"), value, update.effective_user,
-                update.effective_chat.id,
+                context.user_data.get("node_id"), value, update.effective_user, update.effective_chat.id,
             )
             if error:
-                await update.message.reply_text(error)
+                await repeat_prompt(update.message, context, error)
                 return
-            reading_id = reading.id
-            context.user_data["reading_id"] = reading_id
+            context.user_data["reading_id"] = reading.id
             context.user_data.pop("corrected_value", None)
-        context.user_data[STATE] = CONFIRM_MANUAL_VALUE
-        await update.message.reply_text(
-            f"⌨️ LECTURA INGRESADA MANUALMENTE\n\n"
-            f"⚡ Lectura: {format_reading_value(value)}\n\n"
-            "¿El número es correcto?",
-            reply_markup=cancel_registration_markup([
-                [InlineKeyboardButton("✅ Sí, continuar", callback_data=f"reading:manual:confirm:{reading_id}")],
-                [InlineKeyboardButton("✏️ Corregir número", callback_data=f"reading:manual:correct:{reading_id}")],
-            ]),
-        )
-        return
-    if state == CONFIRM_MANUAL_VALUE:
-        await update.message.reply_text("Usa «Sí, continuar» o «Corregir número» para continuar.")
+        context.user_data.update({STATE: CONFIRM_MANUAL_VALUE, "display_value": value})
+        await repeat_prompt(update.message, context)
         return
     if state == WAIT_DATE:
-        reading_date = parse_reading_date(text)
+        reading_date = parse_reading_date(text) if re.fullmatch(r"[0-9]{2}/[0-9]{2}/[0-9]{4}", text) else None
         if reading_date is None:
-            await update.message.reply_text(
-                "La fecha no es válida. Escribe «Hoy» o una fecha con el formato DÍA/MES/AÑO.\n"
-                "Ejemplo: 17/08/2026"
-            )
+            await repeat_prompt(update.message, context, "La fecha no es válida. Corrígela usando el formato indicado y una fecha que exista.")
             return
         await finish_reading(update.message, context, update.effective_user.id, reading_date)
         return
-    normalized = normalize_node_name(text)
-    if normalized in {"1", "ingresar", "ingresar lectura"}:
-        await begin_node_selection(update.message, context, ENTER)
-    elif normalized in {"2", "consultar", "consultar lectura"}:
-        await begin_node_selection(update.message, context, CONSULT)
-    else:
-        await update.message.reply_text(welcome_text(), reply_markup=main_menu_markup())
+    await repeat_prompt(update.message, context)
 
 
+@conversation_handler
 async def receive_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if context.user_data.get(STATE) != WAIT_PHOTO or not context.user_data.get("node_id"):
-        await update.message.reply_text("Primero elige «Ingresar lectura» y selecciona el nodo.", reply_markup=main_menu_markup())
+        await repeat_prompt(update.message, context)
         return
-    mark_conversation_active(context, update.effective_chat.id)
     status = await update.message.reply_text(
         "⏳ Analizando primero con OCR local; si no hay una lectura segura se probará el respaldo…"
     )
@@ -540,31 +649,24 @@ async def receive_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     if error:
         await status.edit_text(error)
+        await repeat_prompt(update.message, context)
         return
-    context.user_data["reading_id"] = reading.id
-    detected = format_reading_value(reading.detected_value)
-    confidence = f"{reading.ocr_confidence:.0%}" if reading.ocr_confidence is not None else "no disponible"
+    context.user_data.update({"reading_id": reading.id, "display_value": reading.detected_value})
     if reading.detected_value is None:
-        context.user_data[STATE] = WAIT_CORRECTION
-        await status.edit_text(
-            f"⚠️ NO SE PUDO RECONOCER LA LECTURA\n\n🏢 Nodo: {reading.schedule.node.name}\n\n"
-            "El OCR local y el respaldo no obtuvieron un resultado suficientemente seguro. "
-            "Ingresa la lectura manualmente para continuar.",
-            reply_markup=cancel_registration_markup([
-                [InlineKeyboardButton("⌨️ Ingresar lectura manual", callback_data=f"reading:correct:{reading.id}")],
-            ]),
-        )
+        context.user_data[STATE] = OCR_FAILED
     else:
+        context.user_data[STATE] = CONFIRM_READING
+        confidence = f"{reading.ocr_confidence:.0%}" if reading.ocr_confidence is not None else "no disponible"
         method = "Cloudflare" if reading.ocr_text.startswith("CLOUDFLARE:") else "OCR local"
-        await status.edit_text(
-            f"🔍 ANÁLISIS COMPLETADO\n\n🏢 Nodo: {reading.schedule.node.name}\n"
-            f"⚡ Lectura detectada: {detected}\n🎯 Confianza: {confidence}\n🧠 Método: {method}"
-            "\n\n¿Confirmas esta lectura?",
-            reply_markup=cancel_registration_markup([
-                [InlineKeyboardButton("✅ Confirmar", callback_data=f"reading:confirm:{reading.id}")],
-                [InlineKeyboardButton("✏️ Corregir", callback_data=f"reading:correct:{reading.id}")],
-            ]),
-        )
+        context.user_data["ocr_details"] = f"🎯 Confianza: {confidence}\n🧠 Método: {method}\n"
+    text, markup = current_prompt(context.user_data)
+    text, markup = prompt_payload(context.user_data, text, markup)
+    await status.edit_text(text, reply_markup=markup)
+
+
+@conversation_handler
+async def receive_unexpected(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await repeat_prompt(update.message, context)
 
 
 async def show_history(message, node_id, chat_id, current_month):
@@ -578,90 +680,95 @@ async def show_history(message, node_id, chat_id, current_month):
         lines.extend(f"• {day:%d/%m/%Y}: {format_reading_value(value)}" for day, value in rows)
     else:
         lines.append("No hay lecturas registradas en este periodo.")
-    await message.reply_text("\n".join(lines), reply_markup=main_menu_markup())
+    await message.reply_text("\n".join(lines))
 
 
+@conversation_handler
 async def callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
-    data = query.data
-    if data == "menu:home":
-        context.user_data.clear()
-        await query.edit_message_text(welcome_text(), reply_markup=main_menu_markup())
-    elif data == "reading:cancel":
-        await cancel_pending_reading(context.user_data.get("reading_id"), update.effective_user.id)
-        context.user_data.clear()
-        await query.edit_message_text(
-            "❌ REGISTRO CANCELADO\n\n"
-            "La lectura no fue registrada.\n\n"
-            f"{welcome_text()}",
-            reply_markup=main_menu_markup(),
-        )
-    elif data == "menu:enter":
-        await begin_node_selection(query.message, context, ENTER)
-    elif data == "menu:consult":
-        await begin_node_selection(query.message, context, CONSULT)
-    elif data == "nodes:list":
-        await show_node_list(query.message, context, edit=True)
-    elif data == "node:no":
-        context.user_data[STATE] = SELECT_NODE
-        mark_conversation_active(context, update.effective_chat.id)
-        await query.edit_message_text("De acuerdo. Escribe nuevamente el nombre o selecciona la lista completa.",
-                                      reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("📋 Ver opciones", callback_data="nodes:list")]]))
-    elif data == "node:yes":
-        await select_node(query.message, context, context.user_data.get("candidate_id"), update.effective_user.id)
-    elif data.startswith("node:select:"):
-        await select_node(query.message, context, int(data.rsplit(":", 1)[1]), update.effective_user.id)
-    elif data.startswith("reminder_register:"):
-        context.user_data.clear()
-        context.user_data[MODE] = ENTER
-        await select_node(query.message, context, int(data.rsplit(":", 1)[1]), update.effective_user.id)
-    elif data.startswith("query:"):
-        _, period, raw_id = data.split(":")
-        await show_history(query.message, int(raw_id), update.effective_chat.id, period == "current")
-    elif data == "reading:manual:start":
-        if not context.user_data.get("node_id"):
-            await query.message.reply_text("Primero selecciona el nodo.", reply_markup=main_menu_markup())
+    action, separator, token = (query.data or "").partition("|")
+    state = context.user_data.get(STATE, MAIN_MENU)
+    # Reminder buttons are entry points, but cannot interrupt an ongoing registration.
+    if action.startswith("reminder_register:") and state == MAIN_MENU:
+        raw_id = action.rsplit(":", 1)[1]
+        if raw_id.isascii() and raw_id.isdigit():
+            context.user_data[MODE] = ENTER
+            await select_node(query.message, context, int(raw_id), update.effective_user.id)
             return
+    if not separator or token != context.user_data.get("prompt_token"):
+        await repeat_prompt(query.message, context)
+        return
+    allowed = {button.callback_data for row in current_prompt(context.user_data)[1].inline_keyboard for button in row}
+    # The node list has a variable keyboard; authorization is checked by select_node.
+    list_selection = state == SELECT_NODE and re.fullmatch(r"node:select:[0-9]+", action)
+    if action not in allowed and not list_selection:
+        await repeat_prompt(query.message, context)
+        return
+    if action in {"menu:home", "reading:cancel"}:
+        if action == "reading:cancel":
+            await query.message.reply_text("❌ REGISTRO CANCELADO\n\nLa lectura no fue registrada.")
+        await show_main_menu(query.message, context)
+    elif action in {"menu:enter", "menu:consult"}:
+        await begin_node_selection(query.message, context, ENTER if action == "menu:enter" else CONSULT)
+    elif action == "nodes:list":
+        await show_node_list(query.message, context)
+    elif action == "node:no":
+        context.user_data[STATE] = SELECT_NODE
+        await repeat_prompt(query.message, context)
+    elif action == "node:yes":
+        await select_node(query.message, context, context.user_data.get("candidate_id"), update.effective_user.id)
+    elif list_selection:
+        await select_node(query.message, context, int(action.rsplit(":", 1)[1]), update.effective_user.id)
+    elif action.startswith("query:"):
+        _, period, raw_id = action.split(":")
+        await show_history(query.message, int(raw_id), update.effective_chat.id, period == "current")
+        await show_main_menu(query.message, context)
+    elif action == "reading:manual:start":
         context.user_data[STATE] = WAIT_MANUAL_VALUE
-        context.user_data.pop("reading_id", None)
-        context.user_data.pop("corrected_value", None)
-        mark_conversation_active(context, update.effective_chat.id)
-        await query.message.reply_text(
-            "⌨️ Escribe el número que aparece en el medidor.\n\nEjemplo: 170269.6",
-            reply_markup=cancel_registration_markup(),
-        )
-    elif data.startswith("reading:manual:confirm:"):
-        context.user_data["reading_id"] = int(data.rsplit(":", 1)[1])
+        await repeat_prompt(query.message, context)
+    elif action.startswith(("reading:manual:confirm:", "reading:confirm:")):
         await ask_reading_date(query.message, context)
-    elif data.startswith("reading:manual:correct:"):
-        context.user_data["reading_id"] = int(data.rsplit(":", 1)[1])
+    elif action.startswith(("reading:manual:correct:", "reading:correct:")):
         context.user_data[STATE] = WAIT_MANUAL_VALUE
-        mark_conversation_active(context, update.effective_chat.id)
-        await query.message.reply_text(
-            "✏️ Escribe nuevamente el número correcto. Ejemplo: 170269.6",
-            reply_markup=cancel_registration_markup(),
-        )
-    elif data.startswith("reading:confirm:"):
-        context.user_data["reading_id"] = int(data.rsplit(":", 1)[1])
-        context.user_data.pop("corrected_value", None)
-        await ask_reading_date(query.message, context)
-    elif data.startswith("reading:correct:"):
-        context.user_data[STATE] = WAIT_CORRECTION
-        context.user_data["reading_id"] = int(data.rsplit(":", 1)[1])
-        mark_conversation_active(context, update.effective_chat.id)
-        await query.message.reply_text(
-            "✏️ Escribe el valor correcto. Ejemplo: 170269.6",
-            reply_markup=cancel_registration_markup(),
-        )
-    elif data == "date:today":
-        await finish_reading(query.message, context, update.effective_user.id, timezone.localdate(), edit=True)
-    elif data == "date:manual":
-        mark_conversation_active(context, update.effective_chat.id)
-        await query.message.reply_text(
-            "Escribe la fecha con el formato DÍA/MES/AÑO.\nEjemplo: 17/08/2026",
-            reply_markup=cancel_registration_markup(),
-        )
+        await repeat_prompt(query.message, context)
+    elif action == "date:today":
+        await finish_reading(query.message, context, update.effective_user.id, timezone.localdate())
+    elif action == "date:manual":
+        context.user_data[STATE] = WAIT_DATE
+        await repeat_prompt(query.message, context)
+
+
+async def expire_conversations(application, now=None):
+    now = now or timezone.now()
+    for user_id, data in list(application.user_data.items()):
+        lock = conversation_lock(data)
+        if lock.locked():
+            continue
+        async with lock:
+            deadline = data.get(ACTIVE_UNTIL)
+            chat_id = data.get(ACTIVE_CHAT_ID)
+            if deadline is None or deadline > now or chat_id is None:
+                continue
+            data[ACTIVE_USER_ID] = user_id
+            await reset_conversation(data, chat_id, now)
+            text, markup = prompt_payload(data, welcome_text(), main_menu_markup())
+            try:
+                await application.bot.send_message(chat_id=chat_id, text=text, reply_markup=markup)
+            except Forbidden:
+                # A blocked bot must not keep trying to contact the user.
+                data.pop(ACTIVE_UNTIL, None)
+            except TelegramError:
+                logger.exception("No se pudo enviar el menú tras la inactividad")
+
+
+async def conversation_timeout_loop(application):
+    while True:
+        try:
+            await expire_conversations(application)
+        except Exception:
+            logger.exception("No se pudieron reiniciar las conversaciones inactivas")
+        await asyncio.sleep(1)
 
 
 async def reminder_loop(application):
@@ -670,8 +777,7 @@ async def reminder_loop(application):
             jobs = await sync_to_async(prepare_reminder_jobs)()
             paused_chats = active_chat_ids(application)
             jobs = [job for job in jobs if job["chat_id"] not in paused_chats]
-            results = await send_reminder_jobs(application.bot, jobs)
-            await sync_to_async(record_reminder_results)(results)
+            await send_reminder_jobs(application.bot, jobs)
         except Exception:
             logger.exception("No se pudieron enviar los recordatorios de Telegram")
         # Se revisa cada minuto para reanudar pronto tras finalizar una conversación.
@@ -680,14 +786,24 @@ async def reminder_loop(application):
 
 
 async def post_init(application):
-    application.create_task(reminder_loop(application), name="wi-net-reminders")
+    application.bot_data["background_tasks"] = [
+        asyncio.create_task(reminder_loop(application), name="wi-net-reminders"),
+        asyncio.create_task(conversation_timeout_loop(application), name="wi-net-conversation-timeouts"),
+    ]
+
+
+async def post_stop(application):
+    tasks = application.bot_data.pop("background_tasks", [])
+    for task in tasks:
+        task.cancel()
+    await asyncio.gather(*tasks, return_exceptions=True)
 
 
 async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE):
     logger.exception("Error al procesar una actualización de Telegram", exc_info=context.error)
     message = getattr(update, "effective_message", None)
     if message:
-        await message.reply_text("Ocurrió un error. Inténtalo nuevamente o avisa al administrador.", reply_markup=main_menu_markup())
+        await repeat_prompt(message, context, "Ocurrió un error. Inténtalo nuevamente o avisa al administrador.")
 
 
 class Command(BaseCommand):
@@ -696,12 +812,13 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         if not settings.TELEGRAM_BOT_TOKEN:
             raise CommandError("Configura TELEGRAM_BOT_TOKEN en el archivo .env")
-        app = Application.builder().token(settings.TELEGRAM_BOT_TOKEN).post_init(post_init).build()
+        app = Application.builder().token(settings.TELEGRAM_BOT_TOKEN).post_init(post_init).post_stop(post_stop).build()
         app.add_handler(CommandHandler("start", start))
         app.add_handler(CommandHandler("id", chat_id))
         app.add_handler(CallbackQueryHandler(callback))
         app.add_handler(MessageHandler(filters.PHOTO, receive_photo))
         app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, receive_text))
+        app.add_handler(MessageHandler(filters.ALL, receive_unexpected))
         app.add_error_handler(error_handler)
         self.stdout.write(self.style.SUCCESS("Bot WI-NET iniciado. Presiona Ctrl+C para detenerlo."))
         app.run_polling(allowed_updates=Update.ALL_TYPES, drop_pending_updates=True)

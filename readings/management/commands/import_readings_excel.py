@@ -1,5 +1,6 @@
 import re
 import unicodedata
+from contextlib import closing
 from datetime import date, datetime
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
@@ -59,7 +60,10 @@ class Command(BaseCommand):
         if not workbook_path.exists():
             raise CommandError(f"No existe el archivo: {workbook_path}")
 
-        workbook = load_workbook(workbook_path, data_only=True, read_only=True)
+        with closing(load_workbook(workbook_path, data_only=True, read_only=True)) as workbook:
+            self._import_workbook(workbook, options)
+
+    def _import_workbook(self, workbook, options):
         if "LECTURAS 2026" not in workbook.sheetnames:
             raise CommandError("El archivo no contiene la hoja LECTURAS 2026")
         sheet = workbook["LECTURAS 2026"]
@@ -114,6 +118,13 @@ class Command(BaseCommand):
                     skipped_non_numeric += 1
                 if reading_value is None or reading_date is None or reading_date.year not in (2025, 2026):
                     continue
+                # A reconciled historical record may now belong to a different
+                # scheduled date. Reimporting must preserve that assignment.
+                if Reading.objects.filter(
+                    schedule__node=node, reading_date=reading_date,
+                    confirmed_value=reading_value, source=Reading.Source.EXCEL,
+                ).exists():
+                    continue
                 schedule, _ = ReadingSchedule.objects.get_or_create(
                     node=node,
                     due_date=reading_date,
@@ -144,4 +155,3 @@ class Command(BaseCommand):
                 f"{readings_created} lecturas nuevas y {skipped_non_numeric} valores no numéricos omitidos."
             )
         )
-

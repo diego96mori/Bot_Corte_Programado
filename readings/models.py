@@ -67,11 +67,10 @@ class ReadingSchedule(models.Model):
         if self.status == self.Status.PENDING:
             days = (self.due_date - today).days
             event = "seguimiento" if self.is_follow_up else "lectura"
-            article = "el" if self.is_follow_up else "la"
             if days > 1:
-                return f"Pendiente: faltan {days} días para {article} {event}"
+                return f"{event.capitalize()}: faltan {days} días"
             if days == 1:
-                return f"Pendiente: falta 1 día para {article} {event}"
+                return f"{event.capitalize()}: falta 1 día"
             if days == 0:
                 return f"{event.capitalize()} para hoy"
             overdue = -days

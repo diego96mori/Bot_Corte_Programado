@@ -482,7 +482,12 @@ class NotificationTests(TestCase):
         self.assertEqual(item.days_until, 2)
 
     def test_monthly_notification_is_hidden_before_three_day_window(self):
-        self.create_node("AUN-NO", 20)
+        node = self.create_node("AUN-NO", 20)
+        # No early August alert when July's monthly reading and follow-up are complete.
+        self.add_reading(node, date(2026, 7, 20))
+        follow_up = self.add_reading(node, date(2026, 7, 30))
+        follow_up.schedule.notes = "Seguimiento de 10 días"
+        follow_up.schedule.save(update_fields=["notes"])
         self.assertEqual(get_reading_notifications(self.today), [])
 
     def test_follow_up_starts_one_day_before_ten_days(self):
@@ -660,7 +665,7 @@ class ManagementStatusLabelTests(TestCase):
         overdue = self.create_schedule(date(2026, 8, 17))
         self.assertEqual(
             upcoming.management_status_label_for(self.today),
-            "Pendiente: faltan 2 días para la lectura",
+            "Lectura: faltan 2 días",
         )
         self.assertEqual(today.management_status_label_for(self.today), "Lectura para hoy")
         self.assertEqual(overdue.management_status_label_for(self.today), "Lectura atrasada 1 día")
@@ -669,7 +674,7 @@ class ManagementStatusLabelTests(TestCase):
         schedule = self.create_schedule(date(2026, 8, 19), "Seguimiento de 10 días")
         self.assertEqual(
             schedule.management_status_label_for(self.today),
-            "Pendiente: falta 1 día para el seguimiento",
+            "Seguimiento: falta 1 día",
         )
 
 

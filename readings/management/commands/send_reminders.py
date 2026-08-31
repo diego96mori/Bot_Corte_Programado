@@ -2,7 +2,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from telegram import Bot
 
-from readings.services.reminders import prepare_reminder_jobs, record_reminder_results, send_reminder_jobs
+from readings.services.reminders import prepare_reminder_jobs, send_reminder_jobs
 
 import asyncio
 
@@ -22,7 +22,6 @@ class Command(BaseCommand):
             raise CommandError("Configura TELEGRAM_BOT_TOKEN en el archivo .env")
         jobs = prepare_reminder_jobs(force=options["force"])
         results = asyncio.run(self.send_all(jobs))
-        record_reminder_results(results)
         self.stdout.write(
             self.style.SUCCESS(f"Recordatorios enviados: {len(results)}")
         )
