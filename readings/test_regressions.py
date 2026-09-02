@@ -81,25 +81,25 @@ class ReadingCycleRegressionTests(TestCase):
         old_task = next(event for event in events if event["date"] == "2026-09-10")
         self.assertEqual(old_task["state"], "closed")
 
-    def test_backdated_reading_completes_only_its_actual_cycle(self):
+    def test_backdated_reading_cannot_reopen_a_closed_cycle(self):
         older = ReadingSchedule.objects.create(node=self.node, due_date=date(2026, 6, 11))
         draft = self.draft(date(2026, 8, 31))
         august = draft.schedule
-        reading = self.confirm(draft, date(2026, 7, 11))
-        self.assertEqual(reading.schedule.due_date, date(2026, 7, 11))
-        self.assertEqual(reading.schedule.status, ReadingSchedule.Status.COMPLETED)
-        self.assertEqual(get_cycle_state(self.node, date(2026, 7, 11))["monthly_reading"], reading)
+        with self.assertRaisesMessage(ValidationError, "ya está cerrado"):
+            self.confirm(draft, date(2026, 7, 11))
+        draft.refresh_from_db()
+        self.assertEqual(draft.status, Reading.Status.REVIEW)
         for schedule in (older, august):
             schedule.refresh_from_db()
             self.assertEqual(schedule.status, ReadingSchedule.Status.PENDING)
         prepare_reminder_jobs(timezone.make_aware(datetime(2026, 8, 31, 12)))
-        reading.schedule.refresh_from_db()
-        self.assertEqual(reading.schedule.status, ReadingSchedule.Status.COMPLETED)
+        august.refresh_from_db()
+        self.assertEqual(august.status, ReadingSchedule.Status.PENDING)
 
     def test_backdating_cannot_create_another_monthly_before_existing_reading(self):
         self.confirm(self.draft(date(2026, 8, 31)), date(2026, 8, 31))
         draft = self.draft(date(2026, 9, 15), "90")
-        with self.assertRaisesMessage(ValidationError, "fecha anterior"):
+        with self.assertRaisesMessage(ValidationError, "historial en gris"):
             self.confirm(draft, date(2026, 8, 11))
         draft.refresh_from_db()
         self.assertEqual(draft.status, Reading.Status.REVIEW)
@@ -108,7 +108,7 @@ class ReadingCycleRegressionTests(TestCase):
         self.confirm(self.draft(date(2026, 8, 31)), date(2026, 8, 31))
         self.confirm(self.draft(date(2026, 9, 8), "110"), date(2026, 9, 8))
         draft = self.draft(date(2026, 9, 15), "105")
-        with self.assertRaisesMessage(ValidationError, "ya tiene su lectura mensual y su seguimiento"):
+        with self.assertRaisesMessage(ValidationError, "historial en gris"):
             self.confirm(draft, date(2026, 9, 7))
         draft.refresh_from_db()
         self.assertEqual(draft.status, Reading.Status.REVIEW)

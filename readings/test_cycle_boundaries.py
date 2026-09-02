@@ -14,6 +14,7 @@ from readings.models import Node, Reading, ReadingSchedule
 from readings.services.calendar import get_calendar_events
 from readings.services.notifications import active_cycle_due, get_node_obligation, get_reading_notifications
 from readings.services.reminders import prepare_reminder_jobs
+from readings.services.reminders import reminder_text
 
 
 class CycleBoundaryTests(TestCase):
@@ -35,6 +36,35 @@ class CycleBoundaryTests(TestCase):
                 node = Node(reading_day=day)
                 self.assertEqual(active_cycle_due(node, cutoff), due)
                 self.assertLess(active_cycle_due(node, cutoff - timedelta(days=1)), due)
+
+    def test_late_monthly_reading_reminds_until_next_cycle_opens(self):
+        node = Node.objects.create(
+            code="LATE-15", name="Lectura tardía", reading_day=15,
+            telegram_chat_id=1,
+        )
+        monthly = ReadingSchedule.objects.create(
+            node=node, due_date=date(2026, 8, 15),
+            notes="Lectura mensual", status=ReadingSchedule.Status.COMPLETED,
+        )
+        Reading.objects.create(
+            schedule=monthly, reading_date=date(2026, 9, 11),
+            confirmed_value=100, status=Reading.Status.CONFIRMED,
+        )
+
+        for today in (date(2026, 9, 11), date(2026, 9, 12)):
+            with self.subTest(today=today):
+                alerts = get_reading_notifications(today)
+                self.assertEqual(len(alerts), 1)
+                self.assertEqual(alerts[0].kind, "FOLLOW_UP")
+                self.assertEqual(alerts[0].due_date, date(2026, 9, 21))
+                self.assertEqual(alerts[0].cutoff, date(2026, 9, 13))
+                self.assertIn("Disponible hasta el 12/09/2026", alerts[0].status_label)
+                self.assertIn("Último día para registrarlo: 12/09/2026", reminder_text(alerts[0]))
+
+        alerts = get_reading_notifications(date(2026, 9, 13))
+        self.assertEqual(len(alerts), 1)
+        self.assertEqual(alerts[0].kind, "MONTHLY")
+        self.assertEqual(alerts[0].due_date, date(2026, 9, 15))
 
 
 class UpcomingGridTests(TestCase):

@@ -22,6 +22,7 @@ from telegram.error import Forbidden, TelegramError
 from telegram.ext import Application, CallbackQueryHandler, CommandHandler, ContextTypes, MessageHandler, filters
 
 from readings.models import Node, Reading, ReadingSchedule
+from readings.services.notifications import active_cycle_due
 from readings.services.registration import get_registration_plan
 from readings.services.ocr import read_meter
 from readings.services.reminders import prepare_reminder_jobs, send_reminder_jobs
@@ -30,7 +31,6 @@ logger = logging.getLogger(__name__)
 STATE = "state"
 MAIN_MENU = "MAIN_MENU"
 SELECT_NODE = "SELECT_NODE"
-SELECT_PERIOD = "SELECT_PERIOD"
 CONFIRM_NODE = "CONFIRM_NODE"
 WAIT_PHOTO = "WAIT_PHOTO"
 WAIT_MANUAL_VALUE = "WAIT_MANUAL_VALUE"
@@ -42,7 +42,6 @@ OCR_FAILED = "OCR_FAILED"
 CONFIRM_READING = "CONFIRM_READING"
 MODE = "mode"
 ENTER = "ENTER"
-CONSULT = "CONSULT"
 ACTIVE_CHAT_ID = "active_chat_id"
 ACTIVE_UNTIL = "active_until"
 ACTIVE_USER_ID = "active_user_id"
@@ -50,7 +49,7 @@ CONVERSATION_TIMEOUT = timedelta(minutes=8)
 ACTIVE_STATES = {
     SELECT_NODE, CONFIRM_NODE, WAIT_PHOTO, WAIT_MANUAL_VALUE,
     CONFIRM_MANUAL_VALUE, WAIT_CORRECTION, WAIT_DATE, CHOOSE_DATE,
-    OCR_FAILED, CONFIRM_READING, SELECT_PERIOD,
+    OCR_FAILED, CONFIRM_READING,
 }
 
 
@@ -129,8 +128,7 @@ def active_chat_ids(application, now=None):
 
 def main_menu_markup():
     return InlineKeyboardMarkup([
-        [InlineKeyboardButton("📷 1. Ingresar lectura", callback_data="menu:enter")],
-        [InlineKeyboardButton("🔎 2. Consultar lectura", callback_data="menu:consult")],
+        [InlineKeyboardButton("📷 Ingresar lectura", callback_data="menu:enter")],
     ])
 
 
@@ -142,8 +140,8 @@ def cancel_registration_markup(rows=None):
 
 def welcome_text():
     return (
-        "👋 Hola. Aquí podrás ingresar y consultar las lecturas de los nodos de WI-NET.\n\n"
-        "Elige una opción para continuar:"
+        "👋 Hola. Aquí podrás ingresar las lecturas de los nodos de WI-NET.\n\n"
+        "Pulsa el botón para continuar:"
     )
 
 
@@ -305,11 +303,28 @@ def confirm_reading(reading_id, telegram_user_id, reading_date, corrected_value=
     node = Node.objects.select_for_update().get(pk=reading.schedule.node_id)
     if not node.active or node.telegram_chat_id != reading.telegram_chat_id:
         raise ValidationError("Este chat ya no está autorizado para registrar lecturas de ese nodo.")
-    if reading_date > timezone.localdate():
-        raise ValidationError("No puedes registrar una lectura con fecha futura. Corrige la fecha o cancela el registro.")
+    today = timezone.localdate()
+    if reading_date > today:
+        raise ValidationError(
+            f"No puedes registrar una lectura con fecha futura. Hoy es {today:%d/%m/%Y}. "
+            "Corrige la fecha o cancela el registro.",
+            code="future_date",
+        )
     # Recheck capacity at save time, including drafts started before another
-    # operator completed the cycle. The actual date still chooses its cycle.
-    get_registration_plan(node)
+    # operator completed the cycle. Dates from an older cycle are historical:
+    # they remain visible, but the bot must not reopen their grey/closed task.
+    validate_node_schedule(node)
+    current_cycle_due = active_cycle_due(node, today)
+    dated_cycle_due = active_cycle_due(node, reading_date)
+    if dated_cycle_due != current_cycle_due:
+        raise ValidationError(
+            f"La fecha {reading_date:%d/%m/%Y} pertenece al ciclo "
+            f"{dated_cycle_due:%m/%Y}, que ya está cerrado. "
+            "Los ciclos anteriores se conservan como historial en gris y no pueden recibir nuevas lecturas. "
+            f"Ingresa una fecha correspondiente al ciclo activo {current_cycle_due:%m/%Y}.",
+            code="closed_cycle",
+        )
+    get_registration_plan(node, today)
     # The draft was created before the operator supplied the actual reading date.
     reading.schedule = prepare_pending_schedule(reading.schedule.node, reading_date)
     reading.confirmed_value = value
@@ -321,21 +336,6 @@ def confirm_reading(reading_id, telegram_user_id, reading_date, corrected_value=
         reading.schedule.status = ReadingSchedule.Status.COMPLETED
         reading.schedule.save(update_fields=["status"])
     return reading
-
-
-@sync_to_async
-def reading_history(node_id, chat_id, current_month=False):
-    node = Node.objects.filter(id=node_id, active=True, telegram_chat_id=chat_id).first()
-    if not node:
-        return None, []
-    readings = Reading.objects.filter(
-        schedule__node=node, status=Reading.Status.CONFIRMED, confirmed_value__isnull=False,
-        reading_date__isnull=False,
-    ).order_by("-reading_date", "-id")
-    if current_month:
-        today = timezone.localdate()
-        readings = readings.filter(reading_date__year=today.year, reading_date__month=today.month)
-    return node, list(readings.values_list("reading_date", "confirmed_value")[:15])
 
 
 def node_selection_markup():
@@ -351,9 +351,8 @@ def current_prompt(data):
     node_name = data.get("node_name", "")
     reading_id = data.get("reading_id")
     if state == SELECT_NODE:
-        label = "registrar" if data.get(MODE) == ENTER else "consultar"
         return (
-            f"Escribe el nombre del nodo que deseas {label}, aunque no lo recuerdes exactamente.\n"
+            "Escribe el nombre del nodo que deseas registrar, aunque no lo recuerdes exactamente.\n"
             "También puedes ver la lista completa:", node_selection_markup(),
         )
     if state == CONFIRM_NODE:
@@ -363,15 +362,6 @@ def current_prompt(data):
                 InlineKeyboardButton("✅ Sí", callback_data="node:yes"),
                 InlineKeyboardButton("❌ No", callback_data="node:no"),
             ]]),
-        )
-    if state == SELECT_PERIOD:
-        return (
-            f"🔎 Consulta de lecturas\n🏢 Nodo: {node_name}\n\n¿Qué deseas ver?",
-            InlineKeyboardMarkup([
-                [InlineKeyboardButton("📅 Lecturas del mes actual", callback_data=f"query:current:{data['node_id']}")],
-                [InlineKeyboardButton("🗂 Últimas lecturas registradas", callback_data=f"query:recent:{data['node_id']}")],
-                [InlineKeyboardButton("↩️ Volver al inicio", callback_data="menu:home")],
-            ]),
         )
     if state == WAIT_PHOTO:
         return (
@@ -510,9 +500,9 @@ async def chat_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await repeat_prompt(update.message, context)
 
 
-async def begin_node_selection(message, context, mode):
+async def begin_node_selection(message, context):
     await reset_conversation(context.user_data, message.chat.id)
-    context.user_data.update({MODE: mode, STATE: SELECT_NODE})
+    context.user_data.update({MODE: ENTER, STATE: SELECT_NODE})
     await repeat_prompt(message, context)
 
 
@@ -534,25 +524,22 @@ async def select_node(message, context, node_id, telegram_user_id):
         await repeat_prompt(message, context, "Ese nodo no está disponible para este chat.")
         return
     context.user_data.update({"node_id": node.id, "node_name": node.name})
-    if context.user_data.get(MODE) == CONSULT:
-        context.user_data[STATE] = SELECT_PERIOD
+    try:
+        plan = await sync_to_async(get_registration_plan)(node)
+    except ValidationError as error:
+        await message.reply_text(" ".join(error.messages))
+        await show_main_menu(message, context)
+        return
+    context.user_data["registration_explanation"] = plan.explanation
+    pending = await get_pending_node_reading(node.id, message.chat.id, telegram_user_id)
+    if pending:
+        context.user_data.update({"reading_id": pending.id, "display_value": pending.detected_value})
+        context.user_data[STATE] = (
+            OCR_FAILED if pending.detected_value is None else
+            CONFIRM_MANUAL_VALUE if pending.source == Reading.Source.MANUAL else CONFIRM_READING
+        )
     else:
-        try:
-            plan = await sync_to_async(get_registration_plan)(node)
-        except ValidationError as error:
-            await message.reply_text(" ".join(error.messages))
-            await show_main_menu(message, context)
-            return
-        context.user_data["registration_explanation"] = plan.explanation
-        pending = await get_pending_node_reading(node.id, message.chat.id, telegram_user_id)
-        if pending:
-            context.user_data.update({"reading_id": pending.id, "display_value": pending.detected_value})
-            context.user_data[STATE] = (
-                OCR_FAILED if pending.detected_value is None else
-                CONFIRM_MANUAL_VALUE if pending.source == Reading.Source.MANUAL else CONFIRM_READING
-            )
-        else:
-            context.user_data[STATE] = WAIT_PHOTO
+        context.user_data[STATE] = WAIT_PHOTO
     mark_conversation_active(context, message.chat.id)
     await repeat_prompt(message, context)
 
@@ -669,20 +656,6 @@ async def receive_unexpected(update: Update, context: ContextTypes.DEFAULT_TYPE)
     await repeat_prompt(update.message, context)
 
 
-async def show_history(message, node_id, chat_id, current_month):
-    node, rows = await reading_history(node_id, chat_id, current_month)
-    if not node:
-        await message.reply_text("Ese nodo no está disponible para este chat.")
-        return
-    title = "LECTURAS DEL MES ACTUAL" if current_month else "ÚLTIMAS LECTURAS REGISTRADAS"
-    lines = [f"📊 {title}", "", f"🏢 Nodo: {node.name}", ""]
-    if rows:
-        lines.extend(f"• {day:%d/%m/%Y}: {format_reading_value(value)}" for day, value in rows)
-    else:
-        lines.append("No hay lecturas registradas en este periodo.")
-    await message.reply_text("\n".join(lines))
-
-
 @conversation_handler
 async def callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
@@ -709,8 +682,8 @@ async def callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if action == "reading:cancel":
             await query.message.reply_text("❌ REGISTRO CANCELADO\n\nLa lectura no fue registrada.")
         await show_main_menu(query.message, context)
-    elif action in {"menu:enter", "menu:consult"}:
-        await begin_node_selection(query.message, context, ENTER if action == "menu:enter" else CONSULT)
+    elif action == "menu:enter":
+        await begin_node_selection(query.message, context)
     elif action == "nodes:list":
         await show_node_list(query.message, context)
     elif action == "node:no":
@@ -720,10 +693,6 @@ async def callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await select_node(query.message, context, context.user_data.get("candidate_id"), update.effective_user.id)
     elif list_selection:
         await select_node(query.message, context, int(action.rsplit(":", 1)[1]), update.effective_user.id)
-    elif action.startswith("query:"):
-        _, period, raw_id = action.split(":")
-        await show_history(query.message, int(raw_id), update.effective_chat.id, period == "current")
-        await show_main_menu(query.message, context)
     elif action == "reading:manual:start":
         context.user_data[STATE] = WAIT_MANUAL_VALUE
         await repeat_prompt(query.message, context)
@@ -746,6 +715,11 @@ async def expire_conversations(application, now=None):
         if lock.locked():
             continue
         async with lock:
+            # El menú principal ya fue mostrado por /start, al terminar un
+            # registro o al vencer un flujo. No debe programar otro menú.
+            if data.get(STATE, MAIN_MENU) == MAIN_MENU:
+                data.pop(ACTIVE_UNTIL, None)
+                continue
             deadline = data.get(ACTIVE_UNTIL)
             chat_id = data.get(ACTIVE_CHAT_ID)
             if deadline is None or deadline > now or chat_id is None:

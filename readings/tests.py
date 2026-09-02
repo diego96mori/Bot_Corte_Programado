@@ -433,6 +433,48 @@ class OCRSelectionTests(TestCase):
         payload = json.loads(request.data.decode("utf-8"))
         self.assertTrue(payload["image"].startswith("data:image/jpeg;base64,"))
 
+    def test_cloudflare_chat_model_embeds_image_in_user_message(self):
+        import json
+        import os
+        import numpy as np
+
+        class FakeResponse:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_args):
+                return False
+
+            def read(self):
+                return json.dumps({
+                    "success": True,
+                    "result": {"choices": [{"message": {
+                        "content": '{"reading":"170269.6","confidence":0.95}'
+                    }}]},
+                }).encode("utf-8")
+
+        image = np.zeros((80, 300, 3), dtype=np.uint8)
+        environment = {
+            "CLOUDFLARE_ACCOUNT_ID": "cuenta-prueba",
+            "CLOUDFLARE_API_TOKEN": "token-prueba",
+            "CLOUDFLARE_VISION_MODEL": "@cf/google/gemma-4-26b-a4b-it",
+        }
+        with patch.dict(os.environ, environment), patch(
+            "readings.services.ocr.urllib.request.urlopen", return_value=FakeResponse()
+        ) as urlopen_mock:
+            selected = read_meter_cloudflare(image)
+
+        self.assertEqual(selected.value, Decimal("170269.6"))
+        request = urlopen_mock.call_args.args[0]
+        payload = json.loads(request.data.decode("utf-8"))
+        user_content = payload["messages"][1]["content"]
+        self.assertEqual(user_content[0]["type"], "text")
+        self.assertEqual(user_content[1]["type"], "image_url")
+        self.assertTrue(user_content[1]["image_url"]["url"].startswith("data:image/jpeg;base64,"))
+        self.assertNotIn("image", payload)
+        self.assertEqual(payload["max_completion_tokens"], 400)
+        self.assertNotIn("max_tokens", payload)
+
 
 class AuthorizedNodesTests(TestCase):
     def test_authorized_list_has_33_unique_nodes(self):
@@ -454,6 +496,17 @@ class AuthorizedNodesTests(TestCase):
         response = self.client.get(reverse("readings:annual_grid"))
         self.assertContains(response, "200 Millas")
         self.assertNotContains(response, "Higuereta")
+
+    def test_annual_grid_accepts_a_valid_year_and_rejects_an_invalid_one(self):
+        user = get_user_model().objects.create_user(username="visor_anual", password="prueba-segura")
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("readings:annual_grid"), {"year": "2027"})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["year"], 2027)
+
+        response = self.client.get(reverse("readings:annual_grid"), {"year": "texto"})
+        self.assertEqual(response.status_code, 400)
 
 
 class NotificationTests(TestCase):

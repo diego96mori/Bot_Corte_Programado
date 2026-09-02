@@ -87,7 +87,7 @@ class TelegramFlowTests(TestCase):
             self.text(value)
             self.state(bot.MAIN_MENU)
             self.assertEqual(self.last_text(), bot.welcome_text())
-            self.assertEqual(self.last_actions(), ["menu:enter", "menu:consult"])
+            self.assertEqual(self.last_actions(), ["menu:enter"])
         self.photo()
         self.context.bot.get_file.assert_not_called()
         self.assertEqual(self.last_text(), bot.welcome_text())
@@ -246,19 +246,7 @@ class TelegramFlowTests(TestCase):
         self.click("date:today")
         self.state(bot.WAIT_MANUAL_VALUE)
 
-    def test_consultation_invalid_input_repeats_and_history_returns_to_menu(self):
-        self.click("menu:consult")
-        self.click("nodes:list")
-        self.click(f"node:select:{self.node.id}")
-        self.state(bot.SELECT_PERIOD)
-        self.text("hola")
-        self.state(bot.SELECT_PERIOD)
-        self.assertIn("¿Qué deseas ver?", self.last_text())
-        self.click(f"query:current:{self.node.id}")
-        self.assertIn("No hay lecturas", self.message.reply_text.call_args_list[-2].args[0])
-        self.state(bot.MAIN_MENU)
-
-    def test_eight_minutes_cancel_draft_and_repeat_menu_every_eight_minutes(self):
+    def test_eight_minutes_cancel_draft_and_show_menu_only_once(self):
         reading = self.choose_date()
         deadline = self.context.user_data[bot.ACTIVE_UNTIL]
         self.assertEqual(deadline, self.now + timedelta(minutes=8))
@@ -274,7 +262,8 @@ class TelegramFlowTests(TestCase):
         async_to_sync(bot.expire_conversations)(self.application, deadline + timedelta(seconds=1))
         self.assertEqual(self.application.bot.send_message.call_count, 1)
         async_to_sync(bot.expire_conversations)(self.application, deadline + timedelta(minutes=8))
-        self.assertEqual(self.application.bot.send_message.call_count, 2)
+        self.assertEqual(self.application.bot.send_message.call_count, 1)
+        self.assertNotIn(bot.ACTIVE_UNTIL, self.context.user_data)
         self.assertEqual(bot.active_chat_ids(self.application, deadline), set())
 
     def test_invalid_input_renews_inactivity_deadline(self):
@@ -306,6 +295,7 @@ class TelegramFlowTests(TestCase):
         self.state(bot.WAIT_PHOTO)
 
     def test_blocked_chat_does_not_repeat_timeout_delivery(self):
+        self.select_node()
         self.application.bot.send_message.side_effect = Forbidden("blocked")
         async_to_sync(bot.expire_conversations)(self.application, self.now + timedelta(minutes=8))
         async_to_sync(bot.expire_conversations)(self.application, self.now + timedelta(minutes=16))

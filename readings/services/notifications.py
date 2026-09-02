@@ -14,6 +14,7 @@ class ReadingNotification:
     due_date: date
     kind: str
     days_until: int
+    cutoff: date | None = None
 
     @property
     def is_overdue(self):
@@ -21,6 +22,8 @@ class ReadingNotification:
 
     @property
     def status_label(self):
+        if self.kind == "FOLLOW_UP" and self.cutoff and self.due_date >= self.cutoff:
+            return f"Disponible hasta el {self.cutoff - timedelta(days=1):%d/%m/%Y}"
         if self.days_until < 0:
             return f"Atrasada {-self.days_until} día(s)"
         if self.days_until == 0:
@@ -157,8 +160,21 @@ def get_reading_notifications(today=None):
         due_date, kind = get_node_obligation(node, today)
         days_until = (due_date - today).days
         lead_days = 2 if kind == "MONTHLY" else 1
-        if days_until <= lead_days:
+        cutoff = None
+        shortened_follow_up = False
+        if kind == "FOLLOW_UP":
+            cycle_due = active_cycle_due(node, today)
+            cutoff = get_cycle_state(node, cycle_due, as_of=today)["cutoff"]
+            # A late monthly reading can put its normal 10-day follow-up due
+            # beyond the next monthly window. In that case there is no useful
+            # "one day before due" reminder: notify throughout the remaining
+            # registration window and stop when the new cycle opens.
+            shortened_follow_up = due_date >= cutoff
+        if days_until <= lead_days or shortened_follow_up:
             notifications.append(
-                ReadingNotification(node=node, due_date=due_date, kind=kind, days_until=days_until)
+                ReadingNotification(
+                    node=node, due_date=due_date, kind=kind,
+                    days_until=days_until, cutoff=cutoff,
+                )
             )
     return sorted(notifications, key=lambda item: (not item.is_overdue, item.due_date, item.node.name))

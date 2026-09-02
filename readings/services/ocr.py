@@ -642,7 +642,7 @@ def read_meter_cloudflare(image, previous_value=None):
     account_id = os.getenv("CLOUDFLARE_ACCOUNT_ID", "").strip()
     api_token = os.getenv("CLOUDFLARE_API_TOKEN", "").strip()
     model = os.getenv(
-        "CLOUDFLARE_VISION_MODEL", "@cf/moondream/moondream3.1-9B-A2B"
+        "CLOUDFLARE_VISION_MODEL", "@cf/google/gemma-4-26b-a4b-it"
     ).strip()
     if not account_id or not api_token:
         return OCRResult(None, "CLOUDFLARE: no configurado", None, "manual")
@@ -690,11 +690,17 @@ def read_meter_cloudflare(image, previous_value=None):
                     "role": "system",
                     "content": "Eres un lector preciso de visores LCD de medidores eléctricos.",
                 },
-                {"role": "user", "content": prompt},
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": prompt},
+                        {"type": "image_url", "image_url": {"url": data_url}},
+                    ],
+                },
             ],
-            "image": data_url,
             "temperature": 0,
-            "max_tokens": 100,
+            "max_completion_tokens": 400,
+            "reasoning_effort": "low",
             "response_format": {
                 "type": "json_schema",
                 "json_schema": {
@@ -727,6 +733,8 @@ def read_meter_cloudflare(image, previous_value=None):
     if not envelope.get("success", False):
         return OCRResult(None, "CLOUDFLARE: respuesta rechazada", None, "manual")
     result = envelope.get("result", {})
+    if os.getenv("CLOUDFLARE_DEBUG_RESPONSE", "").strip() == "1":
+        logger.warning("Respuesta OCR de Cloudflare (%s): %r", model, result)
     if is_moondream:
         nested = result.get("result", result) if isinstance(result, dict) else {}
         answer = nested.get("answer") if isinstance(nested, dict) else None
@@ -740,9 +748,15 @@ def read_meter_cloudflare(image, previous_value=None):
         return OCRResult(
             value, f"CLOUDFLARE: visor reconocido como {value}", 0.90, "cloudflare"
         )
-    parsed = _extract_json_object(
-        result.get("response", result) if isinstance(result, dict) else result
-    )
+    response_content = result
+    if isinstance(result, dict):
+        response_content = result.get("response", result)
+        choices = result.get("choices")
+        if isinstance(choices, list) and choices:
+            message = choices[0].get("message", {})
+            if isinstance(message, dict):
+                response_content = message.get("content", response_content)
+    parsed = _extract_json_object(response_content)
     if not parsed:
         return OCRResult(None, "CLOUDFLARE: respuesta sin lectura válida", None, "manual")
     value = _parse_value(parsed.get("reading"))

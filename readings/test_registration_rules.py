@@ -130,7 +130,7 @@ class RegistrationRulesTests(TestCase):
 
     def test_future_date_cannot_open_next_cycle_early(self):
         draft = self.draft(self.guardia)
-        with self.assertRaisesMessage(ValidationError, "fecha futura"):
+        with self.assertRaisesMessage(ValidationError, "Hoy es 31/08/2026"):
             async_to_sync(bot.confirm_reading)(draft.pk, self.user.id, date(2026, 9, 30))
         draft.refresh_from_db()
         self.assertEqual(draft.status, Reading.Status.REVIEW)
@@ -147,12 +147,6 @@ class RegistrationRulesTests(TestCase):
         self.assertFalse(reading.schedule.is_follow_up)
         previous_schedule.refresh_from_db()
         self.assertEqual(previous_schedule.status, ReadingSchedule.Status.PENDING)
-
-    def test_complete_cycle_remains_available_for_consultation(self):
-        self.context.user_data[bot.MODE] = bot.CONSULT
-        self.select(self.huacho)
-        self.assertEqual(self.context.user_data[bot.STATE], bot.SELECT_PERIOD)
-        self.assertIn("¿Qué deseas ver?", self.message.reply_text.call_args.args[0])
 
     def test_incomplete_monthly_record_does_not_count_as_completed_reading(self):
         node = Node.objects.create(code="NONE", name="Sin lectura", reading_day=23, telegram_chat_id=1)

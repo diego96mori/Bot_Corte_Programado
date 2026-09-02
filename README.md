@@ -44,10 +44,10 @@ El reconocimiento funciona localmente aunque Cloudflare no esté configurado. Pa
 ```text
 CLOUDFLARE_ACCOUNT_ID=identificador-de-la-cuenta
 CLOUDFLARE_API_TOKEN=token-secreto
-CLOUDFLARE_VISION_MODEL=@cf/moondream/moondream3.1-9B-A2B
+CLOUDFLARE_VISION_MODEL=@cf/google/gemma-4-26b-a4b-it
 ```
 
-Moondream 3.1 está especializado en visión y OCR. El token nunca debe guardarse en Git ni enviarse por Telegram.
+Gemma 4 recibe la fotografía como entrada visual y devuelve la lectura en JSON. El token nunca debe guardarse en Git ni enviarse por Telegram. El resultado de la IA siempre debe confirmarse en el bot antes de guardar la lectura.
 
 ## 4. Cargar datos iniciales
 
@@ -105,15 +105,15 @@ python manage.py runserver
 python manage.py run_telegram_bot
 ```
 
-En Telegram, enviar `/start`. El bot muestra dos opciones: **Ingresar lectura** y **Consultar lectura**. Para ingresar, se puede escribir el nombre del nodo (tolera errores de escritura) o abrir la lista de nodos autorizados. Después solicita la foto, detecta el valor y pide confirmarlo o corregirlo. Antes de guardar solicita elegir **Hoy** o **Escribir fecha**; esta última opción acepta una fecha real con formato `DD/MM/AAAA`, por ejemplo `31/08/2026`. La consulta permite ver el mes actual o las últimas lecturas.
+En Telegram, enviar `/start`. El bot muestra únicamente la opción **Ingresar lectura**. Se puede escribir el nombre del nodo (tolera errores de escritura) o abrir la lista de nodos autorizados. Después solicita la foto, detecta el valor y pide confirmarlo o corregirlo. Antes de guardar solicita elegir **Hoy** o **Escribir fecha**; esta última opción acepta una fecha real con formato `DD/MM/AAAA`, por ejemplo `31/08/2026`.
 
 Para ingresar sin fotografía es obligatorio pulsar **Escribir lectura manualmente** antes de enviar el número. Si no se reconoce la foto, hay que elegir **Ingresar lectura manual** o **Cancelar registro**. El valor admite enteros o decimales con punto o coma, hasta 12 dígitos enteros y 3 decimales, sin signos, letras ni unidades. Cada paso repite su pregunta y sus botones cuando recibe texto, fotos, audios u otros mensajes que no corresponden. Los botones de preguntas anteriores no permiten saltar pasos ni confirmar otro registro. Tras registrar o cancelar, vuelve al menú inicial.
 
-La programación definitiva se asigna al confirmar la fecha real de la lectura, incluso si corresponde a un ciclo anterior; no se completan otras programaciones solo por ser más antiguas.
+La programación definitiva se asigna al confirmar la fecha real de la lectura, siempre que pertenezca al ciclo activo. Las fechas de ciclos anteriores se conservan como historial en gris, pero no pueden reabrirse ni recibir nuevos registros desde el bot.
 
 Antes de pedir la fotografía o el valor, el bot revisa las lecturas confirmadas del ciclo activo y explica si corresponde una **lectura mensual** o un **seguimiento**, con sus fechas. Si ya existen ambos registros, bloquea otro ingreso e indica cuándo se abre el siguiente ciclo. Por ejemplo, Huacho, con día mensual 3 y su ciclo de agosto completo, no admite otra lectura el 31/08: vuelve a permitirla desde el 01/09. Guardia Peruana, con día mensual 2, ya admite la lectura mensual de septiembre desde el 31/08; el seguimiento pendiente de agosto deja de ser la obligación activa.
 
-La validación se repite al crear el borrador y al confirmar, para impedir un tercer registro incluso si otro operador completó el ciclo durante la conversación. No se aceptan fechas futuras ni fechas antiguas que oculten registros ya confirmados para reabrir un ciclo completo. Un seguimiento no puede tener fecha anterior a la lectura mensual existente. Los registros históricos se conservan y la consulta continúa disponible aunque el ingreso esté bloqueado.
+La validación se repite al crear el borrador y al confirmar, para impedir un tercer registro incluso si otro operador completó el ciclo durante la conversación. No se aceptan fechas futuras ni fechas pertenecientes a ciclos ya cerrados. Un seguimiento no puede tener fecha anterior a la lectura mensual existente. Los registros históricos se conservan en LECTURAS WI-NET aunque el ingreso esté bloqueado.
 
 La grilla se encuentra en http://127.0.0.1:8000/ y exige iniciar sesión.
 
@@ -132,7 +132,7 @@ python manage.py send_reminders
 
 Cada aviso corresponde a un nodo e incluye el botón **Registrar lectura**, que inicia directamente el flujo de fotografía para ese nodo.
 
-Mientras un chat está seleccionando el nodo, consultando, enviando la foto, confirmando o corrigiendo el valor, o indicando la fecha, sus recordatorios quedan pausados para no interrumpir el proceso. Después de **8 minutos sin mensajes ni pulsaciones**, el bot cancela el borrador sin confirmar y muestra automáticamente el menú inicial. Si sigue sin respuesta, vuelve a mostrarlo cada 8 minutos mientras el proceso del bot esté encendido. Cada nueva interacción renueva el plazo; el tiempo de procesamiento del OCR no cuenta como inactividad. Al finalizar o volver al menú se reanudan los recordatorios.
+Mientras un chat está seleccionando el nodo, enviando la foto, confirmando o corrigiendo el valor, o indicando la fecha, sus recordatorios quedan pausados para no interrumpir el proceso. Después de **8 minutos sin mensajes ni pulsaciones**, el bot cancela el borrador sin confirmar y muestra automáticamente el menú inicial una sola vez. En el menú no vuelve a escribir hasta que el usuario interactúe o corresponda un recordatorio. Cada nueva interacción durante un registro renueva el plazo; el tiempo de procesamiento del OCR no cuenta como inactividad. Al finalizar o volver al menú se reanudan los recordatorios.
 
 La campana de la esquina superior derecha y Telegram comparten estas reglas:
 

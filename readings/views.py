@@ -89,7 +89,13 @@ def reading_grid(request):
 
 @login_required
 def annual_grid(request):
-    year = 2026
+    today = timezone.localdate()
+    try:
+        year = int(request.GET.get("year", today.year))
+        if not 2020 <= year <= 2100:
+            raise ValueError
+    except (TypeError, ValueError):
+        return JsonResponse({"error": "Año no válido."}, status=400)
     names = [item["name"] for item in AUTHORIZED_NODES]
     nodes_by_name = {node.name: node for node in Node.objects.filter(name__in=names)}
     readings = (

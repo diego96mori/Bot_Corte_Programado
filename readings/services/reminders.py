@@ -55,6 +55,12 @@ def reminder_text(item):
     else:
         kind_label = "Día de lectura mensual"
         state = "LECTURA MENSUAL ATRASADA" if item.is_overdue else "LECTURA MENSUAL PRÓXIMA"
+    availability = ""
+    if item.kind == "FOLLOW_UP" and item.cutoff and item.due_date >= item.cutoff:
+        availability = (
+            f"🛑 Último día para registrarlo: "
+            f"{item.cutoff - timedelta(days=1):%d/%m/%Y}\n"
+        )
     return (
         "🔔 WI-NET | RECORDATORIO DE LECTURA\n\n"
         f"⚠️ {state}\n\n"
@@ -63,6 +69,7 @@ def reminder_text(item):
         f"🧾 Suministro: {item.node.supply_number or 'No registrado'}\n"
         f"💡 Concesionaria: {item.node.provider or 'No registrada'}\n"
         f"📅 Fecha programada: {item.due_date:%d/%m/%Y}\n"
+        f"{availability}"
         f"⏰ Estado: {item.status_label}\n\n"
         "Registra la fotografía del medidor desde el botón inferior."
     )
