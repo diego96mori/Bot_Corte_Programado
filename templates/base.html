@@ -93,7 +93,7 @@
   </style>
 </head>
 <body>
-  <div class="top-actions">
+  <div class="top-actions" {% if not perms.readings.access_notifications %}hidden style="display:none"{% endif %}>
     <button class="calendar-trigger" id="calendar-trigger" type="button" aria-label="Abrir calendario" title="Calendario de lecturas">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>
     </button>
@@ -102,7 +102,7 @@
       <div class="notification-panel">
         <h3>Notificaciones</h3>
         {% for item in web_notifications %}
-          <a class="notification-item {% if item.is_overdue %}overdue{% else %}upcoming{% endif %}" href="{% url 'readings:grid' %}?node={{ item.node.id }}">
+          <a class="notification-item {% if item.is_overdue %}overdue{% else %}upcoming{% endif %}" href="{% if perms.readings.access_management %}{% url 'readings:grid' %}?node={{ item.node.id }}{% else %}{% url 'readings:annual_grid' %}{% endif %}">
             <strong>{{ item.node.name }} · {{ item.kind_label }}</strong>
             <span>{{ item.status_label }} — {{ item.due_date|date:"d/m/Y" }}</span>
           </a>
@@ -132,19 +132,22 @@
         <div class="calendar-weekdays" aria-hidden="true"><div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div><div>Dom</div></div>
         <div id="calendar-content" class="calendar-loading">Cargando calendario…</div>
         <section class="calendar-day-details" id="calendar-details" aria-live="polite"></section>
+        {% if perms.readings.add_reading %}<div style="margin-top:1.2rem"><button type="button" class="action-button primary" data-add-reading>Agregar lectura</button></div>{% endif %}
       </div>
     </section>
   </div>
   <aside class="sidebar">
     <h2>Control de lecturas</h2>
-    <a href="{% url 'readings:grid' %}" class="{% if active_page == 'records' %}active{% endif %}">GESTIÓN DE LECTURAS</a>
-    <a href="{% url 'readings:annual_grid' %}" class="{% if active_page == 'annual' %}active{% endif %}">LECTURAS WI-NET</a>
+    {% if perms.readings.access_management %}<a href="{% url 'readings:grid' %}" class="{% if active_page == 'records' %}active{% endif %}">GESTIÓN DE LECTURAS</a>{% endif %}
+    {% if perms.readings.access_annual %}<a href="{% url 'readings:annual_grid' %}" class="{% if active_page == 'annual' %}active{% endif %}">LECTURAS WI-NET</a>{% endif %}
     <div class="bottom">
       {% if user.is_staff %}<a href="/admin/" style="display:block">Administración</a>{% endif %}
       <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button type="submit">Cerrar sesión</button></form>
     </div>
   </aside>
   <main>{% block content %}{% endblock %}</main>
+  <div id="reading-success" role="status" aria-live="polite"></div>
+  {% include "readings/register_modal.html" %}
   <script>
     (() => {
       const modal = document.getElementById('calendar-modal');
@@ -186,7 +189,7 @@
         events.forEach(event => {
           const item = document.createElement('a');
           item.className = `calendar-detail ${event.state}`;
-          item.href = `{% url 'readings:grid' %}?node=${event.node_id}`;
+          item.href = {% if perms.readings.access_management %}`{% url 'readings:grid' %}?node=${event.node_id}`{% else %}"{% url 'readings:annual_grid' %}"{% endif %};
           const strong = document.createElement('strong');
           strong.textContent = `${event.node_name} · ${event.kind_label}`;
           const status = document.createElement('span');
@@ -278,7 +281,8 @@
       document.getElementById('calendar-next').addEventListener('click', () => { shown.setMonth(shown.getMonth() + 1); selectedDate = null; loadCalendar(); });
       document.getElementById('calendar-today').addEventListener('click', () => { shown = new Date(); selectedDate = null; loadCalendar(); });
       modal.addEventListener('click', event => { if (event.target === modal) closeCalendar(); });
-      document.addEventListener('keydown', event => { if (event.key === 'Escape' && !modal.hidden) closeCalendar(); });
+      document.addEventListener('reading-saved', () => { if (!modal.hidden) loadCalendar(); });
+      document.addEventListener('keydown', event => { if (event.key === 'Escape' && !modal.hidden && !document.getElementById('reading-dialog').open) closeCalendar(); });
     })();
   </script>
 </body>

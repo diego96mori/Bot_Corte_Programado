@@ -11,6 +11,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument("--limit", type=int, default=0)
+        parser.add_argument("--reading-id", type=int, help="Evalúa únicamente esta lectura confirmada con foto.")
 
     def handle(self, *args, **options):
         readings = (
@@ -19,6 +20,8 @@ class Command(BaseCommand):
             .select_related("schedule__node")
             .order_by("id")
         )
+        if options["reading_id"] is not None:
+            readings = readings.filter(pk=options["reading_id"])
         if options["limit"] > 0:
             readings = readings[: options["limit"]]
 

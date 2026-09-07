@@ -23,8 +23,9 @@ from telegram.ext import Application, CallbackQueryHandler, CommandHandler, Cont
 
 from readings.models import Node, Reading, ReadingSchedule
 from readings.services.notifications import active_cycle_due
-from readings.services.registration import get_registration_plan
+from readings.services.registration import get_registration_plan, available_plan
 from readings.services.ocr import read_meter
+from readings.services.ocr_learning import append_attempt, build_profile
 from readings.services.reminders import prepare_reminder_jobs, send_reminder_jobs
 
 logger = logging.getLogger(__name__)
@@ -158,8 +159,8 @@ def get_authorized_node(node_id, chat_id):
 
 def validated_ocr_values(node, ocr):
     previous_value = previous_confirmed_value(node)
-    if ocr.value is not None and previous_value is not None and ocr.value <= previous_value:
-        return None, f"{ocr.raw_text} | RECHAZADA: no supera la lectura anterior {previous_value}", None
+    if ocr.value is not None and previous_value is not None and ocr.value < previous_value:
+        return None, f"{ocr.raw_text} | RECHAZADA: menor que la lectura anterior {previous_value}", None
     return ocr.value, ocr.raw_text, ocr.confidence
 
 
@@ -185,7 +186,7 @@ def validate_node_schedule(node):
 
 
 def prepare_pending_schedule(node, reading_date=None):
-    plan = get_registration_plan(node, reading_date)
+    plan = available_plan(node, reading_date or timezone.localdate())
     due_date, kind = plan.due_date, plan.kind
     schedule, _ = ReadingSchedule.objects.get_or_create(
         node=node, due_date=due_date,
@@ -214,7 +215,7 @@ def create_reading(node_id, image_bytes, filename, telegram_user, chat_id):
         temp.write(image_bytes)
         temp_path = Path(temp.name)
     try:
-        ocr = read_meter(temp_path, previous_value=previous_confirmed_value(node))
+        ocr = read_meter(temp_path, previous_value=previous_confirmed_value(node), profile=build_profile(node))
     finally:
         temp_path.unlink(missing_ok=True)
     detected_value, ocr_text, ocr_confidence = validated_ocr_values(node, ocr)
@@ -225,6 +226,7 @@ def create_reading(node_id, image_bytes, filename, telegram_user, chat_id):
         telegram_username=telegram_user.username or telegram_user.full_name,
     )
     reading.photo.save(filename, ContentFile(image_bytes), save=False)
+    append_attempt(reading, ocr, node)
     reading.save()
     return reading, None
 
@@ -271,11 +273,13 @@ def get_pending_node_reading(node_id, chat_id, telegram_user_id):
         ocr = read_meter(
             reading.photo.path,
             previous_value=previous_confirmed_value(reading.schedule.node),
+            profile=build_profile(reading.schedule.node),
         )
         reading.detected_value, reading.ocr_text, reading.ocr_confidence = validated_ocr_values(
             reading.schedule.node, ocr
         )
-        reading.save(update_fields=["detected_value", "ocr_text", "ocr_confidence"])
+        append_attempt(reading, ocr, reading.schedule.node)
+        reading.save(update_fields=["detected_value", "ocr_text", "ocr_confidence", "ocr_attempts"])
     return reading
 
 
@@ -331,7 +335,8 @@ def confirm_reading(reading_id, telegram_user_id, reading_date, corrected_value=
     reading.status = Reading.Status.CONFIRMED
     reading.reading_date = reading_date
     reading.confirmed_at = timezone.now()
-    reading.save(update_fields=["schedule", "confirmed_value", "status", "reading_date", "confirmed_at"])
+    reading.ocr_learning_verified = bool(reading.photo)
+    reading.save(update_fields=["schedule", "confirmed_value", "status", "reading_date", "confirmed_at", "ocr_learning_verified"])
     if reading.schedule.status != ReadingSchedule.Status.COMPLETED:
         reading.schedule.status = ReadingSchedule.Status.COMPLETED
         reading.schedule.save(update_fields=["status"])
@@ -525,7 +530,7 @@ async def select_node(message, context, node_id, telegram_user_id):
         return
     context.user_data.update({"node_id": node.id, "node_name": node.name})
     try:
-        plan = await sync_to_async(get_registration_plan)(node)
+        plan = await sync_to_async(available_plan)(node, timezone.localdate())
     except ValidationError as error:
         await message.reply_text(" ".join(error.messages))
         await show_main_menu(message, context)
@@ -557,7 +562,12 @@ async def finish_reading(message, context, telegram_user_id, reading_date, edit=
             context.user_data.get("corrected_value"),
         )
     except ValidationError as error:
-        await repeat_prompt(message, context, " ".join(error.messages))
+        if getattr(error, "code", None) in {"before_follow_up_window", "before_monthly", "closed_cycle", "future_date", "cycle_complete", "unavailable_schedule"}:
+            await message.reply_text(" ".join(error.messages) + "\n\nLa lectura no fue registrada. Volviendo al inicio.")
+            await cancel_pending_reading(context.user_data.get("reading_id"), telegram_user_id)
+            await show_main_menu(message, context)
+        else:
+            await repeat_prompt(message, context, " ".join(error.messages))
         return
     if reading:
         text = (

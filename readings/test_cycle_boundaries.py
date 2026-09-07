@@ -1,3 +1,4 @@
+from readings.test_access_helpers import create_interface_user
 from datetime import date, datetime, timedelta
 from decimal import Decimal
 from types import SimpleNamespace
@@ -37,7 +38,7 @@ class CycleBoundaryTests(TestCase):
                 self.assertEqual(active_cycle_due(node, cutoff), due)
                 self.assertLess(active_cycle_due(node, cutoff - timedelta(days=1)), due)
 
-    def test_late_monthly_reading_reminds_until_next_cycle_opens(self):
+    def test_late_monthly_reading_without_followup_window_waits_for_next_cycle(self):
         node = Node.objects.create(
             code="LATE-15", name="Lectura tardía", reading_day=15,
             telegram_chat_id=1,
@@ -54,12 +55,7 @@ class CycleBoundaryTests(TestCase):
         for today in (date(2026, 9, 11), date(2026, 9, 12)):
             with self.subTest(today=today):
                 alerts = get_reading_notifications(today)
-                self.assertEqual(len(alerts), 1)
-                self.assertEqual(alerts[0].kind, "FOLLOW_UP")
-                self.assertEqual(alerts[0].due_date, date(2026, 9, 21))
-                self.assertEqual(alerts[0].cutoff, date(2026, 9, 13))
-                self.assertIn("Disponible hasta el 12/09/2026", alerts[0].status_label)
-                self.assertIn("Último día para registrarlo: 12/09/2026", reminder_text(alerts[0]))
+                self.assertEqual(alerts, [])
 
         alerts = get_reading_notifications(date(2026, 9, 13))
         self.assertEqual(len(alerts), 1)
@@ -71,7 +67,7 @@ class UpcomingGridTests(TestCase):
     today = date(2026, 8, 31)
 
     def setUp(self):
-        self.user = get_user_model().objects.create_user(username="grid_boundaries")
+        self.user = create_interface_user(username="grid_boundaries")
         self.client.force_login(self.user)
         self.nodes = []
         for name, actual_day, provider in (("Benvenutto", 4, "PLUZ"), ("Guardia Peruana", 7, "LUZ DEL SUR")):

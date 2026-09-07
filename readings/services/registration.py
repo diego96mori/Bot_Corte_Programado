@@ -7,6 +7,19 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 from readings.services.notifications import active_cycle_due, get_cycle_state
+from readings.models import Reading, ReadingSchedule
+
+
+def available_plan(node, today):
+    plan = get_registration_plan(node, today)
+    schedule = ReadingSchedule.objects.filter(node=node, due_date=plan.due_date).first()
+    if schedule and (
+        schedule.status != ReadingSchedule.Status.PENDING
+        or schedule.is_follow_up != (plan.kind == "FOLLOW_UP")
+        or schedule.readings.filter(status=Reading.Status.CONFIRMED).exists()
+    ):
+        raise ValidationError("La programación ya está completada, anulada o no corresponde al pendiente actual.", code="unavailable_schedule")
+    return plan
 
 
 @dataclass(frozen=True)
@@ -16,6 +29,10 @@ class RegistrationPlan:
     kind: str
     cutoff: date
     monthly_date: date | None = None
+
+    @property
+    def opens_on(self):
+        return self.due_date - timedelta(days=1 if self.kind == "FOLLOW_UP" else 2)
 
     @property
     def explanation(self):
@@ -30,7 +47,7 @@ class RegistrationPlan:
             f"📋 Corresponde un seguimiento del ciclo {self.cycle_due:%m/%Y}.\n"
             f"La lectura mensual ya fue registrada el {self.monthly_date:%d/%m/%Y}.\n"
             f"Seguimiento programado: {self.due_date:%d/%m/%Y} (10 días después).\n"
-            f"Puede registrarse como seguimiento hasta el {self.cutoff - timedelta(days=1):%d/%m/%Y}; "
+            f"Puede registrarse como seguimiento desde el {self.opens_on:%d/%m/%Y} hasta el {self.cutoff - timedelta(days=1):%d/%m/%Y}; "
             f"desde el {self.cutoff:%d/%m/%Y} corresponde al siguiente ciclo mensual."
         )
 
@@ -62,6 +79,20 @@ def get_registration_plan(node, reading_date=None):
             "El seguimiento no puede tener una fecha anterior a esa lectura. "
             "Corrige la fecha o cancela el registro.", code="before_monthly",
         )
+    if monthly and reading_date < state["follow_up_due"] - timedelta(days=1):
+        opening = state["follow_up_due"] - timedelta(days=1)
+        if opening >= state["cutoff"]:
+            message = (
+                f"El seguimiento no tiene una ventana disponible antes del cierre del ciclo. "
+                f"Puedes ingresar la siguiente lectura mensual desde el {state['cutoff']:%d/%m/%Y}."
+            )
+        else:
+            message = (
+                f"El seguimiento de {node.name} se podrá ingresar a partir del {opening:%d/%m/%Y} "
+                f"y hasta el {state['cutoff'] - timedelta(days=1):%d/%m/%Y}. "
+                "La fecha de toma también debe estar dentro de ese período."
+            )
+        raise ValidationError(message, code="before_follow_up_window")
     return RegistrationPlan(
         cycle_due=cycle_due, due_date=state["follow_up_due"] if monthly else cycle_due,
         kind="FOLLOW_UP" if monthly else "MONTHLY", cutoff=state["cutoff"],

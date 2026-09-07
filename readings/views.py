@@ -1,24 +1,82 @@
 from datetime import timedelta
 
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch
-from django.http import JsonResponse
-from django.shortcuts import render
+from django.core.exceptions import ValidationError
+from django.views.decorators.http import require_http_methods
+from django.db.models import Prefetch, Case, When, IntegerField, Value
+from django.http import JsonResponse, FileResponse, Http404
+from django.shortcuts import render, redirect
+from .access import interface_required
 from django.utils import timezone
 
-from .authorized_nodes import AUTHORIZED_NODES
 from .models import Node, Reading, ReadingSchedule
+from .forms import WebReadingForm
+from .services.web_registration import pending_option, register_reading
 from .services.calendar import get_calendar_events
+from .services.annual_grid import annual_row
 from .services.notifications import get_follow_up_cutoff, get_reading_notifications, monthly_due_date, shift_month
 
 
 @login_required
+@require_http_methods(["GET", "HEAD"])
+def protected_photo(request, path):
+    reading = Reading.objects.filter(photo=path).first()
+    if not reading:
+        raise Http404
+    try:
+        photo = reading.photo.open("rb")
+    except (OSError, ValueError):
+        raise Http404
+    response = FileResponse(photo)
+    response["Cache-Control"] = "private, no-store"
+    response["X-Content-Type-Options"] = "nosniff"
+    return response
+
+
+@login_required
+@require_http_methods(["GET", "POST"])
+def web_reading(request):
+    if not request.user.has_perm("readings.add_reading"):
+        return JsonResponse({"error": "Tu usuario tiene acceso de consulta; no puede registrar lecturas."}, status=403)
+    if request.method == "POST":
+        form = WebReadingForm(request.POST, request.FILES)
+        if not form.is_valid():
+            return JsonResponse({"errors": form.errors}, status=400)
+        try:
+            reading = register_reading(request.user, form.cleaned_data)
+        except ValidationError as error:
+            return JsonResponse({"errors": {"pending": error.messages}}, status=409)
+        return JsonResponse({"id": reading.pk, "message": "Lectura registrada correctamente."}, status=201)
+    today = timezone.localdate()
+    nodes = Node.objects.filter(active=True).order_by("name")
+    if "node" not in request.GET:
+        return JsonResponse({"nodes": list(nodes.values("id", "name")), "today": today.isoformat()})
+    node_id = request.GET.get("node", "")
+    valid_id = node_id.isascii() and node_id.isdigit() and len(node_id) <= 19 and int(node_id) <= 9223372036854775807
+    node = nodes.filter(pk=int(node_id)).first() if valid_id else None
+    if not node:
+        return JsonResponse({"error": "Elige un nodo disponible."}, status=400)
+    try:
+        option = pending_option(node, today)
+    except ValidationError as error:
+        return JsonResponse({"options": [], "message": " ".join(error.messages)})
+    return JsonResponse({"options": [option]})
+
+
+@login_required
 def reading_grid(request):
+    if not request.user.has_perm("readings.access_management"):
+        if request.user.has_perm("readings.access_annual"):
+            return redirect("readings:annual_grid")
+        from django.http import HttpResponseForbidden
+        return HttpResponseForbidden("Tu grupo no tiene acceso a esta pantalla.")
     status = request.GET.get("status", "")
     node_id = request.GET.get("node", "")
     provider = request.GET.get("provider", "")
     schedules = ReadingSchedule.objects.select_related("node").prefetch_related(
-        Prefetch("readings", queryset=Reading.objects.order_by("-created_at"), to_attr="latest_readings")
+        Prefetch("readings", queryset=Reading.objects.select_related("confirmed_by").annotate(
+            display_priority=Case(When(status=Reading.Status.CONFIRMED, then=Value(0)), default=Value(1), output_field=IntegerField())
+        ).order_by("display_priority", "-created_at", "-pk"), to_attr="latest_readings")
     ).filter(node__active=True).order_by("-due_date", "node__name")
     if status == "PENDING_READING":
         schedules = schedules.filter(status=ReadingSchedule.Status.PENDING).exclude(
@@ -60,6 +118,9 @@ def reading_grid(request):
             if cutoff and today >= cutoff:
                 schedule.grid_status_label = "Seguimiento no registrado · ciclo cerrado por nueva lectura mensual"
                 schedule.grid_status_class = "CLOSED"
+            elif cutoff and schedule.due_date - timedelta(days=1) >= cutoff:
+                schedule.grid_status_label = "Seguimiento sin ventana disponible antes del cierre"
+                schedule.grid_status_class = "CLOSED"
         elif schedule.status == ReadingSchedule.Status.PENDING and schedule.node.reading_day:
             next_due = monthly_due_date(schedule.node, shift_month(schedule.due_date, 1))
             if today >= next_due - timedelta(days=2):
@@ -88,6 +149,7 @@ def reading_grid(request):
 
 
 @login_required
+@interface_required("access_annual")
 def annual_grid(request):
     today = timezone.localdate()
     try:
@@ -96,13 +158,11 @@ def annual_grid(request):
             raise ValueError
     except (TypeError, ValueError):
         return JsonResponse({"error": "Año no válido."}, status=400)
-    names = [item["name"] for item in AUTHORIZED_NODES]
-    nodes_by_name = {node.name: node for node in Node.objects.filter(name__in=names)}
+    nodes = list(Node.objects.filter(active=True).order_by("location", "name", "pk"))
     readings = (
         Reading.objects.select_related("schedule__node")
         .filter(
-            schedule__node__name__in=names,
-            reading_date__year__in=[year - 1, year],
+            schedule__node__in=nodes,
             status=Reading.Status.CONFIRMED,
             confirmed_value__isnull=False,
         )
@@ -112,20 +172,13 @@ def annual_grid(request):
     for reading in readings:
         by_node.setdefault(reading.schedule.node_id, []).append(reading)
 
+    schedules_by_node = {}
+    for schedule in ReadingSchedule.objects.filter(node__in=nodes):
+        schedules_by_node.setdefault(schedule.node_id, []).append(schedule)
     rows = []
-    for authorized in AUTHORIZED_NODES:
-        node = nodes_by_name.get(authorized["name"])
-        if not node:
-            continue
+    for node in nodes:
         node_readings = by_node.get(node.id, [])
-        previous = [reading for reading in node_readings if reading.reading_date.year == year - 1]
-        months = []
-        for month in range(1, 13):
-            months.append([
-                reading for reading in node_readings
-                if reading.reading_date.year == year and reading.reading_date.month == month
-            ])
-        rows.append({"node": node, "previous": previous[-1] if previous else None, "months": months})
+        rows.append(annual_row(node, node_readings, schedules_by_node.get(node.pk, []), year, today))
 
     return render(
         request,
@@ -139,6 +192,7 @@ def annual_grid(request):
 
 
 @login_required
+@interface_required("access_notifications")
 def calendar_events(request):
     today = timezone.localdate()
     try:

@@ -1,3 +1,4 @@
+from readings.test_access_helpers import create_interface_user
 from datetime import date, datetime, timedelta
 from decimal import Decimal
 from unittest.mock import patch
@@ -51,7 +52,7 @@ class GridAccessTests(TestCase):
         self.assertRedirects(response, f"{reverse('login')}?next=/")
 
     def test_consultation_user_can_only_see_grid(self):
-        user = get_user_model().objects.create_user(username="consulta", password="prueba-segura")
+        user = create_interface_user(username="consulta", password="prueba-segura")
         self.client.force_login(user)
         response = self.client.get(reverse("readings:grid"))
         self.assertEqual(response.status_code, 200)
@@ -74,7 +75,7 @@ class GridAccessTests(TestCase):
         ReadingSchedule.objects.create(
             node=other, due_date=date(2026, 8, 21), status=ReadingSchedule.Status.COMPLETED
         )
-        user = get_user_model().objects.create_user(username="filtros", password="prueba-segura")
+        user = create_interface_user(username="filtros", password="prueba-segura")
         self.client.force_login(user)
         response = self.client.get(
             reverse("readings:grid"), {"node": self.node.id, "provider": "PLUZ", "status": "PENDING"}
@@ -92,7 +93,7 @@ class GridAccessTests(TestCase):
             status=ReadingSchedule.Status.PENDING,
             notes="Seguimiento de 10 días",
         )
-        user = get_user_model().objects.create_user(username="estados", password="prueba-segura")
+        user = create_interface_user(username="estados", password="prueba-segura")
         self.client.force_login(user)
 
         monthly = self.client.get(reverse("readings:grid"), {"status": "PENDING_READING"})
@@ -119,7 +120,7 @@ class GridAccessTests(TestCase):
             confirmed_value=100,
             status=Reading.Status.CONFIRMED,
         )
-        user = get_user_model().objects.create_user(username="orden", password="prueba-segura")
+        user = create_interface_user(username="orden", password="prueba-segura")
         self.client.force_login(user)
 
         response = self.client.get(reverse("readings:grid"))
@@ -159,7 +160,7 @@ class GridAccessTests(TestCase):
             status=ReadingSchedule.Status.PENDING,
             notes="Lectura mensual",
         )
-        user = get_user_model().objects.create_user(username="prioridad", password="prueba-segura")
+        user = create_interface_user(username="prioridad", password="prueba-segura")
         self.client.force_login(user)
 
         with patch("readings.views.timezone.localdate", return_value=date(2026, 9, 10)):
@@ -210,7 +211,7 @@ class GridAccessTests(TestCase):
             status=ReadingSchedule.Status.PENDING,
             notes="Seguimiento de 10 días",
         )
-        user = get_user_model().objects.create_user(username="corte_dia_tres", password="prueba-segura")
+        user = create_interface_user(username="corte_dia_tres", password="prueba-segura")
         self.client.force_login(user)
 
         with patch("readings.views.timezone.localdate", return_value=date(2026, 8, 31)):
@@ -347,7 +348,7 @@ class OCRSelectionTests(TestCase):
         self.assertIn("adaptativo-invertido", names)
         self.assertIn("otsu-invertido", names)
 
-    def test_consensus_preserves_decimal_seen_by_one_trusted_variant(self):
+    def test_consensus_requests_review_when_decimal_variants_disagree(self):
         candidates = [
             OCRCandidate(Decimal("1575192"), 0.99, "rapidocr", "clahe"),
             OCRCandidate(Decimal("1575192"), 0.98, "rapidocr", "otsu"),
@@ -356,7 +357,7 @@ class OCRSelectionTests(TestCase):
 
         selected = choose_consistent_candidate(candidates, previous_value=Decimal("150000"))
 
-        self.assertEqual(selected.value, Decimal("157519.2"))
+        self.assertIsNone(selected.value)
 
     def test_consensus_rejects_value_that_does_not_exceed_previous_reading(self):
         candidates = [
@@ -388,17 +389,19 @@ class OCRSelectionTests(TestCase):
     @patch("readings.services.ocr.read_meter_local")
     def test_local_result_prevents_external_request(self, local_mock, cloudflare_mock):
         local_mock.return_value = (
-            OCRResult(Decimal("1234.5"), "LOCAL", 0.95),
+            OCRResult(Decimal("1234.5"), "LOCAL", 0.95, details={"candidates": [
+                {"method": "rapidocr", "variant": "gris", "value": "1234.5"},
+            ]}),
             [],
             None,
         )
 
-        selected = read_meter("foto.jpg", previous_value=Decimal("1200"))
+        selected = read_meter("foto.jpg", previous_value=Decimal("1200"), profile={"techniques": {"rapidocr:gris": [3, 3]}})
 
         self.assertEqual(selected.source, "local")
         cloudflare_mock.assert_not_called()
 
-    def test_cloudflare_response_is_parsed_and_validated(self):
+    def test_unapproved_cloudflare_model_does_not_make_a_request(self):
         import json
         import os
         import numpy as np
@@ -427,11 +430,8 @@ class OCRSelectionTests(TestCase):
         ) as urlopen_mock:
             selected = read_meter_cloudflare(image, previous_value=Decimal("160000"))
 
-        self.assertEqual(selected.value, Decimal("170269.6"))
-        self.assertEqual(selected.source, "cloudflare")
-        request = urlopen_mock.call_args.args[0]
-        payload = json.loads(request.data.decode("utf-8"))
-        self.assertTrue(payload["image"].startswith("data:image/jpeg;base64,"))
+        self.assertIsNone(selected.value)
+        urlopen_mock.assert_not_called()
 
     def test_cloudflare_chat_model_embeds_image_in_user_message(self):
         import json
@@ -458,6 +458,7 @@ class OCRSelectionTests(TestCase):
             "CLOUDFLARE_ACCOUNT_ID": "cuenta-prueba",
             "CLOUDFLARE_API_TOKEN": "token-prueba",
             "CLOUDFLARE_VISION_MODEL": "@cf/google/gemma-4-26b-a4b-it",
+            "CLOUDFLARE_FREE_PLAN_CONFIRMED": "True",
         }
         with patch.dict(os.environ, environment), patch(
             "readings.services.ocr.urllib.request.urlopen", return_value=FakeResponse()
@@ -472,7 +473,7 @@ class OCRSelectionTests(TestCase):
         self.assertEqual(user_content[1]["type"], "image_url")
         self.assertTrue(user_content[1]["image_url"]["url"].startswith("data:image/jpeg;base64,"))
         self.assertNotIn("image", payload)
-        self.assertEqual(payload["max_completion_tokens"], 400)
+        self.assertEqual(payload["max_completion_tokens"], 1200)
         self.assertNotIn("max_tokens", payload)
 
 
@@ -487,18 +488,18 @@ class AuthorizedNodesTests(TestCase):
         self.assertEqual(parse_reading("170269,6"), Decimal("170269.6"))
         self.assertIsNone(parse_reading("PENDIENTE"))
 
-    def test_annual_grid_only_shows_authorized_nodes(self):
+    def test_annual_grid_shows_all_active_nodes(self):
         authorized = AUTHORIZED_NODES[0]
         Node.objects.create(code="SUM-1081759", name=authorized["name"], location=authorized["location"])
         Node.objects.create(code="NO-AUTORIZADO", name="Higuereta")
-        user = get_user_model().objects.create_user(username="visor", password="prueba-segura")
+        user = create_interface_user(username="visor", password="prueba-segura")
         self.client.force_login(user)
         response = self.client.get(reverse("readings:annual_grid"))
         self.assertContains(response, "200 Millas")
-        self.assertNotContains(response, "Higuereta")
+        self.assertContains(response, "Higuereta")
 
     def test_annual_grid_accepts_a_valid_year_and_rejects_an_invalid_one(self):
-        user = get_user_model().objects.create_user(username="visor_anual", password="prueba-segura")
+        user = create_interface_user(username="visor_anual", password="prueba-segura")
         self.client.force_login(user)
 
         response = self.client.get(reverse("readings:annual_grid"), {"year": "2027"})
@@ -563,7 +564,7 @@ class CalendarTests(TestCase):
     today = date(2026, 8, 17)
 
     def setUp(self):
-        self.user = get_user_model().objects.create_user(username="calendario", password="prueba-segura")
+        self.user = create_interface_user(username="calendario", password="prueba-segura")
         self.node = Node.objects.create(code="CAL-001", name="Zárate", reading_day=20, active=True)
 
     def add_reading(self, reading_date, value=1234):

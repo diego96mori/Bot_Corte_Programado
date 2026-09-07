@@ -1,0 +1,8 @@
+{% extends "admin/base.html" %}
+{% block title %}{{ title }} | Administración WI-NET{% endblock %}
+{% block branding %}<h1 id="site-name"><a href="{% url 'admin:index' %}">Administración WI-NET</a></h1>{% endblock %}
+{% block extrastyle %}{{ block.super }}<style>
+#changelist table td,#changelist table th {padding:14px 12px;vertical-align:middle;font-size:14px}
+#changelist a.button {display:inline-block;padding:9px 13px;border-radius:6px;white-space:nowrap}
+.form-row {padding:16px 12px} .submit-row input {padding:12px 18px}
+</style>{% endblock %}

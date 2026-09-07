@@ -6,14 +6,16 @@ import re
 import urllib.error
 import urllib.request
 from collections import defaultdict
-from dataclasses import dataclass
+from dataclasses import dataclass, field, replace
+import math
 from decimal import Decimal, InvalidOperation
 from functools import lru_cache
 from pathlib import Path
 
 
 logger = logging.getLogger(__name__)
-NUMBER_PATTERN = re.compile(r"^\s*(\d{3,10}(?:[.,]\d{1,3})?)\s*$")
+NUMBER_PATTERN = re.compile(r"^\s*([0-9]{1,12}(?:[.,][0-9]{1,3})?)\s*$")
+OCR_VERSION = "2.0"
 
 
 @dataclass(frozen=True)
@@ -22,6 +24,7 @@ class OCRResult:
     raw_text: str
     confidence: float | None
     source: str = "local"
+    details: dict = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -523,17 +526,22 @@ def _rapid_candidates(engine, region, region_index):
     return candidates
 
 
-def choose_consistent_candidate(candidates, previous_value=None):
-    """Exige repetición entre variantes y descarta valores no superiores al anterior."""
+def choose_consistent_candidate(candidates, previous_value=None, profile=None):
+    """Consenso del valor exacto, incluyendo su decimal, con experiencia del medidor."""
     grouped = defaultdict(list)
     for candidate in candidates:
-        # Agrupa 157519.2 y 1575192 como la misma secuencia visual. Algunos
-        # preprocesamientos borran el punto del LCD; si otra variante sí lo ve,
-        # se conserva la representación decimal.
-        digits = "".join(str(digit) for digit in candidate.value.as_tuple().digits).lstrip("0") or "0"
-        grouped[digits].append(candidate)
+        if not math.isfinite(candidate.confidence):
+            continue
+        if profile:
+            from .ocr_learning import technique
+            key = technique({"method": candidate.method, "variant": candidate.variant})
+            wins, total = profile.get("techniques", {}).get(key, (0, 0))
+            if total >= 3 and wins / total < 0.5:
+                continue
+        grouped[candidate.value].append(candidate)
     ranked = []
-    for digits, items in grouped.items():
+    for value, items in grouped.items():
+        digits = "".join(str(d) for d in value.as_tuple().digits)
         variants = {item.variant for item in items}
         methods = {item.method for item in items}
         maximum = max(item.confidence for item in items)
@@ -547,22 +555,21 @@ def choose_consistent_candidate(candidates, previous_value=None):
             or "rapidocr" not in methods
         ):
             continue
-        decimal_items = [
-            item for item in items
-            if item.value.as_tuple().exponent < 0 and item.confidence >= 0.82
-        ]
-        representations = defaultdict(list)
-        for item in decimal_items or items:
-            representations[item.value].append(item)
-        value, representation_items = max(
-            representations.items(),
-            key=lambda pair: (len(pair[1]), max(item.confidence for item in pair[1])),
-        )
-        if previous_value is not None and value <= Decimal(previous_value):
+        # Otro decimal para los mismos dígitos obliga a segunda opinión.
+        sequence = lambda number: "".join(str(d) for d in number.as_tuple().digits)
+        if any(other != value and sequence(other) == sequence(value) for other in grouped):
+            continue
+        if previous_value is not None and value < Decimal(previous_value):
             continue
         # Una lectura completa de 6 o 7 dígitos es preferible a un fragmento
         # repetido muchas veces dentro de un recorte parcial.
         score = (len(digits) * 1.25) + min(len(variants), 4) + (len(methods) * 0.5) + average
+        if profile:
+            from .ocr_learning import technique
+            history = [profile.get("techniques", {}).get(technique({"method": item.method, "variant": item.variant}), (0, 0)) for item in items]
+            reliable = [wins / total for wins, total in history if total >= 3]
+            if reliable:
+                score += 0.5 * (sum(reliable) / len(reliable))
         ranked.append((score, value, average, len(variants), methods))
     if not ranked:
         return OCRResult(None, "LOCAL: sin consenso suficiente", None)
@@ -574,7 +581,7 @@ def choose_consistent_candidate(candidates, previous_value=None):
     return OCRResult(value, raw, confidence, "local")
 
 
-def read_meter_local(image_path: str | Path, previous_value=None):
+def read_meter_local(image_path: str | Path, previous_value=None, profile=None):
     """Ejecuta únicamente el reconocimiento local sobre el interior de los visores."""
     import cv2
 
@@ -607,14 +614,22 @@ def read_meter_local(image_path: str | Path, previous_value=None):
                     f"visor-detectado-original-{index}",
                 )
             )
-    local = choose_consistent_candidate(candidates, previous_value)
+    local = choose_consistent_candidate(candidates, previous_value, profile)
     full_selection = select_meter_value(full_result)
     mechanical = detect_red_decimal(image, full_result, full_selection, engine)
     if mechanical is not None and (
-        previous_value is None or mechanical.value > Decimal(previous_value)
+        previous_value is None or mechanical.value >= Decimal(previous_value)
     ):
         if local.value is None or (mechanical.confidence or 0) > (local.confidence or 0):
             local = mechanical
+    local = replace(local, details={
+        "version": OCR_VERSION, "profile_examples": (profile or {}).get("examples", 0),
+        "candidates": [
+            {"value": str(c.value), "confidence": c.confidence,
+             "method": c.method, "variant": c.variant}
+            for c in candidates if math.isfinite(c.confidence)
+        ],
+    })
     return local, regions, image
 
 
@@ -644,6 +659,11 @@ def read_meter_cloudflare(image, previous_value=None):
     model = os.getenv(
         "CLOUDFLARE_VISION_MODEL", "@cf/google/gemma-4-26b-a4b-it"
     ).strip()
+    # Free plan is a provider-enforced spending boundary; a local call count is not.
+    if os.getenv("CLOUDFLARE_FREE_PLAN_CONFIRMED", "").lower() != "true":
+        return OCRResult(None, "CLOUDFLARE: desactivado hasta confirmar Workers Free", None, "manual")
+    if model != "@cf/google/gemma-4-26b-a4b-it":
+        return OCRResult(None, "CLOUDFLARE: modelo fuera de la lista gratuita verificada", None, "manual")
     if not account_id or not api_token:
         return OCRResult(None, "CLOUDFLARE: no configurado", None, "manual")
     if image is None or image.size == 0:
@@ -656,35 +676,13 @@ def read_meter_cloudflare(image, previous_value=None):
     if not encoded_ok:
         return OCRResult(None, "CLOUDFLARE: no se pudo preparar el visor", None, "manual")
     data_url = "data:image/jpeg;base64," + base64.b64encode(encoded.tobytes()).decode("ascii")
-    previous_instruction = (
-        f" La lectura anterior confirmada es {previous_value}; el resultado debe ser estrictamente mayor."
-        if previous_value is not None
-        else ""
-    )
     prompt = (
         "Observa exclusivamente los dígitos dentro del visor del medidor eléctrico. "
         "Ignora marcas, números de serie, fechas, coordenadas y etiquetas impresas. "
         "Conserva el punto decimal visible. Si no puedes leerlo con seguridad, devuelve reading null."
-        f"{previous_instruction} Devuelve únicamente JSON."
+        " Devuelve únicamente JSON."
     )
-    is_moondream = "moondream" in model.lower()
-    if is_moondream:
-        payload = {
-            "task": "query",
-            "image": data_url,
-            "question": (
-                "Read only the large numeric electricity meter reading inside the LCD display. "
-                "Ignore voltage, serial numbers, dates, coordinates, labels and all printed text. "
-                "Preserve the visible decimal point. Reply with only the reading number, or UNKNOWN "
-                f"if it is not legible.{previous_instruction}"
-            ),
-            "reasoning": False,
-            "stream": False,
-            "temperature": 0,
-            "max_tokens": 40,
-        }
-    else:
-        payload = {
+    payload = {
             "messages": [
                 {
                     "role": "system",
@@ -699,7 +697,7 @@ def read_meter_cloudflare(image, previous_value=None):
                 },
             ],
             "temperature": 0,
-            "max_completion_tokens": 400,
+            "max_completion_tokens": 1200,
             "reasoning_effort": "low",
             "response_format": {
                 "type": "json_schema",
@@ -712,7 +710,7 @@ def read_meter_cloudflare(image, previous_value=None):
                     "required": ["reading", "confidence"],
                 },
             },
-        }
+    }
     endpoint = f"https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/run/{model}"
     request = urllib.request.Request(
         endpoint,
@@ -730,56 +728,68 @@ def read_meter_cloudflare(image, previous_value=None):
     except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, ValueError) as error:
         logger.warning("Falló el OCR de Cloudflare: %s", error)
         return OCRResult(None, "CLOUDFLARE: servicio no disponible", None, "manual")
-    if not envelope.get("success", False):
+    if not isinstance(envelope, dict) or not envelope.get("success", False):
         return OCRResult(None, "CLOUDFLARE: respuesta rechazada", None, "manual")
     result = envelope.get("result", {})
     if os.getenv("CLOUDFLARE_DEBUG_RESPONSE", "").strip() == "1":
         logger.warning("Respuesta OCR de Cloudflare (%s): %r", model, result)
-    if is_moondream:
-        nested = result.get("result", result) if isinstance(result, dict) else {}
-        answer = nested.get("answer") if isinstance(nested, dict) else None
-        value = _parse_value(answer)
-        if value is None:
-            return OCRResult(None, "CLOUDFLARE: lectura insegura", None, "manual")
-        if previous_value is not None and value <= Decimal(previous_value):
-            return OCRResult(
-                None, f"CLOUDFLARE: lectura {value} no supera la anterior", None, "manual"
-            )
-        return OCRResult(
-            value, f"CLOUDFLARE: visor reconocido como {value}", 0.90, "cloudflare"
-        )
     response_content = result
     if isinstance(result, dict):
         response_content = result.get("response", result)
         choices = result.get("choices")
-        if isinstance(choices, list) and choices:
+        if isinstance(choices, list) and choices and isinstance(choices[0], dict):
+            if choices[0].get("finish_reason") == "length":
+                return OCRResult(None, "CLOUDFLARE: respuesta incompleta; requiere revisión manual", None, "manual")
             message = choices[0].get("message", {})
             if isinstance(message, dict):
                 response_content = message.get("content", response_content)
     parsed = _extract_json_object(response_content)
-    if not parsed:
+    if not isinstance(parsed, dict):
         return OCRResult(None, "CLOUDFLARE: respuesta sin lectura válida", None, "manual")
     value = _parse_value(parsed.get("reading"))
     try:
         confidence = float(parsed.get("confidence", 0))
     except (TypeError, ValueError):
         confidence = 0
-    if value is None or confidence < 0.72:
+    if value is None or not math.isfinite(confidence) or not 0.72 <= confidence <= 1:
         return OCRResult(None, "CLOUDFLARE: lectura insegura", None, "manual")
-    if previous_value is not None and value <= Decimal(previous_value):
+    if previous_value is not None and value < Decimal(previous_value):
         return OCRResult(
-            None, f"CLOUDFLARE: lectura {value} no supera la anterior", None, "manual"
+            None, f"CLOUDFLARE: lectura {value} menor que la anterior", None, "manual"
         )
     return OCRResult(
         value, f"CLOUDFLARE: visor reconocido como {value}", confidence, "cloudflare"
     )
 
 
-def read_meter(image_path: str | Path, previous_value=None) -> OCRResult:
+def read_meter(image_path: str | Path, previous_value=None, profile=None, allow_cloudflare=True) -> OCRResult:
     """OCR local primero; Cloudflare solo actúa como respaldo y luego queda el modo manual."""
-    local, regions, image = read_meter_local(image_path, previous_value)
-    if local.value is not None:
-        return local
+    try:
+        local, regions, image = read_meter_local(image_path, profile=profile)
+    except Exception:
+        logger.exception("Falló el reconocimiento local")
+        import cv2
+        image = cv2.imread(str(image_path))
+        local, regions = OCRResult(None, "LOCAL: error de reconocimiento", None), []
+    details = dict(local.details)
+    details.setdefault("version", OCR_VERSION)
+    details["local"] = {"value": str(local.value) if local.value is not None else None,
+                        "confidence": local.confidence, "reason": local.raw_text}
+    def finish(result):
+        if result.value is not None and previous_value is not None and result.value < Decimal(previous_value):
+            result = OCRResult(None, result.raw_text + " | HISTÓRICO: valor menor; requiere revisión manual", None, "manual")
+        return replace(result, details=details)
+    calibrated = False
+    if local.value is not None and profile:
+        from .ocr_learning import technique
+        for candidate in local.details.get("candidates", []):
+            wins, total = profile.get("techniques", {}).get(technique(candidate), (0, 0))
+            if Decimal(candidate["value"]) == local.value and total >= 3 and wins / total >= 0.9:
+                calibrated = True
+    if calibrated and (local.confidence or 0) >= 0.85:
+        return finish(local)
+    if not allow_cloudflare:
+        return finish(local)
     # Solo se usa un recorte cuando la caja numérica identifica el visor con
     # precisión. Las anclas kWh pueden quedar debajo del LCD; en ese caso el
     # modelo visual recibe la foto completa para localizarlo correctamente.
@@ -787,13 +797,32 @@ def read_meter(image_path: str | Path, previous_value=None) -> OCRResult:
         (region for region in regions if region.label == "caja-numerica-del-visor"),
         None,
     )
-    external_image = precise_region.image if precise_region is not None else image
-    cloudflare = read_meter_cloudflare(external_image, previous_value)
+    # Una caja numérica también puede pertenecer a una serie impresa: sin
+    # experiencia comprobada del medidor, conservar todo el contexto visual.
+    used_crop = precise_region is not None and calibrated
+    external_image = precise_region.image if used_crop else image
+    cloudflare = read_meter_cloudflare(external_image)
+    details["cloudflare"] = [{
+        "model": os.getenv("CLOUDFLARE_VISION_MODEL", "@cf/google/gemma-4-26b-a4b-it"),
+        "input": "crop" if used_crop else "full",
+        "value": str(cloudflare.value) if cloudflare.value is not None else None,
+        "confidence": cloudflare.confidence, "reason": cloudflare.raw_text,
+    }]
+    # Retry only a visual failure on a crop, never an HTTP/quota/configuration failure.
+    if used_crop and cloudflare.value is None and cloudflare.raw_text == "CLOUDFLARE: lectura insegura":
+        cloudflare = read_meter_cloudflare(image)
+        details["cloudflare"].append({
+            "model": details["cloudflare"][0]["model"], "input": "full",
+            "value": str(cloudflare.value) if cloudflare.value is not None else None,
+            "confidence": cloudflare.confidence, "reason": cloudflare.raw_text,
+        })
     if cloudflare.value is not None:
-        return cloudflare
-    return OCRResult(
+        if calibrated and local.value is not None and local.value != cloudflare.value:
+            return finish(OCRResult(None, "LOCAL y CLOUDFLARE discrepan; requiere revisión manual", None, "manual"))
+        return finish(cloudflare)
+    return finish(OCRResult(
         None,
         f"{local.raw_text} | {cloudflare.raw_text} | REQUIERE INGRESO MANUAL",
         None,
         "manual",
-    )
+    ))

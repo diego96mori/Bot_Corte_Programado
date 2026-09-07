@@ -99,6 +99,9 @@ class RegistrationRulesTests(TestCase):
         reading = async_to_sync(bot.confirm_reading)(draft.pk, self.user.id, self.today)
         self.assertEqual(reading.schedule.due_date, date(2026, 9, 2))
         self.assertFalse(reading.schedule.is_follow_up)
+        with self.assertRaisesMessage(ValidationError, "09/09/2026"):
+            get_registration_plan(self.guardia)
+        self.today = date(2026, 9, 9)
         next_plan = get_registration_plan(self.guardia)
         self.assertEqual(next_plan.kind, "FOLLOW_UP")
         self.assertEqual(next_plan.due_date, date(2026, 9, 10))
@@ -107,12 +110,12 @@ class RegistrationRulesTests(TestCase):
         node = Node.objects.create(code="200", name="200 Millas", reading_day=11, telegram_chat_id=1)
         self.monthly(node, date(2026, 8, 11), date(2026, 8, 31))
         self.select(node)
-        message = self.message.reply_text.call_args.args[0]
-        self.assertIn("Corresponde un seguimiento", message)
-        self.assertIn("10/09/2026", message)
-        self.assertIn("hasta el 08/09/2026", message)
+        message = "\n".join(call.args[0] for call in self.message.reply_text.call_args_list)
+        self.assertIn("no tiene una ventana disponible", message)
+        self.assertIn("09/09/2026", message)
         self.today = date(2026, 9, 8)
-        self.assertEqual(get_registration_plan(node).kind, "FOLLOW_UP")
+        with self.assertRaisesMessage(ValidationError, "09/09/2026"):
+            get_registration_plan(node)
         self.today = date(2026, 9, 9)
         self.assertEqual(get_registration_plan(node).kind, "MONTHLY")
 
@@ -155,3 +158,43 @@ class RegistrationRulesTests(TestCase):
         plan = get_registration_plan(node)
         self.assertEqual(plan.kind, "MONTHLY")
         self.assertEqual(plan.due_date, date(2026, 8, 23))
+
+    def test_guardia_rejects_early_photo_date_cancels_draft_and_returns_home(self):
+        self.monthly(self.guardia, date(2026, 9, 2), date(2026, 9, 2))
+        self.today = date(2026, 9, 7)
+        with self.assertRaisesMessage(ValidationError, "11/09/2026"):
+            get_registration_plan(self.guardia)
+        self.today = date(2026, 9, 11)
+        draft = self.draft(self.guardia)
+        draft.photo = 'meter_photos/test-window.jpg'
+        draft.save()
+        self.context.user_data.update({
+            bot.STATE: bot.WAIT_DATE, 'reading_id': draft.pk,
+            bot.ACTIVE_USER_ID: self.user.id,
+        })
+        async_to_sync(bot.finish_reading)(self.message, self.context, self.user.id, date(2026, 9, 7))
+        draft.refresh_from_db()
+        self.assertEqual(draft.status, Reading.Status.CANCELLED)
+        self.assertIsNone(draft.confirmed_value)
+        self.assertFalse(draft.ocr_learning_verified)
+        self.assertEqual(self.context.user_data[bot.STATE], bot.MAIN_MENU)
+        messages = '\n'.join(call.args[0] for call in self.message.reply_text.call_args_list)
+        self.assertIn('11/09/2026', messages)
+        self.assertIn('La lectura no fue registrada', messages)
+        valid = self.draft(self.guardia)
+        reading = async_to_sync(bot.confirm_reading)(valid.pk, self.user.id, date(2026, 9, 11))
+        self.assertEqual(reading.status, Reading.Status.CONFIRMED)
+
+    def test_200_millas_complete_august_cannot_open_september_until_ninth(self):
+        node = Node.objects.create(code='200-W', name='200 Millas', reading_day=11, telegram_chat_id=1)
+        self.monthly(node, date(2026, 8, 11), date(2026, 8, 11))
+        self.follow_up(node, date(2026, 8, 21), date(2026, 8, 21))
+        for day in (7, 8):
+            self.today = date(2026, 9, day)
+            with self.assertRaisesMessage(ValidationError, '09/09/2026'):
+                get_registration_plan(node)
+        self.today = date(2026, 9, 9)
+        plan = get_registration_plan(node)
+        self.assertEqual(plan.kind, 'MONTHLY')
+        self.assertEqual(plan.due_date, date(2026, 9, 11))
+        self.assertEqual(plan.opens_on, self.today)

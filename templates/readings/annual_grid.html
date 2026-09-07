@@ -6,30 +6,40 @@
   .annual-card::-webkit-scrollbar { width:14px; height:14px; }
   .annual-card::-webkit-scrollbar-track { background:#e8edf4; }
   .annual-card::-webkit-scrollbar-thumb { background:#6f7f99; border:3px solid #e8edf4; border-radius:9px; }
-  .annual { font-size:.9rem; width:max-content; min-width:100%; }
-  .annual th,.annual td { padding:.58rem; border-right:1px solid #cdd4df; border-bottom:1px solid #cdd4df; }
+  .annual { --place-width:110px; --node-width:210px; font-size:1rem; line-height:1.5; width:max-content; min-width:100%; }
+  .annual th,.annual td { box-sizing:border-box; padding:.85rem 1rem; border-right:1px solid #cdd4df; border-bottom:1px solid #cdd4df; }
+  .annual th { font-size:.95rem; }
   .annual thead th { position:sticky; top:0; z-index:3; text-align:center; color:#172033; }
   .annual .meta-head { background:#ff9900; }
   .annual .month-head:nth-child(even) { background:#fff500; }
   .annual .month-head:nth-child(odd) { background:#f4b183; }
   .annual .sticky-1 { position:sticky; left:0; z-index:2; background:#d9ead3; }
-  .annual .sticky-2 { position:sticky; left:82px; z-index:2; background:#d8eef1; }
+  .annual .sticky-2 { position:sticky; left:var(--place-width); z-index:2; background:#d8eef1; }
   .annual thead .sticky-1,.annual thead .sticky-2 { z-index:5; background:#ff9900; }
-  .annual .node { min-width:160px; } .annual .location { min-width:82px; font-weight:700; text-align:center; }
+  .annual .sticky-1 { width:var(--place-width); min-width:var(--place-width); max-width:var(--place-width); white-space:normal; overflow-wrap:anywhere; }
+  .annual .sticky-2 { width:var(--node-width); min-width:var(--node-width); max-width:var(--node-width); white-space:normal; overflow-wrap:anywhere; }
+  .annual .location { font-weight:700; text-align:center; }
   .annual .history-head,.annual .history-cell,
-  .annual .month-head,.annual .month-cell { width:220px; min-width:220px; max-width:220px; }
+  .annual .month-head,.annual .month-cell { width:320px; min-width:320px; max-width:320px; white-space:normal; overflow-wrap:break-word; }
   .annual .month-cell { vertical-align:top; }
-  .entry { display:flex; justify-content:space-between; gap:.6rem; padding:.16rem .3rem; border-radius:4px; }
-  .entry + .entry { margin-top:.2rem; } .entry:nth-child(odd) { background:#eef3fa; } .value { font-weight:650; }
+  .entry { display:flex; flex-direction:column; gap:.4rem; padding:.75rem; border-radius:6px; }
+  .entry strong { line-height:1.4; }
+  .entry small { font-size:.9rem; color:#475569; }
+  .entry.pending { background:#fff6df; }
+  .annual-note { color:#475569; margin:.3rem 0 .7rem; }
+  .entry + .entry { margin-top:.65rem; } .entry:nth-child(odd) { background:#eef3fa; }
+  .entry .value { font-size:1.1rem; font-weight:650; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  @media (max-width:800px) { .annual { --place-width:80px; --node-width:150px; } }
 {% endblock %}
 {% block content %}
   <header class="page-header"><div><h1>LECTURAS WI-NET</h1></div></header>
+  <p class="annual-note">Agrupado por ciclo mensual. Cada registro conserva la fecha real de toma. Las históricas sin ciclo identificado se muestran por su fecha real.</p>
   <div class="card annual-card table-wrap">
     <table class="annual">
       <thead><tr>
         <th class="meta-head sticky-1">Lugar</th><th class="meta-head sticky-2">Nodo</th><th class="meta-head">Suministro</th>
         <th class="meta-head">Día lectura</th><th class="meta-head">Día emisión</th><th class="meta-head">Día vencimiento</th>
-        <th class="meta-head">Concesionaria</th><th class="meta-head history-head">Última lectura 2025</th>
+        <th class="meta-head">Concesionaria</th><th class="meta-head history-head">Última lectura de ciclos anteriores a {{ year }}</th>
         {% for month in months %}<th class="month-head">{{ month }} {{ year }}</th>{% endfor %}
       </tr></thead>
       <tbody>{% for row in rows %}<tr>
@@ -37,8 +47,22 @@
         <td>{{ row.node.supply_number }}</td><td>{{ row.node.reading_day|stringformat:"02d" }}</td>
         <td>{{ row.node.billing_day|stringformat:"02d" }}</td><td>{{ row.node.due_day|stringformat:"02d" }}</td><td>{{ row.node.provider }}</td>
         <td class="history-cell">{% if row.previous %}<div class="entry"><span class="value">{{ row.previous.confirmed_value|reading_value }}</span><span>{{ row.previous.reading_date|date:"d/m/Y" }}</span></div>{% else %}—{% endif %}</td>
-        {% for entries in row.months %}<td class="month-cell">{% for reading in entries %}<div class="entry"><span class="value">{{ reading.confirmed_value|reading_value }}</span><span>{{ reading.reading_date|date:"d/m" }}</span></div>{% empty %}—{% endfor %}</td>{% endfor %}
+        {% for entries in row.months %}<td class="month-cell" data-cycle="{{ year }}-{{ forloop.counter|stringformat:'02d' }}">{% for entry in entries %}
+          <div class="entry{% if not entry.reading %} pending{% endif %}">
+            <strong>{{ entry.kind }}</strong>
+            {% if entry.reading %}
+              <span class="value">{{ entry.reading.confirmed_value|reading_value }}</span>
+              <small>Tomada el {{ entry.reading.reading_date|date:"d/m/Y"|default:"Sin fecha registrada" }}</small>
+            {% else %}
+              <span>{{ entry.state }}</span><small>Programado: {{ entry.due|date:"d/m/Y" }}</small>
+              {% if entry.cutoff %}<small>Disponible hasta {{ entry.cutoff|date:"d/m/Y" }}</small>{% endif %}
+            {% endif %}
+          </div>
+        {% empty %}—{% endfor %}</td>{% endfor %}
       </tr>{% empty %}<tr><td colspan="20">Todavía no se han importado nodos.</td></tr>{% endfor %}</tbody>
     </table>
   </div>
+  {% for row in rows %}{% if row.undated %}<p class="annual-note">{{ row.node.name }} — históricas sin fecha:
+    {% for entry in row.undated %}{{ entry.reading.confirmed_value|reading_value }}{% if not forloop.last %}, {% endif %}{% endfor %}.
+  </p>{% endif %}{% endfor %}
 {% endblock %}

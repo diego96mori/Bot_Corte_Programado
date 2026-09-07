@@ -3,7 +3,7 @@ from datetime import date, timedelta
 
 from django.utils import timezone
 
-from readings.models import Node, Reading
+from readings.models import Node, Reading, ReadingSchedule
 from readings.services.notifications import get_cycle_state, monthly_due_date, shift_month
 
 
@@ -50,6 +50,8 @@ def get_calendar_events(year, month, today=None):
     )
 
     events = []
+    cancelled = list(ReadingSchedule.objects.filter(node__in=nodes, status=ReadingSchedule.Status.CANCELLED, due_date__range=(month_start, month_end)).select_related("node"))
+    cancelled_keys = {(s.node_id, s.due_date) for s in cancelled}
     for reading in readings:
         value = reading.confirmed_value if reading.confirmed_value is not None else reading.detected_value
         is_follow_up = reading.schedule.is_follow_up
@@ -69,7 +71,7 @@ def get_calendar_events(year, month, today=None):
     for node in nodes:
         cycle_due = monthly_due_date(node, month_start)
         current_cycle = get_cycle_state(node, cycle_due)
-        if not current_cycle["monthly_reading"]:
+        if not current_cycle["monthly_reading"] and (node.pk, cycle_due) not in cancelled_keys:
             is_closed = today >= current_cycle["cutoff"]
             events.append(
                 {
@@ -94,9 +96,11 @@ def get_calendar_events(year, month, today=None):
                 not due_date
                 or state["follow_up_completed"]
                 or not month_start <= due_date <= month_end
+                or (node.pk, due_date) in cancelled_keys
             ):
                 continue
-            is_closed = today >= state["cutoff"]
+            no_window = due_date - timedelta(days=1) >= state["cutoff"]
+            is_closed = today >= state["cutoff"] or no_window
             events.append(
                 {
                     "date": due_date.isoformat(),
@@ -105,7 +109,7 @@ def get_calendar_events(year, month, today=None):
                     "type": "task",
                     "kind_label": "Seguimiento de 10 días",
                     "status_label": (
-                        "Seguimiento no registrado · ciclo cerrado por nueva lectura mensual"
+                        ("Seguimiento sin ventana disponible antes del cierre" if no_window and today < state["cutoff"] else "Seguimiento no registrado · ciclo cerrado por nueva lectura mensual")
                         if is_closed else _task_status("FOLLOW_UP", due_date, today)
                     ),
                     "state": "closed" if is_closed else _task_state(due_date, today, "FOLLOW_UP"),
@@ -113,5 +117,11 @@ def get_calendar_events(year, month, today=None):
                 }
             )
 
+    for schedule in cancelled:
+        events.append({"date": schedule.due_date.isoformat(), "node_id": schedule.node_id,
+            "node_name": schedule.node.name, "type": "task",
+            "kind_label": "Seguimiento de 10 días" if schedule.is_follow_up else "Lectura mensual",
+            "status_label": "Seguimiento no exigible · mensual eliminada" if "Mensual eliminada" in schedule.notes else "Programación anulada · no exigible",
+            "state": "closed", "value": None})
     state_order = {"danger": 0, "warning": 1, "planned": 2, "closed": 3, "completed": 4}
     return sorted(events, key=lambda event: (event["date"], state_order[event["state"]], event["node_name"]))

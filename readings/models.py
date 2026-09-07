@@ -24,9 +24,19 @@ class Node(models.Model):
     )
     telegram_chat_id = models.BigIntegerField("chat de Telegram", null=True, blank=True)
     active = models.BooleanField("activo", default=True)
+    ocr_learning_generation = models.PositiveIntegerField(
+        "versión de aprendizaje del medidor", default=1,
+        help_text="Incrementar al reemplazar el medidor o para empezar un aprendizaje nuevo.",
+    )
 
     class Meta:
         ordering = ["code"]
+        permissions = [
+            ("access_management", "Ver Gestión de lecturas"),
+            ("access_annual", "Ver Lecturas WI-NET"),
+            ("access_notifications", "Ver calendario y notificaciones"),
+            ("access_admin", "Entrar a Administración"),
+        ]
         verbose_name = "nodo"
         verbose_name_plural = "nodos"
 
@@ -108,6 +118,14 @@ class Reading(models.Model):
     )
     ocr_text = models.TextField("texto OCR", blank=True)
     ocr_confidence = models.FloatField("confianza OCR", null=True, blank=True)
+    ocr_attempts = models.JSONField("historial de reconocimiento", default=list, blank=True)
+    ocr_learning_excluded = models.BooleanField(
+        "excluida del aprendizaje por ser histórica", default=False,
+    )
+    ocr_learning_verified = models.BooleanField(
+        "etiqueta visual verificada para aprendizaje", default=False,
+        help_text="Activar solo después de comparar la fotografía y el valor confirmado, incluyendo decimales.",
+    )
     photo = models.ImageField("fotografía", upload_to="meter_photos/%Y/%m/", blank=True)
     reading_date = models.DateField("fecha de lectura", null=True, blank=True, db_index=True)
     source = models.CharField("origen", max_length=12, choices=Source.choices, default=Source.TELEGRAM)

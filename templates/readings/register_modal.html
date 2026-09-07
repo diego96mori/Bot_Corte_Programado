@@ -1,0 +1,122 @@
+<style>
+  #reading-dialog { width:min(800px,calc(100vw - 2rem)); max-height:90vh; overflow:auto; border:0; border-radius:14px; padding:1.5rem; color:#172033; box-shadow:0 24px 70px #10182766; }
+  #reading-dialog::backdrop { background:#10182799; }
+  #reading-dialog h2 { margin:0 0 1rem; }
+  #reading-form { display:grid; gap:1rem; }
+  #reading-form label { display:grid; gap:.4rem; }
+  #reading-form input,#reading-form select { box-sizing:border-box; width:100%; font-size:1rem; padding:.7rem; }
+  #reading-help { white-space:pre-line; font-size:.9rem; color:#526078; }
+  #reading-error { color:#b42318; white-space:pre-line; }
+  .reading-actions { display:flex; justify-content:flex-end; gap:.75rem; }
+  #reading-success:not(:empty) { position:fixed; bottom:1rem; left:50%; transform:translateX(-50%); z-index:80; background:white; color:#168653; padding:1rem; border:1px solid #168653; border-radius:8px; box-shadow:0 4px 18px #1720332b; }
+  #reading-form button:disabled { opacity:.55; cursor:wait; }
+</style>
+<dialog id="reading-dialog" aria-labelledby="reading-heading">
+  <h2 id="reading-heading">Agregar lectura</h2>
+  <form id="reading-form" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label>Nodo<select name="node" id="reading-node" required><option value="">Elige un nodo</option></select></label>
+    <label>Pendiente disponible<select name="obligation" id="reading-obligation" required disabled><option value="">Primero elige un nodo</option></select></label>
+    <div id="reading-help" aria-live="polite"></div>
+    <label>Fecha de toma (Fecha bot/web)<input type="date" name="reading_date" id="reading-date" required></label>
+    <small>Indica cuándo tomaste la lectura. La fecha de registro se guardará automáticamente: hoy, <strong id="reading-today"></strong>.</small>
+    <label>Lectura manual<input name="value" id="reading-value" type="text" inputmode="decimal" pattern="[0-9]{1,12}([.,][0-9]{1,3})?" maxlength="16" placeholder="Ejemplo: 174306.9" required autocomplete="off" aria-describedby="reading-value-help"></label>
+    <small id="reading-value-help">Solo números enteros o decimales. Hasta 12 dígitos enteros y 3 decimales; usa punto o coma, sin separadores de miles.</small>
+    <label>Fotografía (opcional)<input name="photo" type="file" accept="image/jpeg,image/png,image/webp"></label>
+    <small>JPG, PNG o WebP, máximo 10 MB. Verifica el número y sus decimales antes de guardar.</small>
+    <div id="reading-error" role="alert"></div>
+    <div class="reading-actions"><button type="button" class="action-button secondary" id="reading-cancel">Cancelar</button><button type="submit" class="action-button primary" id="reading-save" disabled>Guardar lectura</button></div>
+  </form>
+</dialog>
+<script>
+(() => {
+  const dialog = document.getElementById('reading-dialog');
+  const form = document.getElementById('reading-form');
+  const node = document.getElementById('reading-node');
+  const obligation = document.getElementById('reading-obligation');
+  const save = document.getElementById('reading-save');
+  const cancel = document.getElementById('reading-cancel');
+  const error = document.getElementById('reading-error');
+  const help = document.getElementById('reading-help');
+  const value = document.getElementById('reading-value');
+  const readingDate = document.getElementById('reading-date');
+  const endpoint = "{% url 'readings:web_reading' %}";
+  let version = 0, busy = false, opener;
+  function clearPending(message) {
+    obligation.replaceChildren(new Option(message, ''));
+    obligation.disabled = true;
+    save.disabled = true;
+    help.textContent = '';
+    readingDate.removeAttribute('min');
+  }
+  async function json(response) {
+    if (response.redirected || !response.headers.get('content-type')?.includes('application/json')) throw new Error('La sesión ha terminado. Recarga la página e inicia sesión.');
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || Object.values(data.errors || {}).flat().join('\n') || 'No se pudo completar la operación.');
+    return data;
+  }
+  document.addEventListener('click', async event => {
+    if (!event.target.closest('[data-add-reading]')) return;
+    opener = event.target;
+    form.reset(); value.setCustomValidity(''); error.textContent = ''; help.textContent = '';
+    document.getElementById('reading-success').textContent = '';
+    clearPending('Primero elige un nodo');
+    node.replaceChildren(new Option('Cargando nodos…', ''));
+    node.disabled = true;
+    const requestVersion = ++version;
+    dialog.showModal();
+    try {
+      const data = await json(await fetch(endpoint, {cache:'no-store'}));
+      if (requestVersion !== version) return;
+      node.replaceChildren(new Option('Elige un nodo', ''), ...data.nodes.map(item => new Option(item.name, item.id)));
+      document.getElementById('reading-today').textContent = data.today.split('-').reverse().join('/');
+      readingDate.value = data.today;
+      readingDate.max = data.today;
+      node.disabled = false; node.focus();
+    } catch (failure) { error.textContent = failure.message; }
+  });
+  node.addEventListener('change', async () => {
+    const requestVersion = ++version;
+    error.textContent = ''; clearPending(node.value ? 'Consultando pendientes…' : 'Primero elige un nodo');
+    if (!node.value) return;
+    try {
+      const data = await json(await fetch(`${endpoint}?node=${encodeURIComponent(node.value)}`, {cache:'no-store'}));
+      if (requestVersion !== version) return;
+      if (!data.options.length) { clearPending('Sin pendientes habilitados'); help.textContent = data.message; return; }
+      obligation.replaceChildren(...data.options.map(item => new Option(item.label, item.token)));
+      obligation.disabled = false; save.disabled = false;
+      help.textContent = data.options[0].explanation;
+      readingDate.min = data.options[0].min_date;
+    } catch (failure) { if (requestVersion === version) error.textContent = failure.message; }
+  });
+  value.addEventListener('input', () => {
+    value.setCustomValidity(value.value && !/^[0-9]{1,12}([.,][0-9]{1,3})?$/.test(value.value) ? 'Ingresa únicamente números enteros o decimales, sin letras ni signos.' : '');
+  });
+  cancel.addEventListener('click', () => dialog.close());
+  dialog.addEventListener('cancel', event => { if (busy) event.preventDefault(); });
+  dialog.addEventListener('close', () => { ++version; opener?.focus(); });
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (busy || !form.reportValidity() || !obligation.value) return;
+    const body = new FormData(form);
+    busy = true; save.disabled = true; cancel.disabled = true; node.disabled = true; error.textContent = '';
+    try {
+      await json(await fetch(endpoint, {method:'POST', body}));
+      dialog.close();
+      document.dispatchEvent(new Event('reading-saved'));
+      // Refresh the records and notification counts without closing the calendar.
+      try {
+        const response = await fetch(window.location.href, {cache:'no-store'});
+        if (!response.ok || response.redirected) throw new Error();
+        const page = new DOMParser().parseFromString(await response.text(), 'text/html');
+        for (const selector of ['main', '.notification-center']) {
+          const replacement = page.querySelector(selector);
+          if (replacement) document.querySelector(selector)?.replaceWith(replacement);
+        }
+        document.getElementById('reading-success').textContent = 'Lectura registrada correctamente.';
+      } catch (_) { document.getElementById('reading-success').textContent = 'Lectura guardada. Recarga la página para actualizar la tabla.'; }
+    } catch (failure) { error.textContent = failure.message; }
+    finally { busy = false; cancel.disabled = false; node.disabled = false; save.disabled = obligation.disabled; }
+  });
+})();
+</script>

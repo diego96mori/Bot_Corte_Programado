@@ -1,3 +1,4 @@
+from readings.test_access_helpers import create_interface_user
 from datetime import date, datetime
 from decimal import Decimal
 from types import SimpleNamespace
@@ -57,10 +58,10 @@ class ReadingCycleRegressionTests(TestCase):
         )
 
     def test_september_eighth_registers_a_single_follow_up(self):
-        self.confirm(self.draft(date(2026, 8, 31)), date(2026, 8, 31))
+        self.confirm(self.draft(date(2026, 8, 29)), date(2026, 8, 29))
         follow_up = self.confirm(self.draft(date(2026, 9, 8), "110"), date(2026, 9, 8))
         self.assertTrue(follow_up.schedule.is_follow_up)
-        self.assertEqual(follow_up.schedule.due_date, date(2026, 9, 10))
+        self.assertEqual(follow_up.schedule.due_date, date(2026, 9, 8))
         self.assertTrue(get_cycle_state(self.node, date(2026, 8, 11))["follow_up_completed"])
         self.assertEqual(
             get_node_obligation(self.node, date(2026, 9, 9)),
@@ -68,7 +69,7 @@ class ReadingCycleRegressionTests(TestCase):
         )
 
     def test_draft_started_on_eighth_becomes_monthly_when_dated_ninth(self):
-        self.confirm(self.draft(date(2026, 8, 31)), date(2026, 8, 31))
+        self.confirm(self.draft(date(2026, 8, 29)), date(2026, 8, 29))
         draft = self.draft(date(2026, 9, 8), "110")
         old_follow_up = draft.schedule
         monthly = self.confirm(draft, date(2026, 9, 9))
@@ -78,7 +79,7 @@ class ReadingCycleRegressionTests(TestCase):
         old_follow_up.refresh_from_db()
         self.assertNotEqual(old_follow_up.status, ReadingSchedule.Status.COMPLETED)
         events = get_calendar_events(2026, 9, date(2026, 9, 9))
-        old_task = next(event for event in events if event["date"] == "2026-09-10")
+        old_task = next(event for event in events if event["date"] == "2026-09-08")
         self.assertEqual(old_task["state"], "closed")
 
     def test_backdated_reading_cannot_reopen_a_closed_cycle(self):
@@ -105,7 +106,7 @@ class ReadingCycleRegressionTests(TestCase):
         self.assertEqual(draft.status, Reading.Status.REVIEW)
 
     def test_backdating_cannot_insert_a_third_reading_in_completed_cycle(self):
-        self.confirm(self.draft(date(2026, 8, 31)), date(2026, 8, 31))
+        self.confirm(self.draft(date(2026, 8, 29)), date(2026, 8, 29))
         self.confirm(self.draft(date(2026, 9, 8), "110"), date(2026, 9, 8))
         draft = self.draft(date(2026, 9, 15), "105")
         with self.assertRaisesMessage(ValidationError, "historial en gris"):
@@ -320,7 +321,7 @@ class ConfirmedScheduleRegressionTests(TestCase):
 
     def test_completed_filter_keeps_confirmed_rows_after_reminder_check(self):
         prepare_reminder_jobs(self.now)
-        user = get_user_model().objects.create_user(username="schedule_viewer")
+        user = create_interface_user(username="schedule_viewer")
         self.client.force_login(user)
         with patch("readings.views.timezone.localdate", return_value=date(2026, 8, 31)):
             response = self.client.get(reverse("readings:grid"), {"status": "COMPLETED"})

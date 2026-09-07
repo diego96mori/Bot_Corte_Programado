@@ -1,0 +1,7 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<p>Nodo: <strong>{{ reading.schedule.node.name }}</strong></p>
+<p>Valor confirmado: <strong>{{ reading.confirmed_value }}</strong>. Comprueba todos los dígitos y el punto decimal.</p>
+{% if reading.photo %}<img src="{{ reading.photo.url }}" alt="Foto del medidor" style="max-width:100%;max-height:55vh">{% endif %}
+<form method="post">{% csrf_token %}<input type="hidden" name="review_token" value="{{ review_token }}"><p><button type="submit">La foto coincide: preparar aprendizaje local</button> <a href="{% url 'admin:readings_reading_changelist' %}">Volver sin cambios</a></p></form>
+{% endblock %}

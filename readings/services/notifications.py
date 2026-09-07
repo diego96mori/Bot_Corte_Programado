@@ -5,7 +5,7 @@ from datetime import date, timedelta
 from django.db.models import Q
 from django.utils import timezone
 
-from readings.models import Node, Reading
+from readings.models import Node, Reading, ReadingSchedule
 
 
 @dataclass(frozen=True)
@@ -158,19 +158,17 @@ def get_reading_notifications(today=None):
     notifications = []
     for node in nodes:
         due_date, kind = get_node_obligation(node, today)
+        if ReadingSchedule.objects.filter(node=node, due_date=due_date, status=ReadingSchedule.Status.CANCELLED).exists():
+            continue
         days_until = (due_date - today).days
         lead_days = 2 if kind == "MONTHLY" else 1
         cutoff = None
-        shortened_follow_up = False
         if kind == "FOLLOW_UP":
             cycle_due = active_cycle_due(node, today)
             cutoff = get_cycle_state(node, cycle_due, as_of=today)["cutoff"]
-            # A late monthly reading can put its normal 10-day follow-up due
-            # beyond the next monthly window. In that case there is no useful
-            # "one day before due" reminder: notify throughout the remaining
-            # registration window and stop when the new cycle opens.
-            shortened_follow_up = due_date >= cutoff
-        if days_until <= lead_days or shortened_follow_up:
+            if due_date - timedelta(days=1) >= cutoff or today >= cutoff:
+                continue
+        if days_until <= lead_days:
             notifications.append(
                 ReadingNotification(
                     node=node, due_date=due_date, kind=kind,

@@ -9,10 +9,11 @@
     <label>Estado<select name="status"><option value="">Todos</option>{% for value, label in statuses %}<option value="{{ value }}" {% if selected_status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
     <button type="submit" class="action-button primary">Filtrar</button>
     <a href="{% url 'readings:grid' %}" class="action-button secondary">Limpiar filtros</a>
+    {% if perms.readings.add_reading %}<button type="button" class="action-button primary" style="margin-left:auto" data-add-reading>Agregar lectura</button>{% endif %}
   </form>
   <div class="card table-wrap">
     <table>
-      <thead><tr><th>Fecha de lectura</th><th>Fecha bot</th><th>Fecha de registro</th><th>Nodo</th><th>Suministro</th><th>Concesionaria</th><th>Detectada</th><th>Confirmada</th><th>Responsable</th><th>Evidencia</th><th>Estado</th></tr></thead>
+      <thead><tr><th>Fecha de lectura</th><th>Fecha bot/web</th><th>Fecha de registro</th><th>Nodo</th><th>Suministro</th><th>Concesionaria</th><th>Detectada</th><th>Confirmada</th><th>Responsable</th><th>Evidencia</th><th>Estado</th></tr></thead>
       <tbody>
       {% for schedule in schedules %}{% with reading=schedule.latest_readings.0 %}
         <tr>
@@ -22,7 +23,7 @@
           <td>{{ schedule.node.name }}</td>
           <td>{{ schedule.node.supply_number|default:"—" }}</td><td>{{ schedule.node.provider|default:"—" }}</td>
           <td>{{ reading.detected_value|reading_value }}</td><td>{{ reading.confirmed_value|reading_value }}</td>
-          <td>{{ reading.telegram_username|default:"—" }}</td>
+          <td>{% if reading.confirmed_by %}{{ reading.confirmed_by.get_full_name|default:reading.confirmed_by.username }}{% else %}{{ reading.telegram_username|default:"—" }}{% endif %}</td>
           <td>{% if reading.photo %}<a href="{{ reading.photo.url }}" target="_blank"><img class="evidence" src="{{ reading.photo.url }}" alt="Medidor"></a>{% else %}—{% endif %}</td>
           <td class="{{ schedule.grid_status_class }}">{{ schedule.grid_status_label }}</td>
         </tr>
