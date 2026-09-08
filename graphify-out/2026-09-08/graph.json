@@ -108,19 +108,6 @@
       "source_location": "L9"
     },
     {
-      "id": "readings_management_commands_evaluate_ocr_command",
-      "label": "Command",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": "command",
-      "source_file": "readings/management/commands/evaluate_ocr.py",
-      "source_location": "L12"
-    },
-    {
       "id": "readings_models_meta",
       "label": "Meta",
       "_callable": true,
@@ -210,19 +197,6 @@
       "norm_label": "status",
       "source_file": "readings/models.py",
       "source_location": "L48"
-    },
-    {
-      "id": "readings_services_registration_registrationplan",
-      "label": "RegistrationPlan",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": "registrationplan",
-      "source_file": "readings/services/registration.py",
-      "source_location": "L26"
     },
     {
       "id": "readings_test_cycle_boundaries_cycleboundarytests",
@@ -420,6 +394,19 @@
       "source_location": "L6"
     },
     {
+      "id": "readings_admin_forms_simplegroupform",
+      "label": "SimpleGroupForm",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "ReadingAdmin",
+      "file_type": "code",
+      "norm_label": "simplegroupform",
+      "source_file": "readings/admin_forms.py",
+      "source_location": "L21"
+    },
+    {
       "id": "readings_admin_ui_friendlyadmin",
       "label": "FriendlyAdmin",
       "_callable": true,
@@ -430,7 +417,7 @@
       "file_type": "code",
       "norm_label": "friendlyadmin",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L24"
+      "source_location": "L22"
     },
     {
       "id": "readings_admin_ui_nodeadmin",
@@ -443,7 +430,7 @@
       "file_type": "code",
       "norm_label": "nodeadmin",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L33"
+      "source_location": "L31"
     },
     {
       "id": "readings_admin_ui_readingadmin",
@@ -456,7 +443,7 @@
       "file_type": "code",
       "norm_label": "readingadmin",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L67"
+      "source_location": "L61"
     },
     {
       "id": "readings_admin_ui_readingscheduleadmin",
@@ -469,7 +456,7 @@
       "file_type": "code",
       "norm_label": "readingscheduleadmin",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L53"
+      "source_location": "L47"
     },
     {
       "id": "readings_admin_ui_reminderlogadmin",
@@ -482,7 +469,7 @@
       "file_type": "code",
       "norm_label": "reminderlogadmin",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L136"
+      "source_location": "L118"
     },
     {
       "id": "readings_admin_ui_simplegroupadmin",
@@ -495,7 +482,7 @@
       "file_type": "code",
       "norm_label": "simplegroupadmin",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L148"
+      "source_location": "L130"
     },
     {
       "id": "readings_admin_ui_simpleuseradmin",
@@ -508,85 +495,33 @@
       "file_type": "code",
       "norm_label": "simpleuseradmin",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L163"
+      "source_location": "L145"
     },
     {
-      "id": "readings_management_commands_import_readings_excel_command",
+      "id": "readings_management_commands_setup_access_groups_command",
       "label": "Command",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
+      "community": 23,
+      "community_name": "ReadingAdmin",
       "file_type": "code",
       "norm_label": "command",
-      "source_file": "readings/management/commands/import_readings_excel.py",
-      "source_location": "L50"
+      "source_file": "readings/management/commands/setup_access_groups.py",
+      "source_location": "L7"
     },
     {
-      "id": "readings_services_ocr_displayregion",
-      "label": "DisplayRegion",
+      "id": "readings_test_simple_admin_simpleadmintests",
+      "label": "SimpleAdminTests",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
+      "community": 23,
+      "community_name": "ReadingAdmin",
       "file_type": "code",
-      "norm_label": "displayregion",
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L39"
-    },
-    {
-      "id": "readings_services_ocr_ocrcandidate",
-      "label": "OCRCandidate",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "ocrcandidate",
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L31"
-    },
-    {
-      "id": "readings_services_ocr_ocrresult",
-      "label": "OCRResult",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "ocrresult",
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L22"
-    },
-    {
-      "id": "readings_test_ocr_learning_ocrsafetytests",
-      "label": "OCRSafetyTests",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "ocrsafetytests",
-      "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L93"
-    },
-    {
-      "id": "readings_tests_ocrselectiontests",
-      "label": "OCRSelectionTests",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "ocrselectiontests",
-      "source_file": "readings/tests.py",
-      "source_location": "L227"
+      "norm_label": "simpleadmintests",
+      "source_file": "readings/test_simple_admin.py",
+      "source_location": "L9"
     },
     {
       "id": "readings_migrations_0007_reading_ocr_learning_verified_migration",
@@ -628,56 +563,43 @@
       "source_location": "L6"
     },
     {
-      "id": "readings_admin_forms_simplegroupform",
-      "label": "SimpleGroupForm",
+      "id": "readings_services_ocr_displayregion",
+      "label": "DisplayRegion",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 33,
-      "community_name": "SimpleAdminTests",
+      "community_name": "OCRResult",
       "file_type": "code",
-      "norm_label": "simplegroupform",
-      "source_file": "readings/admin_forms.py",
-      "source_location": "L21"
+      "norm_label": "displayregion",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L39"
     },
     {
-      "id": "readings_management_commands_setup_access_groups_command",
-      "label": "Command",
+      "id": "readings_services_ocr_ocrresult",
+      "label": "OCRResult",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 33,
-      "community_name": "SimpleAdminTests",
+      "community_name": "OCRResult",
       "file_type": "code",
-      "norm_label": "command",
-      "source_file": "readings/management/commands/setup_access_groups.py",
-      "source_location": "L7"
+      "norm_label": "ocrresult",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L22"
     },
     {
-      "id": "readings_test_simple_admin_simpleadmintests",
-      "label": "SimpleAdminTests",
+      "id": "readings_test_ocr_learning_ocrsafetytests",
+      "label": "OCRSafetyTests",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 33,
-      "community_name": "SimpleAdminTests",
+      "community_name": "OCRResult",
       "file_type": "code",
-      "norm_label": "simpleadmintests",
-      "source_file": "readings/test_simple_admin.py",
-      "source_location": "L9"
-    },
-    {
-      "id": "readings_test_audit_fixes_auditfixtests",
-      "label": "AuditFixTests",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": "auditfixtests",
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L24"
+      "norm_label": "ocrsafetytests",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L93"
     },
     {
       "id": "readings_test_cycle_boundaries_upcominggridtests",
@@ -685,8 +607,8 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
+      "community": 34,
+      "community_name": "UpcomingGridTests",
       "file_type": "code",
       "norm_label": "upcominggridtests",
       "source_file": "readings/test_cycle_boundaries.py",
@@ -699,7 +621,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 35,
-      "community_name": "get_reading_notifications",
+      "community_name": "get_calendar_events",
       "file_type": "code",
       "norm_label": "calendartests",
       "source_file": "readings/tests.py",
@@ -712,11 +634,24 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 35,
-      "community_name": "get_reading_notifications",
+      "community_name": "get_calendar_events",
       "file_type": "code",
       "norm_label": "notificationtests",
       "source_file": "readings/tests.py",
       "source_location": "L513"
+    },
+    {
+      "id": "readings_test_audit_fixes_auditfixtests",
+      "label": "AuditFixTests",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "AuditFixTests",
+      "file_type": "code",
+      "norm_label": "auditfixtests",
+      "source_file": "readings/test_audit_fixes.py",
+      "source_location": "L24"
     },
     {
       "id": "readings_migrations_0009_alter_node_options_migration",
@@ -732,6 +667,19 @@
       "source_location": "L6"
     },
     {
+      "id": "readings_tests_ocrselectiontests",
+      "label": "OCRSelectionTests",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "OCRSelectionTests",
+      "file_type": "code",
+      "norm_label": "ocrselectiontests",
+      "source_file": "readings/tests.py",
+      "source_location": "L227"
+    },
+    {
       "id": "readings_test_telegram_flow_telegramflowtests",
       "label": "TelegramFlowTests",
       "_callable": true,
@@ -743,6 +691,32 @@
       "norm_label": "telegramflowtests",
       "source_file": "readings/test_telegram_flow.py",
       "source_location": "L16"
+    },
+    {
+      "id": "readings_management_commands_evaluate_ocr_command",
+      "label": "Command",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "create_reading",
+      "file_type": "code",
+      "norm_label": "command",
+      "source_file": "readings/management/commands/evaluate_ocr.py",
+      "source_location": "L12"
+    },
+    {
+      "id": "readings_services_ocr_ocrcandidate",
+      "label": "OCRCandidate",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "choose_consistent_candidate",
+      "file_type": "code",
+      "norm_label": "ocrcandidate",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L31"
     },
     {
       "id": "readings_management_commands_normalize_august_baseline_command",
@@ -797,6 +771,19 @@
       "source_location": "L12"
     },
     {
+      "id": "readings_services_registration_registrationplan",
+      "label": "RegistrationPlan",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "RegistrationRulesTests",
+      "file_type": "code",
+      "norm_label": "registrationplan",
+      "source_file": "readings/services/registration.py",
+      "source_location": "L26"
+    },
+    {
       "id": "readings_test_registration_rules_registrationrulestests",
       "label": "RegistrationRulesTests",
       "_callable": true,
@@ -810,13 +797,26 @@
       "source_location": "L15"
     },
     {
+      "id": "readings_management_commands_import_readings_excel_command",
+      "label": "Command",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "command",
+      "source_file": "readings/management/commands/import_readings_excel.py",
+      "source_location": "L50"
+    },
+    {
       "id": "readings_tests_authorizednodestests",
       "label": "AuthorizedNodesTests",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": "authorizednodestests",
       "source_file": "readings/tests.py",
@@ -829,7 +829,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": "gridaccesstests",
       "source_file": "readings/tests.py",
@@ -842,7 +842,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": "managementstatuslabeltests",
       "source_file": "readings/tests.py",
@@ -1017,18 +1017,6 @@
       "source_location": "L235"
     },
     {
-      "id": "readings_management_commands_run_telegram_bot_create_reading",
-      "label": "create_reading()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "run_telegram_bot.py",
-      "file_type": "code",
-      "norm_label": "create_reading()",
-      "source_file": "readings/management/commands/run_telegram_bot.py",
-      "source_location": "L201"
-    },
-    {
       "id": "readings_management_commands_run_telegram_bot_current_prompt",
       "label": "current_prompt()",
       "_callable": true,
@@ -1111,18 +1099,6 @@
       "norm_label": "get_authorized_node()",
       "source_file": "readings/management/commands/run_telegram_bot.py",
       "source_location": "L156"
-    },
-    {
-      "id": "readings_management_commands_run_telegram_bot_get_pending_node_reading",
-      "label": "get_pending_node_reading()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "run_telegram_bot.py",
-      "file_type": "code",
-      "norm_label": "get_pending_node_reading()",
-      "source_file": "readings/management/commands/run_telegram_bot.py",
-      "source_location": "L260"
     },
     {
       "id": "readings_management_commands_run_telegram_bot_is_conversation_active",
@@ -1243,18 +1219,6 @@
       "norm_label": "prepare_pending_schedule()",
       "source_file": "readings/management/commands/run_telegram_bot.py",
       "source_location": "L188"
-    },
-    {
-      "id": "readings_management_commands_run_telegram_bot_previous_confirmed_value",
-      "label": "previous_confirmed_value()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "run_telegram_bot.py",
-      "file_type": "code",
-      "norm_label": "previous_confirmed_value()",
-      "source_file": "readings/management/commands/run_telegram_bot.py",
-      "source_location": "L167"
     },
     {
       "id": "readings_management_commands_run_telegram_bot_prompt_payload",
@@ -1399,18 +1363,6 @@
       "norm_label": "validate_node_schedule()",
       "source_file": "readings/management/commands/run_telegram_bot.py",
       "source_location": "L180"
-    },
-    {
-      "id": "readings_management_commands_run_telegram_bot_validated_ocr_values",
-      "label": "validated_ocr_values()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "run_telegram_bot.py",
-      "file_type": "code",
-      "norm_label": "validated_ocr_values()",
-      "source_file": "readings/management/commands/run_telegram_bot.py",
-      "source_location": "L160"
     },
     {
       "id": "readings_management_commands_run_telegram_bot_welcome_text",
@@ -1569,6 +1521,18 @@
       "source_location": "L85"
     },
     {
+      "id": "readings_admin_forms_readingadminform_init",
+      "label": ".__init__()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "Reading",
+      "file_type": "code",
+      "norm_label": ".__init__()",
+      "source_file": "readings/admin_forms.py",
+      "source_location": "L73"
+    },
+    {
       "id": "readings_admin_forms_scheduleadminform_clean_status",
       "label": ".clean_status()",
       "_callable": true,
@@ -1581,16 +1545,28 @@
       "source_location": "L97"
     },
     {
-      "id": "readings_admin_ui_readingadmin_verify_view",
-      "label": ".verify_view()",
+      "id": "readings_admin_forms_simplegroupform_init",
+      "label": ".__init__()",
       "_callable": true,
       "_origin": "ast",
       "community": 1,
       "community_name": "Reading",
       "file_type": "code",
-      "norm_label": ".verify_view()",
-      "source_file": "readings/admin_ui.py",
-      "source_location": "L117"
+      "norm_label": ".__init__()",
+      "source_file": "readings/admin_forms.py",
+      "source_location": "L32"
+    },
+    {
+      "id": "readings_context_processors_notifications",
+      "label": "notifications()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "Reading",
+      "file_type": "code",
+      "norm_label": "notifications()",
+      "source_file": "readings/context_processors.py",
+      "source_location": "L4"
     },
     {
       "id": "readings_forms_webreadingform_clean_photo",
@@ -1629,19 +1605,7 @@
       "source_location": "L12"
     },
     {
-      "id": "readings_management_commands_evaluate_ocr_command_add_arguments",
-      "label": ".add_arguments()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": ".add_arguments()",
-      "source_file": "readings/management/commands/evaluate_ocr.py",
-      "source_location": "L15"
-    },
-    {
-      "id": "readings_management_commands_evaluate_ocr_command_handle",
+      "id": "readings_management_commands_benchmark_cloudflare_ocr_command_handle",
       "label": ".handle()",
       "_callable": true,
       "_origin": "ast",
@@ -1649,8 +1613,8 @@
       "community_name": "Reading",
       "file_type": "code",
       "norm_label": ".handle()",
-      "source_file": "readings/management/commands/evaluate_ocr.py",
-      "source_location": "L20"
+      "source_file": "readings/management/commands/benchmark_cloudflare_ocr.py",
+      "source_location": "L16"
     },
     {
       "id": "readings_models_node_str",
@@ -1785,6 +1749,18 @@
       "source_location": "L122"
     },
     {
+      "id": "readings_services_notifications_get_reading_notifications",
+      "label": "get_reading_notifications()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "Reading",
+      "file_type": "code",
+      "norm_label": "get_reading_notifications()",
+      "source_file": "readings/services/notifications.py",
+      "source_location": "L155"
+    },
+    {
       "id": "readings_services_notifications_monthly_due_date",
       "label": "monthly_due_date()",
       "_callable": true,
@@ -1821,66 +1797,6 @@
       "source_location": "L43"
     },
     {
-      "id": "readings_services_ocr_learning_append_attempt",
-      "label": "append_attempt()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": "append_attempt()",
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L49"
-    },
-    {
-      "id": "readings_services_ocr_learning_meter_scope",
-      "label": "meter_scope()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": "meter_scope()",
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L8"
-    },
-    {
-      "id": "readings_services_ocr_learning_review_identity",
-      "label": "review_identity()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": "review_identity()",
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L65"
-    },
-    {
-      "id": "readings_services_ocr_learning_review_token",
-      "label": "review_token()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": "review_token()",
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L75"
-    },
-    {
-      "id": "readings_services_ocr_learning_verify_for_learning",
-      "label": "verify_for_learning()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": "verify_for_learning()",
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L80"
-    },
-    {
       "id": "readings_services_registration_available_plan",
       "label": "available_plan()",
       "_callable": true,
@@ -1891,42 +1807,6 @@
       "norm_label": "available_plan()",
       "source_file": "readings/services/registration.py",
       "source_location": "L13"
-    },
-    {
-      "id": "readings_services_registration_get_registration_plan",
-      "label": "get_registration_plan()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": "get_registration_plan()",
-      "source_file": "readings/services/registration.py",
-      "source_location": "L55"
-    },
-    {
-      "id": "readings_services_registration_registrationplan_explanation",
-      "label": ".explanation()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": ".explanation()",
-      "source_file": "readings/services/registration.py",
-      "source_location": "L38"
-    },
-    {
-      "id": "readings_services_registration_registrationplan_opens_on",
-      "label": ".opens_on()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": ".opens_on()",
-      "source_file": "readings/services/registration.py",
-      "source_location": "L34"
     },
     {
       "id": "readings_services_reminders_record_reminder_results",
@@ -2001,18 +1881,6 @@
       "source_location": "L22"
     },
     {
-      "id": "readings_test_registration_rules_registrationrulestests_test_incomplete_monthly_record_does_not_count_as_completed_reading",
-      "label": ".test_incomplete_monthly_record_does_not_count_as_completed_reading()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": ".test_incomplete_monthly_record_does_not_count_as_completed_reading()",
-      "source_file": "readings/test_registration_rules.py",
-      "source_location": "L154"
-    },
-    {
       "id": "readings_views_annual_grid",
       "label": "annual_grid()",
       "_callable": true,
@@ -2083,6 +1951,30 @@
       "norm_label": "build_profile()",
       "source_file": "readings/services/ocr_learning.py",
       "source_location": "L17"
+    },
+    {
+      "id": "readings_services_ocr_learning_meter_scope",
+      "label": "meter_scope()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": "meter_scope()",
+      "source_file": "readings/services/ocr_learning.py",
+      "source_location": "L8"
+    },
+    {
+      "id": "readings_services_ocr_learning_technique",
+      "label": "technique()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": "technique()",
+      "source_file": "readings/services/ocr_learning.py",
+      "source_location": "L12"
     },
     {
       "id": "readings_test_ocr_learning_learningtests_example",
@@ -2517,6 +2409,18 @@
       "source_location": "L255"
     },
     {
+      "id": "readings_test_regressions_confirmedscheduleregressiontests_test_completed_filter_keeps_confirmed_rows_after_reminder_check",
+      "label": ".test_completed_filter_keeps_confirmed_rows_after_reminder_check()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "prepare_reminder_jobs",
+      "file_type": "code",
+      "norm_label": ".test_completed_filter_keeps_confirmed_rows_after_reminder_check()",
+      "source_file": "readings/test_regressions.py",
+      "source_location": "L322"
+    },
+    {
       "id": "readings_test_regressions_confirmedscheduleregressiontests_test_reminders_do_not_reopen_completed_monthly_rows",
       "label": ".test_reminders_do_not_reopen_completed_monthly_rows()",
       "_callable": true,
@@ -2733,6 +2637,18 @@
       "source_location": "L820"
     },
     {
+      "id": "readings_admin_forms_simplegroupform_save_m2m",
+      "label": "._save_m2m()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "ReadingAdmin",
+      "file_type": "code",
+      "norm_label": "._save_m2m()",
+      "source_file": "readings/admin_forms.py",
+      "source_location": "L40"
+    },
+    {
       "id": "readings_admin_ui_friendlyadmin_edit_button",
       "label": ".edit_button()",
       "_callable": true,
@@ -2742,19 +2658,7 @@
       "file_type": "code",
       "norm_label": ".edit_button()",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L29"
-    },
-    {
-      "id": "readings_admin_ui_nodeadmin_code_explanation",
-      "label": ".code_explanation()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "ReadingAdmin",
-      "file_type": "code",
-      "norm_label": ".code_explanation()",
-      "source_file": "readings/admin_ui.py",
-      "source_location": "L42"
+      "source_location": "L27"
     },
     {
       "id": "readings_admin_ui_nodeadmin_has_delete_permission",
@@ -2766,7 +2670,7 @@
       "file_type": "code",
       "norm_label": ".has_delete_permission()",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L44"
+      "source_location": "L38"
     },
     {
       "id": "readings_admin_ui_nodeadmin_save_model",
@@ -2778,7 +2682,7 @@
       "file_type": "code",
       "norm_label": ".save_model()",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L46"
+      "source_location": "L40"
     },
     {
       "id": "readings_admin_ui_readingadmin_delete_button",
@@ -2790,7 +2694,7 @@
       "file_type": "code",
       "norm_label": ".delete_button()",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L83"
+      "source_location": "L77"
     },
     {
       "id": "readings_admin_ui_readingadmin_delete_model",
@@ -2802,7 +2706,7 @@
       "file_type": "code",
       "norm_label": ".delete_model()",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L101"
+      "source_location": "L95"
     },
     {
       "id": "readings_admin_ui_readingadmin_get_urls",
@@ -2814,7 +2718,7 @@
       "file_type": "code",
       "norm_label": ".get_urls()",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L115"
+      "source_location": "L102"
     },
     {
       "id": "readings_admin_ui_readingadmin_has_add_permission",
@@ -2826,7 +2730,7 @@
       "file_type": "code",
       "norm_label": ".has_add_permission()",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L92"
+      "source_location": "L86"
     },
     {
       "id": "readings_admin_ui_readingadmin_learning_button",
@@ -2838,7 +2742,7 @@
       "file_type": "code",
       "norm_label": ".learning_button()",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L86"
+      "source_location": "L80"
     },
     {
       "id": "readings_admin_ui_readingadmin_node_name",
@@ -2850,7 +2754,7 @@
       "file_type": "code",
       "norm_label": ".node_name()",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L77"
+      "source_location": "L71"
     },
     {
       "id": "readings_admin_ui_readingadmin_save_model",
@@ -2862,7 +2766,7 @@
       "file_type": "code",
       "norm_label": ".save_model()",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L94"
+      "source_location": "L88"
     },
     {
       "id": "readings_admin_ui_readingadmin_scheduled_date",
@@ -2874,7 +2778,19 @@
       "file_type": "code",
       "norm_label": ".scheduled_date()",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L80"
+      "source_location": "L74"
+    },
+    {
+      "id": "readings_admin_ui_readingadmin_verify_view",
+      "label": ".verify_view()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "ReadingAdmin",
+      "file_type": "code",
+      "norm_label": ".verify_view()",
+      "source_file": "readings/admin_ui.py",
+      "source_location": "L104"
     },
     {
       "id": "readings_admin_ui_readingscheduleadmin_has_add_permission",
@@ -2886,7 +2802,7 @@
       "file_type": "code",
       "norm_label": ".has_add_permission()",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L61"
+      "source_location": "L55"
     },
     {
       "id": "readings_admin_ui_readingscheduleadmin_has_delete_permission",
@@ -2898,7 +2814,7 @@
       "file_type": "code",
       "norm_label": ".has_delete_permission()",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L63"
+      "source_location": "L57"
     },
     {
       "id": "readings_admin_ui_reminderlogadmin_has_add_permission",
@@ -2910,7 +2826,7 @@
       "file_type": "code",
       "norm_label": ".has_add_permission()",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L139"
+      "source_location": "L121"
     },
     {
       "id": "readings_admin_ui_reminderlogadmin_has_change_permission",
@@ -2922,7 +2838,7 @@
       "file_type": "code",
       "norm_label": ".has_change_permission()",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L141"
+      "source_location": "L123"
     },
     {
       "id": "readings_admin_ui_reminderlogadmin_has_delete_permission",
@@ -2934,7 +2850,7 @@
       "file_type": "code",
       "norm_label": ".has_delete_permission()",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L143"
+      "source_location": "L125"
     },
     {
       "id": "readings_admin_ui_simplegroupadmin_members",
@@ -2946,7 +2862,7 @@
       "file_type": "code",
       "norm_label": ".members()",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L154"
+      "source_location": "L136"
     },
     {
       "id": "readings_admin_ui_simplegroupadmin_save_related",
@@ -2958,19 +2874,7 @@
       "file_type": "code",
       "norm_label": ".save_related()",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L156"
-    },
-    {
-      "id": "readings_admin_ui_simpleuseradmin_formfield_for_manytomany",
-      "label": ".formfield_for_manytomany()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "ReadingAdmin",
-      "file_type": "code",
-      "norm_label": ".formfield_for_manytomany()",
-      "source_file": "readings/admin_ui.py",
-      "source_location": "L169"
+      "source_location": "L138"
     },
     {
       "id": "readings_admin_ui_simpleuseradmin_group_names",
@@ -2982,7 +2886,7 @@
       "file_type": "code",
       "norm_label": ".group_names()",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L175"
+      "source_location": "L152"
     },
     {
       "id": "readings_admin_ui_simpleuseradmin_save_related",
@@ -2994,7 +2898,7 @@
       "file_type": "code",
       "norm_label": ".save_related()",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L177"
+      "source_location": "L154"
     },
     {
       "id": "readings_admin_ui_sync_staff",
@@ -3006,127 +2910,115 @@
       "file_type": "code",
       "norm_label": "sync_staff()",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L20"
+      "source_location": "L18"
     },
     {
-      "id": "readings_management_commands_benchmark_cloudflare_ocr_command_handle",
+      "id": "readings_management_commands_setup_access_groups_command_handle",
       "label": ".handle()",
       "_callable": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
+      "community": 23,
+      "community_name": "ReadingAdmin",
       "file_type": "code",
       "norm_label": ".handle()",
-      "source_file": "readings/management/commands/benchmark_cloudflare_ocr.py",
-      "source_location": "L16"
+      "source_file": "readings/management/commands/setup_access_groups.py",
+      "source_location": "L10"
     },
     {
-      "id": "readings_management_commands_import_readings_excel_command_add_arguments",
-      "label": ".add_arguments()",
+      "id": "readings_test_simple_admin_simpleadmintests_setup",
+      "label": ".setUp()",
       "_callable": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
+      "community": 23,
+      "community_name": "ReadingAdmin",
       "file_type": "code",
-      "norm_label": ".add_arguments()",
-      "source_file": "readings/management/commands/import_readings_excel.py",
-      "source_location": "L53"
+      "norm_label": ".setup()",
+      "source_file": "readings/test_simple_admin.py",
+      "source_location": "L10"
     },
     {
-      "id": "readings_management_commands_import_readings_excel_command_handle",
-      "label": ".handle()",
+      "id": "readings_test_simple_admin_simpleadmintests_test_delete_reading_reopens_schedule_but_closed_cycle_stays_gray",
+      "label": ".test_delete_reading_reopens_schedule_but_closed_cycle_stays_gray()",
       "_callable": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
+      "community": 23,
+      "community_name": "ReadingAdmin",
       "file_type": "code",
-      "norm_label": ".handle()",
-      "source_file": "readings/management/commands/import_readings_excel.py",
-      "source_location": "L58"
+      "norm_label": ".test_delete_reading_reopens_schedule_but_closed_cycle_stays_gray()",
+      "source_file": "readings/test_simple_admin.py",
+      "source_location": "L69"
     },
     {
-      "id": "readings_management_commands_import_readings_excel_command_import_workbook",
-      "label": "._import_workbook()",
+      "id": "readings_test_simple_admin_simpleadmintests_test_group_form_and_user_form_render_simple_fields",
+      "label": ".test_group_form_and_user_form_render_simple_fields()",
       "_callable": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
+      "community": 23,
+      "community_name": "ReadingAdmin",
       "file_type": "code",
-      "norm_label": "._import_workbook()",
-      "source_file": "readings/management/commands/import_readings_excel.py",
-      "source_location": "L66"
+      "norm_label": ".test_group_form_and_user_form_render_simple_fields()",
+      "source_file": "readings/test_simple_admin.py",
+      "source_location": "L33"
     },
     {
-      "id": "readings_management_commands_import_readings_excel_normalize",
-      "label": "normalize()",
+      "id": "readings_test_simple_admin_simpleadmintests_test_group_permissions_consulta_and_direct_urls",
+      "label": ".test_group_permissions_consulta_and_direct_urls()",
       "_callable": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
+      "community": 23,
+      "community_name": "ReadingAdmin",
       "file_type": "code",
-      "norm_label": "normalize()",
-      "source_file": "readings/management/commands/import_readings_excel.py",
+      "norm_label": ".test_group_permissions_consulta_and_direct_urls()",
+      "source_file": "readings/test_simple_admin.py",
       "source_location": "L17"
     },
     {
-      "id": "readings_management_commands_import_readings_excel_parse_date",
-      "label": "parse_date()",
+      "id": "readings_test_simple_admin_simpleadmintests_test_nodes_default_code_chat_no_delete_and_inactive_hidden",
+      "label": ".test_nodes_default_code_chat_no_delete_and_inactive_hidden()",
       "_callable": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
+      "community": 23,
+      "community_name": "ReadingAdmin",
       "file_type": "code",
-      "norm_label": "parse_date()",
-      "source_file": "readings/management/commands/import_readings_excel.py",
-      "source_location": "L30"
+      "norm_label": ".test_nodes_default_code_chat_no_delete_and_inactive_hidden()",
+      "source_file": "readings/test_simple_admin.py",
+      "source_location": "L80"
     },
     {
-      "id": "readings_management_commands_import_readings_excel_parse_day",
-      "label": "parse_day()",
+      "id": "readings_test_simple_admin_simpleadmintests_test_reading_only_value_and_photo_editable_and_no_bulk_actions",
+      "label": ".test_reading_only_value_and_photo_editable_and_no_bulk_actions()",
       "_callable": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
+      "community": 23,
+      "community_name": "ReadingAdmin",
       "file_type": "code",
-      "norm_label": "parse_day()",
-      "source_file": "readings/management/commands/import_readings_excel.py",
-      "source_location": "L22"
+      "norm_label": ".test_reading_only_value_and_photo_editable_and_no_bulk_actions()",
+      "source_file": "readings/test_simple_admin.py",
+      "source_location": "L56"
     },
     {
-      "id": "readings_management_commands_import_readings_excel_parse_reading",
-      "label": "parse_reading()",
+      "id": "readings_test_simple_admin_simpleadmintests_test_schedule_state_only_and_reminders_readonly",
+      "label": ".test_schedule_state_only_and_reminders_readonly()",
       "_callable": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
+      "community": 23,
+      "community_name": "ReadingAdmin",
       "file_type": "code",
-      "norm_label": "parse_reading()",
-      "source_file": "readings/management/commands/import_readings_excel.py",
+      "norm_label": ".test_schedule_state_only_and_reminders_readonly()",
+      "source_file": "readings/test_simple_admin.py",
+      "source_location": "L92"
+    },
+    {
+      "id": "readings_test_simple_admin_simpleadmintests_test_user_group_assignment_controls_admin_and_register_is_independent",
+      "label": ".test_user_group_assignment_controls_admin_and_register_is_independent()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "ReadingAdmin",
+      "file_type": "code",
+      "norm_label": ".test_user_group_assignment_controls_admin_and_register_is_independent()",
+      "source_file": "readings/test_simple_admin.py",
       "source_location": "L40"
-    },
-    {
-      "id": "readings_services_ocr_choose_consistent_candidate",
-      "label": "choose_consistent_candidate()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "choose_consistent_candidate()",
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L529"
-    },
-    {
-      "id": "readings_services_ocr_detect_red_decimal",
-      "label": "detect_red_decimal()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "detect_red_decimal()",
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L422"
     },
     {
       "id": "readings_services_ocr_extract_json_object",
@@ -3134,7 +3026,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "_extract_json_object()",
       "source_file": "readings/services/ocr.py",
@@ -3146,7 +3038,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "find_display_crop()",
       "source_file": "readings/services/ocr.py",
@@ -3158,7 +3050,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "find_display_regions()",
       "source_file": "readings/services/ocr.py",
@@ -3170,7 +3062,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "find_kba_display_crop()",
       "source_file": "readings/services/ocr.py",
@@ -3182,7 +3074,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "generate_display_variants()",
       "source_file": "readings/services/ocr.py",
@@ -3194,23 +3086,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "_intersection_over_union()",
       "source_file": "readings/services/ocr.py",
       "source_location": "L164"
-    },
-    {
-      "id": "readings_services_ocr_learning_technique",
-      "label": "technique()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "technique()",
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L12"
     },
     {
       "id": "readings_services_ocr_order_points",
@@ -3218,7 +3098,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "_order_points()",
       "source_file": "readings/services/ocr.py",
@@ -3230,7 +3110,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "_parse_value()",
       "source_file": "readings/services/ocr.py",
@@ -3242,7 +3122,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "_perspective_crop()",
       "source_file": "readings/services/ocr.py",
@@ -3254,7 +3134,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "_rapid_candidates()",
       "source_file": "readings/services/ocr.py",
@@ -3266,35 +3146,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "_rapid_ocr_engine()",
       "source_file": "readings/services/ocr.py",
       "source_location": "L479"
-    },
-    {
-      "id": "readings_services_ocr_read_meter",
-      "label": "read_meter()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "read_meter()",
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L765"
-    },
-    {
-      "id": "readings_services_ocr_read_meter_cloudflare",
-      "label": "read_meter_cloudflare()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "read_meter_cloudflare()",
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L653"
     },
     {
       "id": "readings_services_ocr_read_meter_local",
@@ -3302,7 +3158,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "read_meter_local()",
       "source_file": "readings/services/ocr.py",
@@ -3314,7 +3170,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "recognize_seven_segment()",
       "source_file": "readings/services/ocr.py",
@@ -3326,23 +3182,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "_segment_state()",
       "source_file": "readings/services/ocr.py",
       "source_location": "L347"
-    },
-    {
-      "id": "readings_services_ocr_select_direct_recognition",
-      "label": "select_direct_recognition()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "select_direct_recognition()",
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L309"
     },
     {
       "id": "readings_services_ocr_select_meter_value",
@@ -3350,179 +3194,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "select_meter_value()",
       "source_file": "readings/services/ocr.py",
       "source_location": "L55"
-    },
-    {
-      "id": "readings_test_ocr_learning_ocrsafetytests_test_cloud_response_rejects_nonfinite_confidence_and_prompt_has_no_history",
-      "label": ".test_cloud_response_rejects_nonfinite_confidence_and_prompt_has_no_history()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": ".test_cloud_response_rejects_nonfinite_confidence_and_prompt_has_no_history()",
-      "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L152"
-    },
-    {
-      "id": "readings_test_ocr_learning_ocrsafetytests_test_crop_failure_retries_full_photo_but_quota_failure_does_not",
-      "label": ".test_crop_failure_retries_full_photo_but_quota_failure_does_not()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": ".test_crop_failure_retries_full_photo_but_quota_failure_does_not()",
-      "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L121"
-    },
-    {
-      "id": "readings_test_ocr_learning_ocrsafetytests_test_disagreement_never_selects_a_guessed_reading",
-      "label": ".test_disagreement_never_selects_a_guessed_reading()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": ".test_disagreement_never_selects_a_guessed_reading()",
-      "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L112"
-    },
-    {
-      "id": "readings_test_ocr_learning_ocrsafetytests_test_equal_previous_reading_is_allowed",
-      "label": ".test_equal_previous_reading_is_allowed()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": ".test_equal_previous_reading_is_allowed()",
-      "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L100"
-    },
-    {
-      "id": "readings_test_ocr_learning_ocrsafetytests_test_evaluation_is_offline",
-      "label": ".test_evaluation_is_offline()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": ".test_evaluation_is_offline()",
-      "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L138"
-    },
-    {
-      "id": "readings_test_ocr_learning_ocrsafetytests_test_failed_techniques_are_filtered_but_new_ones_remain_available",
-      "label": ".test_failed_techniques_are_filtered_but_new_ones_remain_available()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": ".test_failed_techniques_are_filtered_but_new_ones_remain_available()",
-      "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L94"
-    },
-    {
-      "id": "readings_test_ocr_learning_ocrsafetytests_test_free_plan_must_be_explicitly_confirmed",
-      "label": ".test_free_plan_must_be_explicitly_confirmed()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": ".test_free_plan_must_be_explicitly_confirmed()",
-      "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L105"
-    },
-    {
-      "id": "readings_test_ocr_learning_ocrsafetytests_test_truncated_response_cannot_be_used_even_if_it_contains_a_number",
-      "label": ".test_truncated_response_cannot_be_used_even_if_it_contains_a_number()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": ".test_truncated_response_cannot_be_used_even_if_it_contains_a_number()",
-      "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L165"
-    },
-    {
-      "id": "readings_test_ocr_learning_ocrsafetytests_test_unlearned_high_confidence_cannot_bypass_cloudflare",
-      "label": ".test_unlearned_high_confidence_cannot_bypass_cloudflare()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": ".test_unlearned_high_confidence_cannot_bypass_cloudflare()",
-      "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L145"
-    },
-    {
-      "id": "readings_tests_authorizednodestests_test_excel_helpers_handle_operational_values",
-      "label": ".test_excel_helpers_handle_operational_values()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": ".test_excel_helpers_handle_operational_values()",
-      "source_file": "readings/tests.py",
-      "source_location": "L486"
-    },
-    {
-      "id": "readings_tests_ocrselectiontests_test_cloudflare_chat_model_embeds_image_in_user_message",
-      "label": ".test_cloudflare_chat_model_embeds_image_in_user_message()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": ".test_cloudflare_chat_model_embeds_image_in_user_message()",
-      "source_file": "readings/tests.py",
-      "source_location": "L436"
-    },
-    {
-      "id": "readings_tests_ocrselectiontests_test_cloudflare_is_only_used_after_local_ocr_fails",
-      "label": ".test_cloudflare_is_only_used_after_local_ocr_fails()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": ".test_cloudflare_is_only_used_after_local_ocr_fails()",
-      "source_file": "readings/tests.py",
-      "source_location": "L374"
-    },
-    {
-      "id": "readings_tests_ocrselectiontests_test_consensus_rejects_value_that_does_not_exceed_previous_reading",
-      "label": ".test_consensus_rejects_value_that_does_not_exceed_previous_reading()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": ".test_consensus_rejects_value_that_does_not_exceed_previous_reading()",
-      "source_file": "readings/tests.py",
-      "source_location": "L362"
-    },
-    {
-      "id": "readings_tests_ocrselectiontests_test_consensus_requests_review_when_decimal_variants_disagree",
-      "label": ".test_consensus_requests_review_when_decimal_variants_disagree()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": ".test_consensus_requests_review_when_decimal_variants_disagree()",
-      "source_file": "readings/tests.py",
-      "source_location": "L351"
     },
     {
       "id": "readings_tests_ocrselectiontests_test_contour_locator_finds_rectangular_display_without_text_anchor",
@@ -3530,35 +3206,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_contour_locator_finds_rectangular_display_without_text_anchor()",
       "source_file": "readings/tests.py",
       "source_location": "L327"
-    },
-    {
-      "id": "readings_tests_ocrselectiontests_test_direct_display_recognition_preserves_decimal",
-      "label": ".test_direct_display_recognition_preserves_decimal()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": ".test_direct_display_recognition_preserves_decimal()",
-      "source_file": "readings/tests.py",
-      "source_location": "L258"
-    },
-    {
-      "id": "readings_tests_ocrselectiontests_test_direct_recognition_prefers_complete_decimal_over_high_confidence_without_separator",
-      "label": ".test_direct_recognition_prefers_complete_decimal_over_high_confidence_without_separator()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": ".test_direct_recognition_prefers_complete_decimal_over_high_confidence_without_separator()",
-      "source_file": "readings/tests.py",
-      "source_location": "L277"
     },
     {
       "id": "readings_tests_ocrselectiontests_test_display_variants_include_contrast_threshold_inverse_and_reflection_reduction",
@@ -3566,83 +3218,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_display_variants_include_contrast_threshold_inverse_and_reflection_reduction()",
       "source_file": "readings/tests.py",
       "source_location": "L341"
-    },
-    {
-      "id": "readings_tests_ocrselectiontests_test_grid_value_hides_unused_decimal_zeroes",
-      "label": ".test_grid_value_hides_unused_decimal_zeroes()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": ".test_grid_value_hides_unused_decimal_zeroes()",
-      "source_file": "readings/tests.py",
-      "source_location": "L239"
-    },
-    {
-      "id": "readings_tests_ocrselectiontests_test_local_result_prevents_external_request",
-      "label": ".test_local_result_prevents_external_request()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": ".test_local_result_prevents_external_request()",
-      "source_file": "readings/tests.py",
-      "source_location": "L390"
-    },
-    {
-      "id": "readings_tests_ocrselectiontests_test_mechanical_meter_appends_detected_red_tenths_digit",
-      "label": ".test_mechanical_meter_appends_detected_red_tenths_digit()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": ".test_mechanical_meter_appends_detected_red_tenths_digit()",
-      "source_file": "readings/tests.py",
-      "source_location": "L284"
-    },
-    {
-      "id": "readings_tests_ocrselectiontests_test_prefers_large_meter_display_and_preserves_decimal",
-      "label": ".test_prefers_large_meter_display_and_preserves_decimal()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": ".test_prefers_large_meter_display_and_preserves_decimal()",
-      "source_file": "readings/tests.py",
-      "source_location": "L228"
-    },
-    {
-      "id": "readings_tests_ocrselectiontests_test_regular_meter_does_not_invent_red_decimal",
-      "label": ".test_regular_meter_does_not_invent_red_decimal()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": ".test_regular_meter_does_not_invent_red_decimal()",
-      "source_file": "readings/tests.py",
-      "source_location": "L307"
-    },
-    {
-      "id": "readings_tests_ocrselectiontests_test_unapproved_cloudflare_model_does_not_make_a_request",
-      "label": ".test_unapproved_cloudflare_model_does_not_make_a_request()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": ".test_unapproved_cloudflare_model_does_not_make_a_request()",
-      "source_file": "readings/tests.py",
-      "source_location": "L404"
     },
     {
       "id": "readings_tests_ocrselectiontests_test_uses_kba_brand_to_crop_the_faint_lcd_above_it",
@@ -3650,7 +3230,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_uses_kba_brand_to_crop_the_faint_lcd_above_it()",
       "source_file": "readings/tests.py",
@@ -3662,7 +3242,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_uses_kwh_label_to_crop_the_display_on_its_left()",
       "source_file": "readings/tests.py",
@@ -3681,196 +3261,220 @@
       "source_location": "L4"
     },
     {
-      "id": "readings_admin_forms_readingadminform_init",
-      "label": ".__init__()",
+      "id": "readings_services_ocr_read_meter",
+      "label": "read_meter()",
       "_callable": true,
       "_origin": "ast",
       "community": 33,
-      "community_name": "SimpleAdminTests",
+      "community_name": "OCRResult",
       "file_type": "code",
-      "norm_label": ".__init__()",
-      "source_file": "readings/admin_forms.py",
-      "source_location": "L73"
+      "norm_label": "read_meter()",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L765"
     },
     {
-      "id": "readings_admin_forms_simplegroupform_init",
-      "label": ".__init__()",
+      "id": "readings_services_ocr_read_meter_cloudflare",
+      "label": "read_meter_cloudflare()",
       "_callable": true,
       "_origin": "ast",
       "community": 33,
-      "community_name": "SimpleAdminTests",
+      "community_name": "OCRResult",
       "file_type": "code",
-      "norm_label": ".__init__()",
-      "source_file": "readings/admin_forms.py",
-      "source_location": "L32"
+      "norm_label": "read_meter_cloudflare()",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L653"
     },
     {
-      "id": "readings_admin_forms_simplegroupform_save_m2m",
-      "label": "._save_m2m()",
+      "id": "readings_test_ocr_learning_ocrsafetytests_test_cloud_response_rejects_nonfinite_confidence_and_prompt_has_no_history",
+      "label": ".test_cloud_response_rejects_nonfinite_confidence_and_prompt_has_no_history()",
       "_callable": true,
       "_origin": "ast",
       "community": 33,
-      "community_name": "SimpleAdminTests",
+      "community_name": "OCRResult",
       "file_type": "code",
-      "norm_label": "._save_m2m()",
-      "source_file": "readings/admin_forms.py",
-      "source_location": "L40"
+      "norm_label": ".test_cloud_response_rejects_nonfinite_confidence_and_prompt_has_no_history()",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L152"
     },
     {
-      "id": "readings_management_commands_setup_access_groups_command_handle",
-      "label": ".handle()",
+      "id": "readings_test_ocr_learning_ocrsafetytests_test_crop_failure_retries_full_photo_but_quota_failure_does_not",
+      "label": ".test_crop_failure_retries_full_photo_but_quota_failure_does_not()",
       "_callable": true,
       "_origin": "ast",
       "community": 33,
-      "community_name": "SimpleAdminTests",
+      "community_name": "OCRResult",
       "file_type": "code",
-      "norm_label": ".handle()",
-      "source_file": "readings/management/commands/setup_access_groups.py",
-      "source_location": "L10"
-    },
-    {
-      "id": "readings_test_simple_admin_simpleadmintests_setup",
-      "label": ".setUp()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 33,
-      "community_name": "SimpleAdminTests",
-      "file_type": "code",
-      "norm_label": ".setup()",
-      "source_file": "readings/test_simple_admin.py",
-      "source_location": "L10"
-    },
-    {
-      "id": "readings_test_simple_admin_simpleadmintests_test_cancelled_monthly_and_followup_are_gray",
-      "label": ".test_cancelled_monthly_and_followup_are_gray()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 33,
-      "community_name": "SimpleAdminTests",
-      "file_type": "code",
-      "norm_label": ".test_cancelled_monthly_and_followup_are_gray()",
-      "source_file": "readings/test_simple_admin.py",
-      "source_location": "L49"
-    },
-    {
-      "id": "readings_test_simple_admin_simpleadmintests_test_delete_monthly_cancels_pending_followup_but_keeps_visible",
-      "label": ".test_delete_monthly_cancels_pending_followup_but_keeps_visible()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 33,
-      "community_name": "SimpleAdminTests",
-      "file_type": "code",
-      "norm_label": ".test_delete_monthly_cancels_pending_followup_but_keeps_visible()",
-      "source_file": "readings/test_simple_admin.py",
-      "source_location": "L59"
-    },
-    {
-      "id": "readings_test_simple_admin_simpleadmintests_test_delete_reading_reopens_schedule_but_closed_cycle_stays_gray",
-      "label": ".test_delete_reading_reopens_schedule_but_closed_cycle_stays_gray()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 33,
-      "community_name": "SimpleAdminTests",
-      "file_type": "code",
-      "norm_label": ".test_delete_reading_reopens_schedule_but_closed_cycle_stays_gray()",
-      "source_file": "readings/test_simple_admin.py",
-      "source_location": "L98"
-    },
-    {
-      "id": "readings_test_simple_admin_simpleadmintests_test_group_form_and_user_form_render_simple_fields",
-      "label": ".test_group_form_and_user_form_render_simple_fields()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 33,
-      "community_name": "SimpleAdminTests",
-      "file_type": "code",
-      "norm_label": ".test_group_form_and_user_form_render_simple_fields()",
-      "source_file": "readings/test_simple_admin.py",
-      "source_location": "L33"
-    },
-    {
-      "id": "readings_test_simple_admin_simpleadmintests_test_group_permissions_consulta_and_direct_urls",
-      "label": ".test_group_permissions_consulta_and_direct_urls()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 33,
-      "community_name": "SimpleAdminTests",
-      "file_type": "code",
-      "norm_label": ".test_group_permissions_consulta_and_direct_urls()",
-      "source_file": "readings/test_simple_admin.py",
-      "source_location": "L17"
-    },
-    {
-      "id": "readings_test_simple_admin_simpleadmintests_test_groups_are_checkboxes_and_node_code_is_visible",
-      "label": ".test_groups_are_checkboxes_and_node_code_is_visible()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 33,
-      "community_name": "SimpleAdminTests",
-      "file_type": "code",
-      "norm_label": ".test_groups_are_checkboxes_and_node_code_is_visible()",
-      "source_file": "readings/test_simple_admin.py",
-      "source_location": "L40"
-    },
-    {
-      "id": "readings_test_simple_admin_simpleadmintests_test_nodes_default_code_chat_no_delete_and_inactive_hidden",
-      "label": ".test_nodes_default_code_chat_no_delete_and_inactive_hidden()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 33,
-      "community_name": "SimpleAdminTests",
-      "file_type": "code",
-      "norm_label": ".test_nodes_default_code_chat_no_delete_and_inactive_hidden()",
-      "source_file": "readings/test_simple_admin.py",
-      "source_location": "L109"
-    },
-    {
-      "id": "readings_test_simple_admin_simpleadmintests_test_reading_only_value_and_photo_editable_and_no_bulk_actions",
-      "label": ".test_reading_only_value_and_photo_editable_and_no_bulk_actions()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 33,
-      "community_name": "SimpleAdminTests",
-      "file_type": "code",
-      "norm_label": ".test_reading_only_value_and_photo_editable_and_no_bulk_actions()",
-      "source_file": "readings/test_simple_admin.py",
-      "source_location": "L85"
-    },
-    {
-      "id": "readings_test_simple_admin_simpleadmintests_test_schedule_state_only_and_reminders_readonly",
-      "label": ".test_schedule_state_only_and_reminders_readonly()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 33,
-      "community_name": "SimpleAdminTests",
-      "file_type": "code",
-      "norm_label": ".test_schedule_state_only_and_reminders_readonly()",
-      "source_file": "readings/test_simple_admin.py",
+      "norm_label": ".test_crop_failure_retries_full_photo_but_quota_failure_does_not()",
+      "source_file": "readings/test_ocr_learning.py",
       "source_location": "L121"
     },
     {
-      "id": "readings_test_simple_admin_simpleadmintests_test_user_group_assignment_controls_admin_and_register_is_independent",
-      "label": ".test_user_group_assignment_controls_admin_and_register_is_independent()",
+      "id": "readings_test_ocr_learning_ocrsafetytests_test_disagreement_never_selects_a_guessed_reading",
+      "label": ".test_disagreement_never_selects_a_guessed_reading()",
       "_callable": true,
       "_origin": "ast",
       "community": 33,
-      "community_name": "SimpleAdminTests",
+      "community_name": "OCRResult",
       "file_type": "code",
-      "norm_label": ".test_user_group_assignment_controls_admin_and_register_is_independent()",
-      "source_file": "readings/test_simple_admin.py",
+      "norm_label": ".test_disagreement_never_selects_a_guessed_reading()",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L112"
+    },
+    {
+      "id": "readings_test_ocr_learning_ocrsafetytests_test_evaluation_is_offline",
+      "label": ".test_evaluation_is_offline()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "OCRResult",
+      "file_type": "code",
+      "norm_label": ".test_evaluation_is_offline()",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L138"
+    },
+    {
+      "id": "readings_test_ocr_learning_ocrsafetytests_test_free_plan_must_be_explicitly_confirmed",
+      "label": ".test_free_plan_must_be_explicitly_confirmed()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "OCRResult",
+      "file_type": "code",
+      "norm_label": ".test_free_plan_must_be_explicitly_confirmed()",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L105"
+    },
+    {
+      "id": "readings_test_ocr_learning_ocrsafetytests_test_truncated_response_cannot_be_used_even_if_it_contains_a_number",
+      "label": ".test_truncated_response_cannot_be_used_even_if_it_contains_a_number()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "OCRResult",
+      "file_type": "code",
+      "norm_label": ".test_truncated_response_cannot_be_used_even_if_it_contains_a_number()",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L165"
+    },
+    {
+      "id": "readings_test_ocr_learning_ocrsafetytests_test_unlearned_high_confidence_cannot_bypass_cloudflare",
+      "label": ".test_unlearned_high_confidence_cannot_bypass_cloudflare()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "OCRResult",
+      "file_type": "code",
+      "norm_label": ".test_unlearned_high_confidence_cannot_bypass_cloudflare()",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L145"
+    },
+    {
+      "id": "readings_test_cycle_boundaries_upcominggridtests_grid",
+      "label": ".grid()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "UpcomingGridTests",
+      "file_type": "code",
+      "norm_label": ".grid()",
+      "source_file": "readings/test_cycle_boundaries.py",
+      "source_location": "L88"
+    },
+    {
+      "id": "readings_test_cycle_boundaries_upcominggridtests_setup",
+      "label": ".setUp()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "UpcomingGridTests",
+      "file_type": "code",
+      "norm_label": ".setup()",
+      "source_file": "readings/test_cycle_boundaries.py",
       "source_location": "L69"
     },
     {
-      "id": "readings_context_processors_notifications",
-      "label": "notifications()",
+      "id": "readings_test_cycle_boundaries_upcominggridtests_test_countdown_advances_to_today_then_overdue",
+      "label": ".test_countdown_advances_to_today_then_overdue()",
       "_callable": true,
       "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
+      "community": 34,
+      "community_name": "UpcomingGridTests",
       "file_type": "code",
-      "norm_label": "notifications()",
-      "source_file": "readings/context_processors.py",
-      "source_location": "L4"
+      "norm_label": ".test_countdown_advances_to_today_then_overdue()",
+      "source_file": "readings/test_cycle_boundaries.py",
+      "source_location": "L142"
+    },
+    {
+      "id": "readings_test_cycle_boundaries_upcominggridtests_test_existing_schedule_appears_once_and_explicit_cancellation_is_preserved",
+      "label": ".test_existing_schedule_appears_once_and_explicit_cancellation_is_preserved()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "UpcomingGridTests",
+      "file_type": "code",
+      "norm_label": ".test_existing_schedule_appears_once_and_explicit_cancellation_is_preserved()",
+      "source_file": "readings/test_cycle_boundaries.py",
+      "source_location": "L115"
+    },
+    {
+      "id": "readings_test_cycle_boundaries_upcominggridtests_test_grid_calendar_obligation_and_jobs_switch_on_same_day",
+      "label": ".test_grid_calendar_obligation_and_jobs_switch_on_same_day()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "UpcomingGridTests",
+      "file_type": "code",
+      "norm_label": ".test_grid_calendar_obligation_and_jobs_switch_on_same_day()",
+      "source_file": "readings/test_cycle_boundaries.py",
+      "source_location": "L125"
+    },
+    {
+      "id": "readings_test_cycle_boundaries_upcominggridtests_test_grid_filters_include_projected_rows_but_not_in_completed",
+      "label": ".test_grid_filters_include_projected_rows_but_not_in_completed()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "UpcomingGridTests",
+      "file_type": "code",
+      "norm_label": ".test_grid_filters_include_projected_rows_but_not_in_completed()",
+      "source_file": "readings/test_cycle_boundaries.py",
+      "source_location": "L104"
+    },
+    {
+      "id": "readings_test_cycle_boundaries_upcominggridtests_test_grid_shows_two_days_remaining_without_worker_or_database_writes",
+      "label": ".test_grid_shows_two_days_remaining_without_worker_or_database_writes()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "UpcomingGridTests",
+      "file_type": "code",
+      "norm_label": ".test_grid_shows_two_days_remaining_without_worker_or_database_writes()",
+      "source_file": "readings/test_cycle_boundaries.py",
+      "source_location": "L92"
+    },
+    {
+      "id": "readings_test_cycle_boundaries_upcominggridtests_test_registration_on_august_31_belongs_to_september_monthly",
+      "label": ".test_registration_on_august_31_belongs_to_september_monthly()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "UpcomingGridTests",
+      "file_type": "code",
+      "norm_label": ".test_registration_on_august_31_belongs_to_september_monthly()",
+      "source_file": "readings/test_cycle_boundaries.py",
+      "source_location": "L161"
+    },
+    {
+      "id": "readings_test_cycle_boundaries_upcominggridtests_test_unregistered_old_monthly_row_is_closed_without_becoming_completed",
+      "label": ".test_unregistered_old_monthly_row_is_closed_without_becoming_completed()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "UpcomingGridTests",
+      "file_type": "code",
+      "norm_label": ".test_unregistered_old_monthly_row_is_closed_without_becoming_completed()",
+      "source_file": "readings/test_cycle_boundaries.py",
+      "source_location": "L151"
     },
     {
       "id": "readings_services_calendar_get_calendar_events",
@@ -3878,7 +3482,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 35,
-      "community_name": "get_reading_notifications",
+      "community_name": "get_calendar_events",
       "file_type": "code",
       "norm_label": "get_calendar_events()",
       "source_file": "readings/services/calendar.py",
@@ -3890,7 +3494,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 35,
-      "community_name": "get_reading_notifications",
+      "community_name": "get_calendar_events",
       "file_type": "code",
       "norm_label": "_task_state()",
       "source_file": "readings/services/calendar.py",
@@ -3902,251 +3506,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 35,
-      "community_name": "get_reading_notifications",
+      "community_name": "get_calendar_events",
       "file_type": "code",
       "norm_label": "_task_status()",
       "source_file": "readings/services/calendar.py",
       "source_location": "L20"
-    },
-    {
-      "id": "readings_services_notifications_get_reading_notifications",
-      "label": "get_reading_notifications()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": "get_reading_notifications()",
-      "source_file": "readings/services/notifications.py",
-      "source_location": "L155"
-    },
-    {
-      "id": "readings_test_audit_fixes_auditfixtests_record",
-      "label": ".record()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".record()",
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L40"
-    },
-    {
-      "id": "readings_test_audit_fixes_auditfixtests_test_cancelled_schedule_cannot_start_or_finish_telegram",
-      "label": ".test_cancelled_schedule_cannot_start_or_finish_telegram()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_cancelled_schedule_cannot_start_or_finish_telegram()",
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L43"
-    },
-    {
-      "id": "readings_test_audit_fixes_auditfixtests_test_grid_prefers_confirmed_over_later_cancelled_attempt",
-      "label": ".test_grid_prefers_confirmed_over_later_cancelled_attempt()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_grid_prefers_confirmed_over_later_cancelled_attempt()",
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L62"
-    },
-    {
-      "id": "readings_test_audit_fixes_auditfixtests_test_learning_without_candidates_leaves_photo_unverified",
-      "label": ".test_learning_without_candidates_leaves_photo_unverified()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_learning_without_candidates_leaves_photo_unverified()",
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L121"
-    },
-    {
-      "id": "readings_test_audit_fixes_auditfixtests_test_new_active_node_appears_in_annual_grid",
-      "label": ".test_new_active_node_appears_in_annual_grid()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_new_active_node_appears_in_annual_grid()",
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L69"
-    },
-    {
-      "id": "readings_test_audit_fixes_auditfixtests_test_photo_requires_login_and_existing_reference_even_with_debug",
-      "label": ".test_photo_requires_login_and_existing_reference_even_with_debug()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_photo_requires_login_and_existing_reference_even_with_debug()",
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L75"
-    },
-    {
-      "id": "readings_test_audit_fixes_auditfixtests_test_review_rejects_changed_value_photo_and_missing_token",
-      "label": ".test_review_rejects_changed_value_photo_and_missing_token()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_review_rejects_changed_value_photo_and_missing_token()",
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L131"
-    },
-    {
-      "id": "readings_test_audit_fixes_auditfixtests_test_unavailable_followup_has_no_alert_and_consistent_projection",
-      "label": ".test_unavailable_followup_has_no_alert_and_consistent_projection()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_unavailable_followup_has_no_alert_and_consistent_projection()",
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L107"
-    },
-    {
-      "id": "readings_test_audit_fixes_auditfixtests_test_web_photo_verified_action_builds_local_profile_and_never_uses_cloud",
-      "label": ".test_web_photo_verified_action_builds_local_profile_and_never_uses_cloud()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_web_photo_verified_action_builds_local_profile_and_never_uses_cloud()",
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L88"
-    },
-    {
-      "id": "readings_test_cycle_boundaries_upcominggridtests_grid",
-      "label": ".grid()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".grid()",
-      "source_file": "readings/test_cycle_boundaries.py",
-      "source_location": "L88"
-    },
-    {
-      "id": "readings_test_cycle_boundaries_upcominggridtests_test_countdown_advances_to_today_then_overdue",
-      "label": ".test_countdown_advances_to_today_then_overdue()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_countdown_advances_to_today_then_overdue()",
-      "source_file": "readings/test_cycle_boundaries.py",
-      "source_location": "L142"
-    },
-    {
-      "id": "readings_test_cycle_boundaries_upcominggridtests_test_existing_schedule_appears_once_and_explicit_cancellation_is_preserved",
-      "label": ".test_existing_schedule_appears_once_and_explicit_cancellation_is_preserved()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_existing_schedule_appears_once_and_explicit_cancellation_is_preserved()",
-      "source_file": "readings/test_cycle_boundaries.py",
-      "source_location": "L115"
-    },
-    {
-      "id": "readings_test_cycle_boundaries_upcominggridtests_test_grid_calendar_obligation_and_jobs_switch_on_same_day",
-      "label": ".test_grid_calendar_obligation_and_jobs_switch_on_same_day()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_grid_calendar_obligation_and_jobs_switch_on_same_day()",
-      "source_file": "readings/test_cycle_boundaries.py",
-      "source_location": "L125"
-    },
-    {
-      "id": "readings_test_cycle_boundaries_upcominggridtests_test_grid_filters_include_projected_rows_but_not_in_completed",
-      "label": ".test_grid_filters_include_projected_rows_but_not_in_completed()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_grid_filters_include_projected_rows_but_not_in_completed()",
-      "source_file": "readings/test_cycle_boundaries.py",
-      "source_location": "L104"
-    },
-    {
-      "id": "readings_test_cycle_boundaries_upcominggridtests_test_grid_shows_two_days_remaining_without_worker_or_database_writes",
-      "label": ".test_grid_shows_two_days_remaining_without_worker_or_database_writes()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_grid_shows_two_days_remaining_without_worker_or_database_writes()",
-      "source_file": "readings/test_cycle_boundaries.py",
-      "source_location": "L92"
-    },
-    {
-      "id": "readings_test_cycle_boundaries_upcominggridtests_test_registration_on_august_31_belongs_to_september_monthly",
-      "label": ".test_registration_on_august_31_belongs_to_september_monthly()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_registration_on_august_31_belongs_to_september_monthly()",
-      "source_file": "readings/test_cycle_boundaries.py",
-      "source_location": "L161"
-    },
-    {
-      "id": "readings_test_cycle_boundaries_upcominggridtests_test_unregistered_old_monthly_row_is_closed_without_becoming_completed",
-      "label": ".test_unregistered_old_monthly_row_is_closed_without_becoming_completed()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_unregistered_old_monthly_row_is_closed_without_becoming_completed()",
-      "source_file": "readings/test_cycle_boundaries.py",
-      "source_location": "L151"
-    },
-    {
-      "id": "readings_test_regressions_readingcycleregressiontests_test_missing_august_reading_keeps_alert_until_september_ninth",
-      "label": ".test_missing_august_reading_keeps_alert_until_september_ninth()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_missing_august_reading_keeps_alert_until_september_ninth()",
-      "source_file": "readings/test_regressions.py",
-      "source_location": "L126"
-    },
-    {
-      "id": "readings_test_regressions_readingcycleregressiontests_test_overdue_alert_survives_year_change",
-      "label": ".test_overdue_alert_survives_year_change()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_overdue_alert_survives_year_change()",
-      "source_file": "readings/test_regressions.py",
-      "source_location": "L138"
     },
     {
       "id": "readings_tests_calendartests_add_reading",
@@ -4154,7 +3518,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 35,
-      "community_name": "get_reading_notifications",
+      "community_name": "get_calendar_events",
       "file_type": "code",
       "norm_label": ".add_reading()",
       "source_file": "readings/tests.py",
@@ -4166,7 +3530,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 35,
-      "community_name": "get_reading_notifications",
+      "community_name": "get_calendar_events",
       "file_type": "code",
       "norm_label": ".test_calendar_closes_missing_monthly_reading_when_next_cycle_starts()",
       "source_file": "readings/tests.py",
@@ -4178,7 +3542,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 35,
-      "community_name": "get_reading_notifications",
+      "community_name": "get_calendar_events",
       "file_type": "code",
       "norm_label": ".test_calendar_endpoint_requires_login_and_returns_events()",
       "source_file": "readings/tests.py",
@@ -4190,7 +3554,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 35,
-      "community_name": "get_reading_notifications",
+      "community_name": "get_calendar_events",
       "file_type": "code",
       "norm_label": ".test_calendar_marks_three_day_warning_in_orange()",
       "source_file": "readings/tests.py",
@@ -4202,7 +3566,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 35,
-      "community_name": "get_reading_notifications",
+      "community_name": "get_calendar_events",
       "file_type": "code",
       "norm_label": ".test_calendar_shows_record_and_follow_up()",
       "source_file": "readings/tests.py",
@@ -4214,7 +3578,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 35,
-      "community_name": "get_reading_notifications",
+      "community_name": "get_calendar_events",
       "file_type": "code",
       "norm_label": ".test_calendar_stops_follow_up_overdue_count_when_new_monthly_window_starts()",
       "source_file": "readings/tests.py",
@@ -4226,7 +3590,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 35,
-      "community_name": "get_reading_notifications",
+      "community_name": "get_calendar_events",
       "file_type": "code",
       "norm_label": ".test_completed_follow_up_does_not_create_a_second_follow_up()",
       "source_file": "readings/tests.py",
@@ -4238,7 +3602,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 35,
-      "community_name": "get_reading_notifications",
+      "community_name": "get_calendar_events",
       "file_type": "code",
       "norm_label": ".test_follow_up_only_turns_orange_one_day_before()",
       "source_file": "readings/tests.py",
@@ -4250,7 +3614,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 35,
-      "community_name": "get_reading_notifications",
+      "community_name": "get_calendar_events",
       "file_type": "code",
       "norm_label": ".test_grid_contains_calendar_button_and_dialog()",
       "source_file": "readings/tests.py",
@@ -4262,7 +3626,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 35,
-      "community_name": "get_reading_notifications",
+      "community_name": "get_calendar_events",
       "file_type": "code",
       "norm_label": ".test_late_monthly_reading_can_create_follow_up_in_next_month()",
       "source_file": "readings/tests.py",
@@ -4274,7 +3638,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 35,
-      "community_name": "get_reading_notifications",
+      "community_name": "get_calendar_events",
       "file_type": "code",
       "norm_label": ".add_reading()",
       "source_file": "readings/tests.py",
@@ -4286,7 +3650,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 35,
-      "community_name": "get_reading_notifications",
+      "community_name": "get_calendar_events",
       "file_type": "code",
       "norm_label": ".create_node()",
       "source_file": "readings/tests.py",
@@ -4298,7 +3662,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 35,
-      "community_name": "get_reading_notifications",
+      "community_name": "get_calendar_events",
       "file_type": "code",
       "norm_label": ".test_follow_up_starts_one_day_before_ten_days()",
       "source_file": "readings/tests.py",
@@ -4310,7 +3674,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 35,
-      "community_name": "get_reading_notifications",
+      "community_name": "get_calendar_events",
       "file_type": "code",
       "norm_label": ".test_monthly_notification_is_hidden_before_three_day_window()",
       "source_file": "readings/tests.py",
@@ -4322,7 +3686,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 35,
-      "community_name": "get_reading_notifications",
+      "community_name": "get_calendar_events",
       "file_type": "code",
       "norm_label": ".test_monthly_notification_starts_three_days_before()",
       "source_file": "readings/tests.py",
@@ -4334,11 +3698,263 @@
       "_callable": true,
       "_origin": "ast",
       "community": 35,
-      "community_name": "get_reading_notifications",
+      "community_name": "get_calendar_events",
       "file_type": "code",
       "norm_label": ".test_overdue_follow_up_remains_visible()",
       "source_file": "readings/tests.py",
       "source_location": "L555"
+    },
+    {
+      "id": "readings_test_audit_fixes_auditfixtests_record",
+      "label": ".record()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "AuditFixTests",
+      "file_type": "code",
+      "norm_label": ".record()",
+      "source_file": "readings/test_audit_fixes.py",
+      "source_location": "L40"
+    },
+    {
+      "id": "readings_test_audit_fixes_auditfixtests_setup",
+      "label": ".setUp()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "AuditFixTests",
+      "file_type": "code",
+      "norm_label": ".setup()",
+      "source_file": "readings/test_audit_fixes.py",
+      "source_location": "L25"
+    },
+    {
+      "id": "readings_test_audit_fixes_auditfixtests_test_cancelled_schedule_cannot_start_or_finish_telegram",
+      "label": ".test_cancelled_schedule_cannot_start_or_finish_telegram()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "AuditFixTests",
+      "file_type": "code",
+      "norm_label": ".test_cancelled_schedule_cannot_start_or_finish_telegram()",
+      "source_file": "readings/test_audit_fixes.py",
+      "source_location": "L43"
+    },
+    {
+      "id": "readings_test_audit_fixes_auditfixtests_test_grid_prefers_confirmed_over_later_cancelled_attempt",
+      "label": ".test_grid_prefers_confirmed_over_later_cancelled_attempt()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "AuditFixTests",
+      "file_type": "code",
+      "norm_label": ".test_grid_prefers_confirmed_over_later_cancelled_attempt()",
+      "source_file": "readings/test_audit_fixes.py",
+      "source_location": "L62"
+    },
+    {
+      "id": "readings_test_audit_fixes_auditfixtests_test_learning_without_candidates_leaves_photo_unverified",
+      "label": ".test_learning_without_candidates_leaves_photo_unverified()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "AuditFixTests",
+      "file_type": "code",
+      "norm_label": ".test_learning_without_candidates_leaves_photo_unverified()",
+      "source_file": "readings/test_audit_fixes.py",
+      "source_location": "L121"
+    },
+    {
+      "id": "readings_test_audit_fixes_auditfixtests_test_new_active_node_appears_in_annual_grid",
+      "label": ".test_new_active_node_appears_in_annual_grid()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "AuditFixTests",
+      "file_type": "code",
+      "norm_label": ".test_new_active_node_appears_in_annual_grid()",
+      "source_file": "readings/test_audit_fixes.py",
+      "source_location": "L69"
+    },
+    {
+      "id": "readings_test_audit_fixes_auditfixtests_test_photo_requires_login_and_existing_reference_even_with_debug",
+      "label": ".test_photo_requires_login_and_existing_reference_even_with_debug()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "AuditFixTests",
+      "file_type": "code",
+      "norm_label": ".test_photo_requires_login_and_existing_reference_even_with_debug()",
+      "source_file": "readings/test_audit_fixes.py",
+      "source_location": "L75"
+    },
+    {
+      "id": "readings_test_audit_fixes_auditfixtests_test_unavailable_followup_has_no_alert_and_consistent_projection",
+      "label": ".test_unavailable_followup_has_no_alert_and_consistent_projection()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "AuditFixTests",
+      "file_type": "code",
+      "norm_label": ".test_unavailable_followup_has_no_alert_and_consistent_projection()",
+      "source_file": "readings/test_audit_fixes.py",
+      "source_location": "L107"
+    },
+    {
+      "id": "readings_test_audit_fixes_auditfixtests_test_web_photo_verified_action_builds_local_profile_and_never_uses_cloud",
+      "label": ".test_web_photo_verified_action_builds_local_profile_and_never_uses_cloud()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "AuditFixTests",
+      "file_type": "code",
+      "norm_label": ".test_web_photo_verified_action_builds_local_profile_and_never_uses_cloud()",
+      "source_file": "readings/test_audit_fixes.py",
+      "source_location": "L88"
+    },
+    {
+      "id": "readings_services_ocr_detect_red_decimal",
+      "label": "detect_red_decimal()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "OCRSelectionTests",
+      "file_type": "code",
+      "norm_label": "detect_red_decimal()",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L422"
+    },
+    {
+      "id": "readings_services_ocr_select_direct_recognition",
+      "label": "select_direct_recognition()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "OCRSelectionTests",
+      "file_type": "code",
+      "norm_label": "select_direct_recognition()",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L309"
+    },
+    {
+      "id": "readings_tests_ocrselectiontests_test_cloudflare_chat_model_embeds_image_in_user_message",
+      "label": ".test_cloudflare_chat_model_embeds_image_in_user_message()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "OCRSelectionTests",
+      "file_type": "code",
+      "norm_label": ".test_cloudflare_chat_model_embeds_image_in_user_message()",
+      "source_file": "readings/tests.py",
+      "source_location": "L436"
+    },
+    {
+      "id": "readings_tests_ocrselectiontests_test_cloudflare_is_only_used_after_local_ocr_fails",
+      "label": ".test_cloudflare_is_only_used_after_local_ocr_fails()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "OCRSelectionTests",
+      "file_type": "code",
+      "norm_label": ".test_cloudflare_is_only_used_after_local_ocr_fails()",
+      "source_file": "readings/tests.py",
+      "source_location": "L374"
+    },
+    {
+      "id": "readings_tests_ocrselectiontests_test_direct_display_recognition_preserves_decimal",
+      "label": ".test_direct_display_recognition_preserves_decimal()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "OCRSelectionTests",
+      "file_type": "code",
+      "norm_label": ".test_direct_display_recognition_preserves_decimal()",
+      "source_file": "readings/tests.py",
+      "source_location": "L258"
+    },
+    {
+      "id": "readings_tests_ocrselectiontests_test_direct_recognition_prefers_complete_decimal_over_high_confidence_without_separator",
+      "label": ".test_direct_recognition_prefers_complete_decimal_over_high_confidence_without_separator()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "OCRSelectionTests",
+      "file_type": "code",
+      "norm_label": ".test_direct_recognition_prefers_complete_decimal_over_high_confidence_without_separator()",
+      "source_file": "readings/tests.py",
+      "source_location": "L277"
+    },
+    {
+      "id": "readings_tests_ocrselectiontests_test_grid_value_hides_unused_decimal_zeroes",
+      "label": ".test_grid_value_hides_unused_decimal_zeroes()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "OCRSelectionTests",
+      "file_type": "code",
+      "norm_label": ".test_grid_value_hides_unused_decimal_zeroes()",
+      "source_file": "readings/tests.py",
+      "source_location": "L239"
+    },
+    {
+      "id": "readings_tests_ocrselectiontests_test_local_result_prevents_external_request",
+      "label": ".test_local_result_prevents_external_request()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "OCRSelectionTests",
+      "file_type": "code",
+      "norm_label": ".test_local_result_prevents_external_request()",
+      "source_file": "readings/tests.py",
+      "source_location": "L390"
+    },
+    {
+      "id": "readings_tests_ocrselectiontests_test_mechanical_meter_appends_detected_red_tenths_digit",
+      "label": ".test_mechanical_meter_appends_detected_red_tenths_digit()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "OCRSelectionTests",
+      "file_type": "code",
+      "norm_label": ".test_mechanical_meter_appends_detected_red_tenths_digit()",
+      "source_file": "readings/tests.py",
+      "source_location": "L284"
+    },
+    {
+      "id": "readings_tests_ocrselectiontests_test_prefers_large_meter_display_and_preserves_decimal",
+      "label": ".test_prefers_large_meter_display_and_preserves_decimal()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "OCRSelectionTests",
+      "file_type": "code",
+      "norm_label": ".test_prefers_large_meter_display_and_preserves_decimal()",
+      "source_file": "readings/tests.py",
+      "source_location": "L228"
+    },
+    {
+      "id": "readings_tests_ocrselectiontests_test_regular_meter_does_not_invent_red_decimal",
+      "label": ".test_regular_meter_does_not_invent_red_decimal()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "OCRSelectionTests",
+      "file_type": "code",
+      "norm_label": ".test_regular_meter_does_not_invent_red_decimal()",
+      "source_file": "readings/tests.py",
+      "source_location": "L307"
+    },
+    {
+      "id": "readings_tests_ocrselectiontests_test_unapproved_cloudflare_model_does_not_make_a_request",
+      "label": ".test_unapproved_cloudflare_model_does_not_make_a_request()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "OCRSelectionTests",
+      "file_type": "code",
+      "norm_label": ".test_unapproved_cloudflare_model_does_not_make_a_request()",
+      "source_file": "readings/tests.py",
+      "source_location": "L404"
     },
     {
       "id": "readings_test_telegram_flow_telegramflowtests_choose_date",
@@ -4687,6 +4303,162 @@
       "norm_label": ".text()",
       "source_file": "readings/test_telegram_flow.py",
       "source_location": "L39"
+    },
+    {
+      "id": "readings_management_commands_evaluate_ocr_command_add_arguments",
+      "label": ".add_arguments()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "create_reading",
+      "file_type": "code",
+      "norm_label": ".add_arguments()",
+      "source_file": "readings/management/commands/evaluate_ocr.py",
+      "source_location": "L15"
+    },
+    {
+      "id": "readings_management_commands_evaluate_ocr_command_handle",
+      "label": ".handle()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "create_reading",
+      "file_type": "code",
+      "norm_label": ".handle()",
+      "source_file": "readings/management/commands/evaluate_ocr.py",
+      "source_location": "L20"
+    },
+    {
+      "id": "readings_management_commands_run_telegram_bot_create_reading",
+      "label": "create_reading()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "create_reading",
+      "file_type": "code",
+      "norm_label": "create_reading()",
+      "source_file": "readings/management/commands/run_telegram_bot.py",
+      "source_location": "L201"
+    },
+    {
+      "id": "readings_management_commands_run_telegram_bot_get_pending_node_reading",
+      "label": "get_pending_node_reading()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "create_reading",
+      "file_type": "code",
+      "norm_label": "get_pending_node_reading()",
+      "source_file": "readings/management/commands/run_telegram_bot.py",
+      "source_location": "L260"
+    },
+    {
+      "id": "readings_management_commands_run_telegram_bot_previous_confirmed_value",
+      "label": "previous_confirmed_value()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "create_reading",
+      "file_type": "code",
+      "norm_label": "previous_confirmed_value()",
+      "source_file": "readings/management/commands/run_telegram_bot.py",
+      "source_location": "L167"
+    },
+    {
+      "id": "readings_management_commands_run_telegram_bot_validated_ocr_values",
+      "label": "validated_ocr_values()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "create_reading",
+      "file_type": "code",
+      "norm_label": "validated_ocr_values()",
+      "source_file": "readings/management/commands/run_telegram_bot.py",
+      "source_location": "L160"
+    },
+    {
+      "id": "readings_services_ocr_learning_append_attempt",
+      "label": "append_attempt()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "create_reading",
+      "file_type": "code",
+      "norm_label": "append_attempt()",
+      "source_file": "readings/services/ocr_learning.py",
+      "source_location": "L49"
+    },
+    {
+      "id": "readings_services_ocr_learning_verify_for_learning",
+      "label": "verify_for_learning()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "create_reading",
+      "file_type": "code",
+      "norm_label": "verify_for_learning()",
+      "source_file": "readings/services/ocr_learning.py",
+      "source_location": "L65"
+    },
+    {
+      "id": "readings_services_ocr_choose_consistent_candidate",
+      "label": "choose_consistent_candidate()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "choose_consistent_candidate",
+      "file_type": "code",
+      "norm_label": "choose_consistent_candidate()",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L529"
+    },
+    {
+      "id": "readings_test_ocr_learning_ocrsafetytests_test_equal_previous_reading_is_allowed",
+      "label": ".test_equal_previous_reading_is_allowed()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "choose_consistent_candidate",
+      "file_type": "code",
+      "norm_label": ".test_equal_previous_reading_is_allowed()",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L100"
+    },
+    {
+      "id": "readings_test_ocr_learning_ocrsafetytests_test_failed_techniques_are_filtered_but_new_ones_remain_available",
+      "label": ".test_failed_techniques_are_filtered_but_new_ones_remain_available()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "choose_consistent_candidate",
+      "file_type": "code",
+      "norm_label": ".test_failed_techniques_are_filtered_but_new_ones_remain_available()",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L94"
+    },
+    {
+      "id": "readings_tests_ocrselectiontests_test_consensus_rejects_value_that_does_not_exceed_previous_reading",
+      "label": ".test_consensus_rejects_value_that_does_not_exceed_previous_reading()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "choose_consistent_candidate",
+      "file_type": "code",
+      "norm_label": ".test_consensus_rejects_value_that_does_not_exceed_previous_reading()",
+      "source_file": "readings/tests.py",
+      "source_location": "L362"
+    },
+    {
+      "id": "readings_tests_ocrselectiontests_test_consensus_requests_review_when_decimal_variants_disagree",
+      "label": ".test_consensus_requests_review_when_decimal_variants_disagree()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "choose_consistent_candidate",
+      "file_type": "code",
+      "norm_label": ".test_consensus_requests_review_when_decimal_variants_disagree()",
+      "source_file": "readings/tests.py",
+      "source_location": "L351"
     },
     {
       "id": "readings_management_commands_normalize_august_baseline_command_add_arguments",
@@ -5049,6 +4821,30 @@
       "source_location": "L44"
     },
     {
+      "id": "readings_test_regressions_readingcycleregressiontests_test_missing_august_reading_keeps_alert_until_september_ninth",
+      "label": ".test_missing_august_reading_keeps_alert_until_september_ninth()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "get_cycle_state",
+      "file_type": "code",
+      "norm_label": ".test_missing_august_reading_keeps_alert_until_september_ninth()",
+      "source_file": "readings/test_regressions.py",
+      "source_location": "L126"
+    },
+    {
+      "id": "readings_test_regressions_readingcycleregressiontests_test_overdue_alert_survives_year_change",
+      "label": ".test_overdue_alert_survives_year_change()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "get_cycle_state",
+      "file_type": "code",
+      "norm_label": ".test_overdue_alert_survives_year_change()",
+      "source_file": "readings/test_regressions.py",
+      "source_location": "L138"
+    },
+    {
       "id": "readings_test_regressions_readingcycleregressiontests_test_september_eighth_registers_a_single_follow_up",
       "label": ".test_september_eighth_registers_a_single_follow_up()",
       "_callable": true,
@@ -5083,6 +4879,18 @@
       "norm_label": ".row()",
       "source_file": "readings/test_annual_cycles.py",
       "source_location": "L24"
+    },
+    {
+      "id": "readings_test_annual_cycles_annualcycletests_setup",
+      "label": ".setUp()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "AnnualCycleTests",
+      "file_type": "code",
+      "norm_label": ".setup()",
+      "source_file": "readings/test_annual_cycles.py",
+      "source_location": "L13"
     },
     {
       "id": "readings_test_annual_cycles_annualcycletests_test_ambiguous_parent_does_not_duplicate_followup_or_invent_pending",
@@ -5167,6 +4975,42 @@
       "norm_label": ".test_imports_and_orphans_are_not_guessed_into_another_cycle()",
       "source_file": "readings/test_annual_cycles.py",
       "source_location": "L59"
+    },
+    {
+      "id": "readings_services_registration_get_registration_plan",
+      "label": "get_registration_plan()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "RegistrationRulesTests",
+      "file_type": "code",
+      "norm_label": "get_registration_plan()",
+      "source_file": "readings/services/registration.py",
+      "source_location": "L55"
+    },
+    {
+      "id": "readings_services_registration_registrationplan_explanation",
+      "label": ".explanation()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "RegistrationRulesTests",
+      "file_type": "code",
+      "norm_label": ".explanation()",
+      "source_file": "readings/services/registration.py",
+      "source_location": "L38"
+    },
+    {
+      "id": "readings_services_registration_registrationplan_opens_on",
+      "label": ".opens_on()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "RegistrationRulesTests",
+      "file_type": "code",
+      "norm_label": ".opens_on()",
+      "source_file": "readings/services/registration.py",
+      "source_location": "L34"
     },
     {
       "id": "readings_test_registration_rules_registrationrulestests_confirmed",
@@ -5337,6 +5181,18 @@
       "source_location": "L53"
     },
     {
+      "id": "readings_test_registration_rules_registrationrulestests_test_incomplete_monthly_record_does_not_count_as_completed_reading",
+      "label": ".test_incomplete_monthly_record_does_not_count_as_completed_reading()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "RegistrationRulesTests",
+      "file_type": "code",
+      "norm_label": ".test_incomplete_monthly_record_does_not_count_as_completed_reading()",
+      "source_file": "readings/test_registration_rules.py",
+      "source_location": "L154"
+    },
+    {
       "id": "readings_test_registration_rules_registrationrulestests_test_old_follow_up_draft_reclassifies_when_new_window_opens",
       "label": ".test_old_follow_up_draft_reclassifies_when_new_window_opens()",
       "_callable": true,
@@ -5361,64 +5217,100 @@
       "source_location": "L109"
     },
     {
+      "id": "readings_management_commands_import_readings_excel_command_add_arguments",
+      "label": ".add_arguments()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": ".add_arguments()",
+      "source_file": "readings/management/commands/import_readings_excel.py",
+      "source_location": "L53"
+    },
+    {
+      "id": "readings_management_commands_import_readings_excel_command_handle",
+      "label": ".handle()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": ".handle()",
+      "source_file": "readings/management/commands/import_readings_excel.py",
+      "source_location": "L58"
+    },
+    {
+      "id": "readings_management_commands_import_readings_excel_command_import_workbook",
+      "label": "._import_workbook()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "._import_workbook()",
+      "source_file": "readings/management/commands/import_readings_excel.py",
+      "source_location": "L66"
+    },
+    {
+      "id": "readings_management_commands_import_readings_excel_normalize",
+      "label": "normalize()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "normalize()",
+      "source_file": "readings/management/commands/import_readings_excel.py",
+      "source_location": "L17"
+    },
+    {
+      "id": "readings_management_commands_import_readings_excel_parse_date",
+      "label": "parse_date()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "parse_date()",
+      "source_file": "readings/management/commands/import_readings_excel.py",
+      "source_location": "L30"
+    },
+    {
+      "id": "readings_management_commands_import_readings_excel_parse_day",
+      "label": "parse_day()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "parse_day()",
+      "source_file": "readings/management/commands/import_readings_excel.py",
+      "source_location": "L22"
+    },
+    {
+      "id": "readings_management_commands_import_readings_excel_parse_reading",
+      "label": "parse_reading()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "parse_reading()",
+      "source_file": "readings/management/commands/import_readings_excel.py",
+      "source_location": "L40"
+    },
+    {
       "id": "readings_test_access_helpers_create_interface_user",
       "label": "create_interface_user()",
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": "create_interface_user()",
       "source_file": "readings/test_access_helpers.py",
       "source_location": "L4"
-    },
-    {
-      "id": "readings_test_annual_cycles_annualcycletests_setup",
-      "label": ".setUp()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 8,
-      "community_name": "create_interface_user",
-      "file_type": "code",
-      "norm_label": ".setup()",
-      "source_file": "readings/test_annual_cycles.py",
-      "source_location": "L13"
-    },
-    {
-      "id": "readings_test_audit_fixes_auditfixtests_setup",
-      "label": ".setUp()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 8,
-      "community_name": "create_interface_user",
-      "file_type": "code",
-      "norm_label": ".setup()",
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L25"
-    },
-    {
-      "id": "readings_test_cycle_boundaries_upcominggridtests_setup",
-      "label": ".setUp()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 8,
-      "community_name": "create_interface_user",
-      "file_type": "code",
-      "norm_label": ".setup()",
-      "source_file": "readings/test_cycle_boundaries.py",
-      "source_location": "L69"
-    },
-    {
-      "id": "readings_test_regressions_confirmedscheduleregressiontests_test_completed_filter_keeps_confirmed_rows_after_reminder_check",
-      "label": ".test_completed_filter_keeps_confirmed_rows_after_reminder_check()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 8,
-      "community_name": "create_interface_user",
-      "file_type": "code",
-      "norm_label": ".test_completed_filter_keeps_confirmed_rows_after_reminder_check()",
-      "source_file": "readings/test_regressions.py",
-      "source_location": "L322"
     },
     {
       "id": "readings_test_web_registration_webregistrationtests_setup",
@@ -5426,7 +5318,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".setup()",
       "source_file": "readings/test_web_registration.py",
@@ -5438,7 +5330,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".test_annual_grid_accepts_a_valid_year_and_rejects_an_invalid_one()",
       "source_file": "readings/tests.py",
@@ -5450,7 +5342,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".test_annual_grid_shows_all_active_nodes()",
       "source_file": "readings/tests.py",
@@ -5462,11 +5354,23 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".test_authorized_list_has_33_unique_nodes()",
       "source_file": "readings/tests.py",
       "source_location": "L481"
+    },
+    {
+      "id": "readings_tests_authorizednodestests_test_excel_helpers_handle_operational_values",
+      "label": ".test_excel_helpers_handle_operational_values()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": ".test_excel_helpers_handle_operational_values()",
+      "source_file": "readings/tests.py",
+      "source_location": "L486"
     },
     {
       "id": "readings_tests_calendartests_setup",
@@ -5474,7 +5378,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".setup()",
       "source_file": "readings/tests.py",
@@ -5486,7 +5390,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".setup()",
       "source_file": "readings/tests.py",
@@ -5498,7 +5402,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".test_administrator_sees_admin_link()",
       "source_file": "readings/tests.py",
@@ -5510,7 +5414,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".test_anonymous_user_is_sent_to_regular_login()",
       "source_file": "readings/tests.py",
@@ -5522,7 +5426,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".test_consultation_user_can_only_see_grid()",
       "source_file": "readings/tests.py",
@@ -5534,7 +5438,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".test_follow_up_stops_counting_overdue_on_first_of_month_for_reading_day_three()",
       "source_file": "readings/tests.py",
@@ -5546,7 +5450,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".test_grid_distinguishes_monthly_and_follow_up_pending_statuses()",
       "source_file": "readings/tests.py",
@@ -5558,7 +5462,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".test_grid_filters_node_provider_and_status_separately()",
       "source_file": "readings/tests.py",
@@ -5570,7 +5474,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".test_grid_orders_rows_by_the_scheduled_reading_date()",
       "source_file": "readings/tests.py",
@@ -5582,7 +5486,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".test_grid_switches_from_follow_up_to_monthly_three_days_before_reading_day()",
       "source_file": "readings/tests.py",
@@ -5594,7 +5498,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".create_schedule()",
       "source_file": "readings/tests.py",
@@ -5606,7 +5510,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".test_follow_up_label_uses_follow_up_wording()",
       "source_file": "readings/tests.py",
@@ -5618,7 +5522,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".test_monthly_label_shows_days_remaining_today_and_overdue()",
       "source_file": "readings/tests.py",
@@ -5768,6 +5672,17 @@
       "source_location": "L1"
     },
     {
+      "id": "readings_context_processors",
+      "label": "context_processors.py",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "Reading",
+      "file_type": "code",
+      "norm_label": "context_processors.py",
+      "source_file": "readings/context_processors.py",
+      "source_location": "L1"
+    },
+    {
       "id": "readings_forms",
       "label": "forms.py",
       "_origin": "ast",
@@ -5802,28 +5717,6 @@
     },
     {
       "id": "readings_management_commands_benchmark_cloudflare_ocr_py_basecommand",
-      "label": "BaseCommand",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": "basecommand",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "readings_management_commands_evaluate_ocr",
-      "label": "evaluate_ocr.py",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": "evaluate_ocr.py",
-      "source_file": "readings/management/commands/evaluate_ocr.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "readings_management_commands_evaluate_ocr_py_basecommand",
       "label": "BaseCommand",
       "_origin": "ast",
       "community": 1,
@@ -5875,17 +5768,6 @@
       "file_type": "code",
       "norm_label": "notifications.py",
       "source_file": "readings/services/notifications.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "readings_services_ocr_learning",
-      "label": "ocr_learning.py",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": "ocr_learning.py",
-      "source_file": "readings/services/ocr_learning.py",
       "source_location": "L1"
     },
     {
@@ -5964,17 +5846,6 @@
       "norm_label": "test_cycle_boundaries.py",
       "source_file": "readings/test_cycle_boundaries.py",
       "source_location": "L1"
-    },
-    {
-      "id": "readings_test_cycle_boundaries_py_testcase",
-      "label": "TestCase",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": "testcase",
-      "source_file": "",
-      "source_location": ""
     },
     {
       "id": "readings_test_registration_rules",
@@ -6065,17 +5936,6 @@
       "source_location": ""
     },
     {
-      "id": "readings_management_commands_evaluate_ocr_rationale_1",
-      "label": "Evaluaci\u00f3n local sin red y exportaci\u00f3n reutilizable de ejemplos confirmados.",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "rationale",
-      "norm_label": "evaluacion local sin red y exportacion reutilizable de ejemplos confirmados.",
-      "source_file": "readings/management/commands/evaluate_ocr.py",
-      "source_location": "L1"
-    },
-    {
       "id": "readings_services_annual_grid_rationale_1",
       "label": "Presentaci\u00f3n por ciclo sin modificar fechas ni reclasificar hist\u00f3ricos ambiguos.",
       "_origin": "ast",
@@ -6120,28 +5980,6 @@
       "source_location": "L56"
     },
     {
-      "id": "readings_services_ocr_learning_rationale_1",
-      "label": "Aprendizaje local por medidor; nunca utiliza valores anteriores como predicci\u00f3n.",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "rationale",
-      "norm_label": "aprendizaje local por medidor; nunca utiliza valores anteriores como prediccion.",
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "readings_services_ocr_learning_rationale_81",
-      "label": "Called only after an operator verifies the photo against its decimal label.",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "rationale",
-      "norm_label": "called only after an operator verifies the photo against its decimal label.",
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L81"
-    },
-    {
       "id": "readings_services_registration_rationale_1",
       "label": "Eligibility for new bot registrations, without changing historical records.",
       "_origin": "ast",
@@ -6164,6 +6002,17 @@
       "source_location": "L1"
     },
     {
+      "id": "readings_services_ocr_learning",
+      "label": "ocr_learning.py",
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": "ocr_learning.py",
+      "source_file": "readings/services/ocr_learning.py",
+      "source_location": "L1"
+    },
+    {
       "id": "readings_test_ocr_learning_py_testcase",
       "label": "TestCase",
       "_origin": "ast",
@@ -6173,6 +6022,17 @@
       "norm_label": "testcase",
       "source_file": "",
       "source_location": ""
+    },
+    {
+      "id": "readings_services_ocr_learning_rationale_1",
+      "label": "Aprendizaje local por medidor; nunca utiliza valores anteriores como predicci\u00f3n.",
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "rationale",
+      "norm_label": "aprendizaje local por medidor; nunca utiliza valores anteriores como prediccion.",
+      "source_file": "readings/services/ocr_learning.py",
+      "source_location": "L1"
     },
     {
       "id": "readings_test_web_registration_py_testcase",
@@ -6408,6 +6268,50 @@
       "source_location": ""
     },
     {
+      "id": "readings_management_commands_setup_access_groups",
+      "label": "setup_access_groups.py",
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "ReadingAdmin",
+      "file_type": "code",
+      "norm_label": "setup_access_groups.py",
+      "source_file": "readings/management/commands/setup_access_groups.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "readings_management_commands_setup_access_groups_py_atomic",
+      "label": "atomic",
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "ReadingAdmin",
+      "file_type": "code",
+      "norm_label": "atomic",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "readings_management_commands_setup_access_groups_py_basecommand",
+      "label": "BaseCommand",
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "ReadingAdmin",
+      "file_type": "code",
+      "norm_label": "basecommand",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "readings_test_simple_admin_py_testcase",
+      "label": "TestCase",
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "ReadingAdmin",
+      "file_type": "code",
+      "norm_label": "testcase",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "register",
       "label": "register",
       "_origin": "ast",
@@ -6496,121 +6400,22 @@
       "source_location": "L1"
     },
     {
-      "id": "readings_authorized_nodes",
-      "label": "authorized_nodes.py",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "authorized_nodes.py",
-      "source_file": "readings/authorized_nodes.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "readings_management_commands_import_readings_excel",
-      "label": "import_readings_excel.py",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "import_readings_excel.py",
-      "source_file": "readings/management/commands/import_readings_excel.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "readings_management_commands_import_readings_excel_py_atomic",
-      "label": "atomic",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "atomic",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "readings_management_commands_import_readings_excel_py_basecommand",
-      "label": "BaseCommand",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "basecommand",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
       "id": "readings_services_ocr",
       "label": "ocr.py",
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "ocr.py",
       "source_file": "readings/services/ocr.py",
       "source_location": "L1"
     },
     {
-      "id": "readings_test_ocr_learning",
-      "label": "test_ocr_learning.py",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "test_ocr_learning.py",
-      "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "readings_test_ocr_learning_py_patch",
-      "label": "patch",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "patch",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "readings_tests",
-      "label": "tests.py",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "tests.py",
-      "source_file": "readings/tests.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "readings_tests_py_patch",
-      "label": "patch",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "patch",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "simpletestcase",
-      "label": "SimpleTestCase",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "simpletestcase",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
       "id": "readings_services_ocr_rationale_106",
       "label": "Usa KBA como pista adicional para los visores tenues de ese fabricante.",
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "rationale",
       "norm_label": "usa kba como pista adicional para los visores tenues de ese fabricante.",
       "source_file": "readings/services/ocr.py",
@@ -6621,7 +6426,7 @@
       "label": "Localiza visores rectangulares por contorno y rectifica su perspectiva.",
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "rationale",
       "norm_label": "localiza visores rectangulares por contorno y rectifica su perspectiva.",
       "source_file": "readings/services/ocr.py",
@@ -6632,62 +6437,29 @@
       "label": "Genera variantes para LCD tenue, reflejos, segmentos claros y oscuros.",
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "rationale",
       "norm_label": "genera variantes para lcd tenue, reflejos, segmentos claros y oscuros.",
       "source_file": "readings/services/ocr.py",
       "source_location": "L276"
     },
     {
-      "id": "readings_services_ocr_rationale_310",
-      "label": "Interpreta el reconocedor aplicado directamente al interior del visor.",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "rationale",
-      "norm_label": "interpreta el reconocedor aplicado directamente al interior del visor.",
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L310"
-    },
-    {
       "id": "readings_services_ocr_rationale_377",
       "label": "Reconocedor geom\u00e9trico espec\u00edfico para pantallas LCD de siete segmentos.",
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "rationale",
       "norm_label": "reconocedor geometrico especifico para pantallas lcd de siete segmentos.",
       "source_file": "readings/services/ocr.py",
       "source_location": "L377"
     },
     {
-      "id": "readings_services_ocr_rationale_423",
-      "label": "Lee la rueda roja de d\u00e9cimas ubicada al final de algunos medidores mec\u00e1nicos.",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "rationale",
-      "norm_label": "lee la rueda roja de decimas ubicada al final de algunos medidores mecanicos.",
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L423"
-    },
-    {
-      "id": "readings_services_ocr_rationale_530",
-      "label": "Consenso del valor exacto, incluyendo su decimal, con experiencia del medidor.",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "rationale",
-      "norm_label": "consenso del valor exacto, incluyendo su decimal, con experiencia del medidor.",
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L530"
-    },
-    {
       "id": "readings_services_ocr_rationale_56",
       "label": "Compatibilidad: selecciona el n\u00famero m\u00e1s grande de un resultado OCR completo.",
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "rationale",
       "norm_label": "compatibilidad: selecciona el numero mas grande de un resultado ocr completo.",
       "source_file": "readings/services/ocr.py",
@@ -6698,40 +6470,18 @@
       "label": "Ejecuta \u00fanicamente el reconocimiento local sobre el interior de los visores.",
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "rationale",
       "norm_label": "ejecuta unicamente el reconocimiento local sobre el interior de los visores.",
       "source_file": "readings/services/ocr.py",
       "source_location": "L585"
     },
     {
-      "id": "readings_services_ocr_rationale_654",
-      "label": "Consulta Workers AI solo cuando est\u00e1n configuradas sus credenciales.",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "rationale",
-      "norm_label": "consulta workers ai solo cuando estan configuradas sus credenciales.",
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L654"
-    },
-    {
-      "id": "readings_services_ocr_rationale_766",
-      "label": "OCR local primero; Cloudflare solo act\u00faa como respaldo y luego queda el modo\u2026",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "rationale",
-      "norm_label": "ocr local primero; cloudflare solo actua como respaldo y luego queda el modo...",
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L766"
-    },
-    {
       "id": "readings_services_ocr_rationale_78",
       "label": "Usa kWh como una pista adicional, pero ya no es el \u00fanico localizador.",
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "rationale",
       "norm_label": "usa kwh como una pista adicional, pero ya no es el unico localizador.",
       "source_file": "readings/services/ocr.py",
@@ -6771,66 +6521,66 @@
       "source_location": "L1"
     },
     {
-      "id": "readings_management_commands_setup_access_groups",
-      "label": "setup_access_groups.py",
+      "id": "readings_test_ocr_learning",
+      "label": "test_ocr_learning.py",
       "_origin": "ast",
       "community": 33,
-      "community_name": "SimpleAdminTests",
+      "community_name": "OCRResult",
       "file_type": "code",
-      "norm_label": "setup_access_groups.py",
-      "source_file": "readings/management/commands/setup_access_groups.py",
+      "norm_label": "test_ocr_learning.py",
+      "source_file": "readings/test_ocr_learning.py",
       "source_location": "L1"
     },
     {
-      "id": "readings_management_commands_setup_access_groups_py_atomic",
-      "label": "atomic",
+      "id": "readings_test_ocr_learning_py_patch",
+      "label": "patch",
       "_origin": "ast",
       "community": 33,
-      "community_name": "SimpleAdminTests",
+      "community_name": "OCRResult",
       "file_type": "code",
-      "norm_label": "atomic",
+      "norm_label": "patch",
       "source_file": "",
       "source_location": ""
     },
     {
-      "id": "readings_management_commands_setup_access_groups_py_basecommand",
-      "label": "BaseCommand",
+      "id": "simpletestcase",
+      "label": "SimpleTestCase",
       "_origin": "ast",
       "community": 33,
-      "community_name": "SimpleAdminTests",
+      "community_name": "OCRResult",
       "file_type": "code",
-      "norm_label": "basecommand",
+      "norm_label": "simpletestcase",
       "source_file": "",
       "source_location": ""
     },
     {
-      "id": "readings_test_simple_admin_py_testcase",
+      "id": "readings_services_ocr_rationale_654",
+      "label": "Consulta Workers AI solo cuando est\u00e1n configuradas sus credenciales.",
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "OCRResult",
+      "file_type": "rationale",
+      "norm_label": "consulta workers ai solo cuando estan configuradas sus credenciales.",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L654"
+    },
+    {
+      "id": "readings_services_ocr_rationale_766",
+      "label": "OCR local primero; Cloudflare solo act\u00faa como respaldo y luego queda el modo\u2026",
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "OCRResult",
+      "file_type": "rationale",
+      "norm_label": "ocr local primero; cloudflare solo actua como respaldo y luego queda el modo...",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L766"
+    },
+    {
+      "id": "readings_test_cycle_boundaries_py_testcase",
       "label": "TestCase",
       "_origin": "ast",
-      "community": 33,
-      "community_name": "SimpleAdminTests",
-      "file_type": "code",
-      "norm_label": "testcase",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "readings_context_processors",
-      "label": "context_processors.py",
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": "context_processors.py",
-      "source_file": "readings/context_processors.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "readings_test_audit_fixes_py_testcase",
-      "label": "TestCase",
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
+      "community": 34,
+      "community_name": "UpcomingGridTests",
       "file_type": "code",
       "norm_label": "testcase",
       "source_file": "",
@@ -6841,11 +6591,22 @@
       "label": "Return readings and the current obligation for every active node in a month.",
       "_origin": "ast",
       "community": 35,
-      "community_name": "get_reading_notifications",
+      "community_name": "get_calendar_events",
       "file_type": "rationale",
       "norm_label": "return readings and the current obligation for every active node in a month.",
       "source_file": "readings/services/calendar.py",
       "source_location": "L35"
+    },
+    {
+      "id": "readings_test_audit_fixes_py_testcase",
+      "label": "TestCase",
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "AuditFixTests",
+      "file_type": "code",
+      "norm_label": "testcase",
+      "source_file": "",
+      "source_location": ""
     },
     {
       "id": "documentacion_auditoria_codigo_y_base_2026_09_07",
@@ -7063,6 +6824,39 @@
       "source_location": "L1"
     },
     {
+      "id": "readings_tests_py_patch",
+      "label": "patch",
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "OCRSelectionTests",
+      "file_type": "code",
+      "norm_label": "patch",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "readings_services_ocr_rationale_310",
+      "label": "Interpreta el reconocedor aplicado directamente al interior del visor.",
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "OCRSelectionTests",
+      "file_type": "rationale",
+      "norm_label": "interpreta el reconocedor aplicado directamente al interior del visor.",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L310"
+    },
+    {
+      "id": "readings_services_ocr_rationale_423",
+      "label": "Lee la rueda roja de d\u00e9cimas ubicada al final de algunos medidores mec\u00e1nicos.",
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "OCRSelectionTests",
+      "file_type": "rationale",
+      "norm_label": "lee la rueda roja de decimas ubicada al final de algunos medidores mecanicos.",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L423"
+    },
+    {
       "id": "readings_test_telegram_flow_py_testcase",
       "label": "TestCase",
       "_origin": "ast",
@@ -7072,6 +6866,72 @@
       "norm_label": "testcase",
       "source_file": "",
       "source_location": ""
+    },
+    {
+      "id": "path",
+      "label": "Path",
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "create_reading",
+      "file_type": "code",
+      "norm_label": "path",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "readings_management_commands_evaluate_ocr",
+      "label": "evaluate_ocr.py",
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "create_reading",
+      "file_type": "code",
+      "norm_label": "evaluate_ocr.py",
+      "source_file": "readings/management/commands/evaluate_ocr.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "readings_management_commands_evaluate_ocr_py_basecommand",
+      "label": "BaseCommand",
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "create_reading",
+      "file_type": "code",
+      "norm_label": "basecommand",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "readings_management_commands_evaluate_ocr_rationale_1",
+      "label": "Evaluaci\u00f3n local sin red y exportaci\u00f3n reutilizable de ejemplos confirmados.",
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "create_reading",
+      "file_type": "rationale",
+      "norm_label": "evaluacion local sin red y exportacion reutilizable de ejemplos confirmados.",
+      "source_file": "readings/management/commands/evaluate_ocr.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "readings_services_ocr_learning_rationale_66",
+      "label": "Called only after an operator verifies the photo against its decimal label.",
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "create_reading",
+      "file_type": "rationale",
+      "norm_label": "called only after an operator verifies the photo against its decimal label.",
+      "source_file": "readings/services/ocr_learning.py",
+      "source_location": "L66"
+    },
+    {
+      "id": "readings_services_ocr_rationale_530",
+      "label": "Consenso del valor exacto, incluyendo su decimal, con experiencia del medidor.",
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "choose_consistent_candidate",
+      "file_type": "rationale",
+      "norm_label": "consenso del valor exacto, incluyendo su decimal, con experiencia del medidor.",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L530"
     },
     {
       "id": "documentacion_revision_integral_administracion_2026_09_07",
@@ -7132,17 +6992,6 @@
       "norm_label": "revision posterior a la administracion simplificada",
       "source_file": "documentacion/Revision_integral_administracion_2026-09-07.md",
       "source_location": "L1"
-    },
-    {
-      "id": "path",
-      "label": "Path",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "get_cycle_state",
-      "file_type": "code",
-      "norm_label": "path",
-      "source_file": "",
-      "source_location": ""
     },
     {
       "id": "readings_management_commands_normalize_august_baseline",
@@ -7277,11 +7126,66 @@
       "source_location": ""
     },
     {
+      "id": "readings_authorized_nodes",
+      "label": "authorized_nodes.py",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "authorized_nodes.py",
+      "source_file": "readings/authorized_nodes.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "readings_management_commands_import_readings_excel",
+      "label": "import_readings_excel.py",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "import_readings_excel.py",
+      "source_file": "readings/management/commands/import_readings_excel.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "readings_management_commands_import_readings_excel_py_atomic",
+      "label": "atomic",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "atomic",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "readings_management_commands_import_readings_excel_py_basecommand",
+      "label": "BaseCommand",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "basecommand",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "readings_tests",
+      "label": "tests.py",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "tests.py",
+      "source_file": "readings/tests.py",
+      "source_location": "L1"
+    },
+    {
       "id": "readings_tests_py_testcase",
       "label": "TestCase",
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": "testcase",
       "source_file": "",
@@ -7292,7 +7196,7 @@
       "label": "Explicit permissions for pre-existing tests of the operational screens.",
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "rationale",
       "norm_label": "explicit permissions for pre-existing tests of the operational screens.",
       "source_file": "readings/test_access_helpers.py",
@@ -7525,7 +7429,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L50",
+      "source_location": "L44",
       "weight": 1.0
     },
     {
@@ -7537,7 +7441,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L119",
+      "source_location": "L106",
       "weight": 1.0
     },
     {
@@ -7549,19 +7453,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L123",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_admin_ui_readingadmin_verify_view",
-      "target": "readings_services_ocr_learning_review_token",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "readings/admin_ui.py",
-      "source_location": "L129",
+      "source_location": "L110",
       "weight": 1.0
     },
     {
@@ -7573,7 +7465,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L157",
+      "source_location": "L139",
       "weight": 1.0
     },
     {
@@ -7585,7 +7477,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L159",
+      "source_location": "L141",
       "weight": 1.0
     },
     {
@@ -7597,7 +7489,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L179",
+      "source_location": "L156",
       "weight": 1.0
     },
     {
@@ -8905,7 +8797,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/calendar.py",
-      "source_location": "L72",
+      "source_location": "L70",
       "weight": 1.0
     },
     {
@@ -8917,7 +8809,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/calendar.py",
-      "source_location": "L73",
+      "source_location": "L71",
       "weight": 1.0
     },
     {
@@ -8929,7 +8821,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/calendar.py",
-      "source_location": "L85",
+      "source_location": "L83",
       "weight": 1.0
     },
     {
@@ -8941,7 +8833,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/calendar.py",
-      "source_location": "L87",
+      "source_location": "L85",
       "weight": 1.0
     },
     {
@@ -8953,7 +8845,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/calendar.py",
-      "source_location": "L92",
+      "source_location": "L90",
       "weight": 1.0
     },
     {
@@ -9305,30 +9197,6 @@
       "weight": 1.0
     },
     {
-      "source": "readings_services_ocr_learning_review_identity",
-      "target": "readings_services_ocr_learning_meter_scope",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L72",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_services_ocr_learning_review_token",
-      "target": "readings_services_ocr_learning_review_identity",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L77",
-      "weight": 1.0
-    },
-    {
       "source": "readings_services_ocr_learning_verify_for_learning",
       "target": "readings_services_ocr_read_meter",
       "relation": "calls",
@@ -9337,7 +9205,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L101",
+      "source_location": "L78",
       "weight": 1.0
     },
     {
@@ -9349,19 +9217,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L104",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_services_ocr_learning_verify_for_learning",
-      "target": "readings_services_ocr_learning_review_identity",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L94",
+      "source_location": "L81",
       "weight": 1.0
     },
     {
@@ -10118,42 +9974,6 @@
       "context": "call",
       "source_file": "readings/test_audit_fixes.py",
       "source_location": "L76",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_test_audit_fixes_auditfixtests_test_review_rejects_changed_value_photo_and_missing_token",
-      "target": "readings_test_audit_fixes_auditfixtests_record",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L132",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_test_audit_fixes_auditfixtests_test_review_rejects_changed_value_photo_and_missing_token",
-      "target": "readings_services_ocr_learning_review_token",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L134",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_test_audit_fixes_auditfixtests_test_review_rejects_changed_value_photo_and_missing_token",
-      "target": "readings_services_ocr_learning_verify_for_learning",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L138",
       "weight": 1.0
     },
     {
@@ -12145,7 +11965,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_simple_admin.py",
-      "source_location": "L70",
+      "source_location": "L41",
       "weight": 1.0
     },
     {
@@ -14437,7 +14257,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L28",
+      "source_location": "L26",
       "weight": 1.0
     },
     {
@@ -14449,19 +14269,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L32",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_admin_ui_nodeadmin_code_explanation",
-      "target": "display",
-      "relation": "references",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "decorator",
-      "source_file": "readings/admin_ui.py",
-      "source_location": "L41",
+      "source_location": "L30",
       "weight": 1.0
     },
     {
@@ -14473,7 +14281,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L66",
+      "source_location": "L60",
       "weight": 1.0
     },
     {
@@ -14485,7 +14293,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L82",
+      "source_location": "L76",
       "weight": 1.0
     },
     {
@@ -14497,7 +14305,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L100",
+      "source_location": "L94",
       "weight": 1.0
     },
     {
@@ -14509,7 +14317,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L85",
+      "source_location": "L79",
       "weight": 1.0
     },
     {
@@ -14521,7 +14329,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L76",
+      "source_location": "L70",
       "weight": 1.0
     },
     {
@@ -14533,7 +14341,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L79",
+      "source_location": "L73",
       "weight": 1.0
     },
     {
@@ -14545,7 +14353,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L52",
+      "source_location": "L46",
       "weight": 1.0
     },
     {
@@ -14557,7 +14365,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L135",
+      "source_location": "L117",
       "weight": 1.0
     },
     {
@@ -14569,7 +14377,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L147",
+      "source_location": "L129",
       "weight": 1.0
     },
     {
@@ -14581,7 +14389,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L153",
+      "source_location": "L135",
       "weight": 1.0
     },
     {
@@ -14593,7 +14401,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L162",
+      "source_location": "L144",
       "weight": 1.0
     },
     {
@@ -14605,7 +14413,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L174",
+      "source_location": "L151",
       "weight": 1.0
     },
     {
@@ -15085,7 +14893,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L12",
+      "source_location": "L10",
       "weight": 1.0
     },
     {
@@ -15097,7 +14905,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L12",
+      "source_location": "L10",
       "weight": 1.0
     },
     {
@@ -15109,7 +14917,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L12",
+      "source_location": "L10",
       "weight": 1.0
     },
     {
@@ -15121,7 +14929,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L12",
+      "source_location": "L10",
       "weight": 1.0
     },
     {
@@ -15133,7 +14941,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L13",
+      "source_location": "L11",
       "weight": 1.0
     },
     {
@@ -15145,7 +14953,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L13",
+      "source_location": "L11",
       "weight": 1.0
     },
     {
@@ -15157,7 +14965,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L13",
+      "source_location": "L11",
       "weight": 1.0
     },
     {
@@ -15169,19 +14977,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L13",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_admin_ui",
-      "target": "readings_services_ocr_learning_review_token",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "readings/admin_ui.py",
-      "source_location": "L14",
+      "source_location": "L11",
       "weight": 1.0
     },
     {
@@ -15193,7 +14989,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L14",
+      "source_location": "L12",
       "weight": 1.0
     },
     {
@@ -15606,18 +15402,6 @@
     },
     {
       "source": "readings_services_calendar",
-      "target": "readings_models_readingschedule",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "readings/services/calendar.py",
-      "source_location": "L6",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_services_calendar",
       "target": "readings_services_notifications_get_cycle_state",
       "relation": "imports",
       "_origin": "ast",
@@ -15721,7 +15505,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L84",
+      "source_location": "L69",
       "weight": 1.0
     },
     {
@@ -16003,18 +15787,6 @@
     {
       "source": "readings_test_audit_fixes",
       "target": "readings_services_ocr_learning_build_profile",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L18",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_test_audit_fixes",
-      "target": "readings_services_ocr_learning_review_token",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -17341,7 +17113,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L12",
+      "source_location": "L10",
       "weight": 1.0
     },
     {
@@ -17353,7 +17125,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L13",
+      "source_location": "L11",
       "weight": 1.0
     },
     {
@@ -17365,7 +17137,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "readings/admin_ui.py",
-      "source_location": "L14",
+      "source_location": "L12",
       "weight": 1.0
     },
     {
@@ -18989,7 +18761,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L136",
+      "source_location": "L118",
       "weight": 1.0
     },
     {
@@ -19000,7 +18772,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L148",
+      "source_location": "L130",
       "weight": 1.0
     },
     {
@@ -19011,7 +18783,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L163",
+      "source_location": "L145",
       "weight": 1.0
     },
     {
@@ -19022,7 +18794,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L20",
+      "source_location": "L18",
       "weight": 1.0
     },
     {
@@ -19033,7 +18805,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L24",
+      "source_location": "L22",
       "weight": 1.0
     },
     {
@@ -19044,7 +18816,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L33",
+      "source_location": "L31",
       "weight": 1.0
     },
     {
@@ -19055,7 +18827,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L53",
+      "source_location": "L47",
       "weight": 1.0
     },
     {
@@ -19066,7 +18838,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L67",
+      "source_location": "L61",
       "weight": 1.0
     },
     {
@@ -20457,24 +20229,13 @@
     },
     {
       "source": "readings_services_ocr_learning",
-      "target": "readings_services_ocr_learning_review_identity",
+      "target": "readings_services_ocr_learning_verify_for_learning",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr_learning.py",
       "source_location": "L65",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_services_ocr_learning",
-      "target": "readings_services_ocr_learning_review_token",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L75",
       "weight": 1.0
     },
     {
@@ -20486,17 +20247,6 @@
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr_learning.py",
       "source_location": "L8",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_services_ocr_learning",
-      "target": "readings_services_ocr_learning_verify_for_learning",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L80",
       "weight": 1.0
     },
     {
@@ -21112,7 +20862,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L33",
+      "source_location": "L31",
       "weight": 1.0
     },
     {
@@ -21123,7 +20873,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L67",
+      "source_location": "L61",
       "weight": 1.0
     },
     {
@@ -21134,7 +20884,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L53",
+      "source_location": "L47",
       "weight": 1.0
     },
     {
@@ -21145,7 +20895,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L136",
+      "source_location": "L118",
       "weight": 1.0
     },
     {
@@ -21156,7 +20906,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L148",
+      "source_location": "L130",
       "weight": 1.0
     },
     {
@@ -21167,7 +20917,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L163",
+      "source_location": "L145",
       "weight": 1.0
     },
     {
@@ -21596,18 +21346,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L29",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_admin_ui_nodeadmin",
-      "target": "readings_admin_ui_nodeadmin_code_explanation",
-      "relation": "method",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/admin_ui.py",
-      "source_location": "L42",
+      "source_location": "L27",
       "weight": 1.0
     },
     {
@@ -21618,7 +21357,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L44",
+      "source_location": "L38",
       "weight": 1.0
     },
     {
@@ -21629,18 +21368,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L46",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_admin_ui_readingadmin",
-      "target": "readings_admin_ui_readingadmin_delete_model",
-      "relation": "method",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/admin_ui.py",
-      "source_location": "L101",
+      "source_location": "L40",
       "weight": 1.0
     },
     {
@@ -21651,7 +21379,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L115",
+      "source_location": "L102",
       "weight": 1.0
     },
     {
@@ -21662,7 +21390,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L117",
+      "source_location": "L104",
       "weight": 1.0
     },
     {
@@ -21673,7 +21401,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L77",
+      "source_location": "L71",
       "weight": 1.0
     },
     {
@@ -21684,7 +21412,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L80",
+      "source_location": "L74",
       "weight": 1.0
     },
     {
@@ -21695,7 +21423,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L83",
+      "source_location": "L77",
       "weight": 1.0
     },
     {
@@ -21706,7 +21434,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L86",
+      "source_location": "L80",
       "weight": 1.0
     },
     {
@@ -21717,7 +21445,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L92",
+      "source_location": "L86",
       "weight": 1.0
     },
     {
@@ -21728,7 +21456,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L94",
+      "source_location": "L88",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_admin_ui_readingadmin",
+      "target": "readings_admin_ui_readingadmin_delete_model",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/admin_ui.py",
+      "source_location": "L95",
       "weight": 1.0
     },
     {
@@ -21739,7 +21478,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L61",
+      "source_location": "L55",
       "weight": 1.0
     },
     {
@@ -21750,7 +21489,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L63",
+      "source_location": "L57",
       "weight": 1.0
     },
     {
@@ -21761,7 +21500,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L139",
+      "source_location": "L121",
       "weight": 1.0
     },
     {
@@ -21772,7 +21511,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L141",
+      "source_location": "L123",
       "weight": 1.0
     },
     {
@@ -21783,7 +21522,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L143",
+      "source_location": "L125",
       "weight": 1.0
     },
     {
@@ -21794,7 +21533,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L154",
+      "source_location": "L136",
       "weight": 1.0
     },
     {
@@ -21805,18 +21544,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L156",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_admin_ui_simpleuseradmin",
-      "target": "readings_admin_ui_simpleuseradmin_formfield_for_manytomany",
-      "relation": "method",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/admin_ui.py",
-      "source_location": "L169",
+      "source_location": "L138",
       "weight": 1.0
     },
     {
@@ -21827,7 +21555,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L175",
+      "source_location": "L152",
       "weight": 1.0
     },
     {
@@ -21838,7 +21566,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L177",
+      "source_location": "L154",
       "weight": 1.0
     },
     {
@@ -22279,17 +22007,6 @@
       "confidence_score": 1.0,
       "source_file": "readings/test_audit_fixes.py",
       "source_location": "L121",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_test_audit_fixes_auditfixtests",
-      "target": "readings_test_audit_fixes_auditfixtests_test_review_rejects_changed_value_photo_and_missing_token",
-      "relation": "method",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L131",
       "weight": 1.0
     },
     {
@@ -23328,28 +23045,6 @@
     },
     {
       "source": "readings_test_simple_admin_simpleadmintests",
-      "target": "readings_test_simple_admin_simpleadmintests_test_nodes_default_code_chat_no_delete_and_inactive_hidden",
-      "relation": "method",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/test_simple_admin.py",
-      "source_location": "L109",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_test_simple_admin_simpleadmintests",
-      "target": "readings_test_simple_admin_simpleadmintests_test_schedule_state_only_and_reminders_readonly",
-      "relation": "method",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/test_simple_admin.py",
-      "source_location": "L121",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_test_simple_admin_simpleadmintests",
       "target": "readings_test_simple_admin_simpleadmintests_test_group_permissions_consulta_and_direct_urls",
       "relation": "method",
       "_origin": "ast",
@@ -23372,7 +23067,7 @@
     },
     {
       "source": "readings_test_simple_admin_simpleadmintests",
-      "target": "readings_test_simple_admin_simpleadmintests_test_groups_are_checkboxes_and_node_code_is_visible",
+      "target": "readings_test_simple_admin_simpleadmintests_test_user_group_assignment_controls_admin_and_register_is_independent",
       "relation": "method",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -23383,46 +23078,13 @@
     },
     {
       "source": "readings_test_simple_admin_simpleadmintests",
-      "target": "readings_test_simple_admin_simpleadmintests_test_cancelled_monthly_and_followup_are_gray",
-      "relation": "method",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/test_simple_admin.py",
-      "source_location": "L49",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_test_simple_admin_simpleadmintests",
-      "target": "readings_test_simple_admin_simpleadmintests_test_delete_monthly_cancels_pending_followup_but_keeps_visible",
-      "relation": "method",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/test_simple_admin.py",
-      "source_location": "L59",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_test_simple_admin_simpleadmintests",
-      "target": "readings_test_simple_admin_simpleadmintests_test_user_group_assignment_controls_admin_and_register_is_independent",
-      "relation": "method",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/test_simple_admin.py",
-      "source_location": "L69",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_test_simple_admin_simpleadmintests",
       "target": "readings_test_simple_admin_simpleadmintests_test_reading_only_value_and_photo_editable_and_no_bulk_actions",
       "relation": "method",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/test_simple_admin.py",
-      "source_location": "L85",
+      "source_location": "L56",
       "weight": 1.0
     },
     {
@@ -23433,7 +23095,29 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/test_simple_admin.py",
-      "source_location": "L98",
+      "source_location": "L69",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_simple_admin_simpleadmintests",
+      "target": "readings_test_simple_admin_simpleadmintests_test_nodes_default_code_chat_no_delete_and_inactive_hidden",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/test_simple_admin.py",
+      "source_location": "L80",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_simple_admin_simpleadmintests",
+      "target": "readings_test_simple_admin_simpleadmintests_test_schedule_state_only_and_reminders_readonly",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/test_simple_admin.py",
+      "source_location": "L92",
       "weight": 1.0
     },
     {
@@ -24746,14 +24430,14 @@
       "weight": 1.0
     },
     {
-      "source": "readings_services_ocr_learning_rationale_81",
+      "source": "readings_services_ocr_learning_rationale_66",
       "target": "readings_services_ocr_learning_verify_for_learning",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L81",
+      "source_location": "L66",
       "weight": 1.0
     },
     {
@@ -25077,18 +24761,6 @@
       "weight": 1.0
     },
     {
-      "source": "readings_services_ocr_learning_review_identity",
-      "target": "readings_test_telegram_flow_telegramflowtests_photo",
-      "relation": "indirect_call",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "argument",
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L70",
-      "weight": 1.0
-    },
-    {
       "source": "readings_services_reminders_send_reminder_jobs",
       "target": "readings_services_reminders_record_reminder_results",
       "relation": "indirect_call",
@@ -25259,18 +24931,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L34",
-      "weight": 0.8
-    },
-    {
-      "source": "readings_admin_ui_readingadmin",
-      "target": "readings_models_readingschedule",
-      "relation": "uses",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.95,
-      "source_file": "readings/admin_ui.py",
-      "source_location": "L102",
+      "source_location": "L32",
       "weight": 0.8
     },
     {
@@ -25281,7 +24942,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L68",
+      "source_location": "L62",
       "weight": 0.8
     },
     {
@@ -25292,7 +24953,18 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L89",
+      "source_location": "L83",
+      "weight": 0.8
+    },
+    {
+      "source": "readings_admin_ui_readingadmin",
+      "target": "readings_models_readingschedule",
+      "relation": "uses",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "readings/admin_ui.py",
+      "source_location": "L96",
       "weight": 0.8
     },
     {
@@ -25303,7 +24975,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L54",
+      "source_location": "L48",
       "weight": 0.8
     },
     {
@@ -25314,7 +24986,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "readings/admin_ui.py",
-      "source_location": "L149",
+      "source_location": "L131",
       "weight": 0.8
     },
     {
@@ -25615,17 +25287,6 @@
       "weight": 0.8
     },
     {
-      "source": "readings_services_calendar_get_calendar_events",
-      "target": "readings_models_readingschedule",
-      "relation": "uses",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.95,
-      "source_file": "readings/services/calendar.py",
-      "source_location": "L53",
-      "weight": 0.8
-    },
-    {
       "source": "readings_services_notifications_get_cycle_state",
       "target": "readings_models_reading",
       "relation": "uses",
@@ -25699,7 +25360,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L87",
+      "source_location": "L72",
       "weight": 0.8
     },
     {
@@ -26199,17 +25860,6 @@
     },
     {
       "source": "readings_test_simple_admin_simpleadmintests",
-      "target": "readings_models_reminderlog",
-      "relation": "uses",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.95,
-      "source_file": "readings/test_simple_admin.py",
-      "source_location": "L125",
-      "weight": 0.8
-    },
-    {
-      "source": "readings_test_simple_admin_simpleadmintests",
       "target": "readings_models_node",
       "relation": "uses",
       "_origin": "ast",
@@ -26250,6 +25900,17 @@
       "confidence_score": 0.95,
       "source_file": "readings/test_simple_admin.py",
       "source_location": "L18",
+      "weight": 0.8
+    },
+    {
+      "source": "readings_test_simple_admin_simpleadmintests",
+      "target": "readings_models_reminderlog",
+      "relation": "uses",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "readings/test_simple_admin.py",
+      "source_location": "L96",
       "weight": 0.8
     },
     {
@@ -26562,5 +26223,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "f7fe136c1bdd9715a4cf7d6669b85c1f1e6bfa7d"
+  "built_at_commit": "cb0aca9592d542d6a1004eb7a0effee1a121577e"
 }
