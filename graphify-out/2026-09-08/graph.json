@@ -3234,7 +3234,7 @@
       "file_type": "code",
       "norm_label": "read_meter()",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L948"
+      "source_location": "L951"
     },
     {
       "id": "readings_services_ocr_read_meter_cloudflare",
@@ -6849,7 +6849,7 @@
       "source_location": "L84"
     },
     {
-      "id": "readings_services_ocr_rationale_952",
+      "id": "readings_services_ocr_rationale_955",
       "label": "OCR local primero; Cloudflare solo act\u00faa como respaldo y luego queda el modo\u2026",
       "_origin": "ast",
       "community": 3,
@@ -6857,7 +6857,7 @@
       "file_type": "rationale",
       "norm_label": "ocr local primero; cloudflare solo actua como respaldo y luego queda el modo...",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L952"
+      "source_location": "L955"
     },
     {
       "id": "readings_migrations_0007_reading_ocr_learning_verified",
@@ -9718,7 +9718,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L953",
+      "source_location": "L956",
       "weight": 1.0
     },
     {
@@ -9730,7 +9730,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L955",
+      "source_location": "L958",
       "weight": 1.0
     },
     {
@@ -9742,7 +9742,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L965",
+      "source_location": "L968",
       "weight": 1.0
     },
     {
@@ -9754,7 +9754,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L978",
+      "source_location": "L981",
       "weight": 1.0
     },
     {
@@ -9766,7 +9766,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L990",
+      "source_location": "L993",
       "weight": 1.0
     },
     {
@@ -9814,7 +9814,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L932",
+      "source_location": "L933",
       "weight": 1.0
     },
     {
@@ -19054,7 +19054,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L948",
+      "source_location": "L951",
       "weight": 1.0
     },
     {
@@ -20999,7 +20999,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr.py",
-      "source_location": "L948",
+      "source_location": "L951",
       "weight": 1.0
     },
     {
@@ -25568,14 +25568,14 @@
       "weight": 1.0
     },
     {
-      "source": "readings_services_ocr_rationale_952",
+      "source": "readings_services_ocr_rationale_955",
       "target": "readings_services_ocr_read_meter",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr.py",
-      "source_location": "L952",
+      "source_location": "L955",
       "weight": 1.0
     },
     {

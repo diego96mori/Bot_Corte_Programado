@@ -5,12 +5,12 @@
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 644 nodes · 1691 edges · 38 communities (13 shown, 16 thin omitted)
-- Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 146 edges (avg confidence: 0.93)
+- 646 nodes · 1682 edges · 44 communities (16 shown, 19 thin omitted)
+- Extraction: 92% EXTRACTED · 8% INFERRED · 0% AMBIGUOUS · INFERRED: 141 edges (avg confidence: 0.93)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `4bca4056`
+- Built from commit: `1bb5ebd5`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -20,7 +20,7 @@
 - prepare_reminder_jobs
 - ocr.py
 - TelegramFlowTests
-- get_cycle_state
+- apply_baseline
 - AnnualCycleTests
 - RegistrationRulesTests
 - tests.py
@@ -35,64 +35,74 @@
 - 0002_alter_reading_confirmed_value_and_more.py
 - 0003_node_billing_day_node_due_day_node_provider_and_more.py
 - 0005_remove_reminderlog_one_reminder_per_day_and_more.py
-- ReadingAdmin
+- admin_ui.py
 - 0007_reading_ocr_learning_verified.py
 - 0008_exclude_historical_ocr_learning.py
 - 0006_node_ocr_learning_generation_reading_ocr_attempts.py
 - SimpleAdminTests
-- get_reading_notifications
+- admin_forms.py
+- ReadingAdmin
+- SimpleGroupForm
 - Auditoría del bot y almacenamiento — 07/09/2026
 - 0009_alter_node_options.py
+- SimpleUserAdmin
+- NodeAdmin
+- patch
 - Revisión posterior a la Administración simplificada
+- TestCase
 
 ## God Nodes (most connected - your core abstractions)
-1. `Reading` - 72 edges
-2. `ReadingSchedule` - 61 edges
-3. `Node` - 57 edges
+1. `Reading` - 67 edges
+2. `ReadingSchedule` - 59 edges
+3. `Node` - 55 edges
 4. `TelegramFlowTests` - 33 edges
 5. `get_reading_notifications()` - 31 edges
-6. `get_calendar_events()` - 26 edges
-7. `OCRResult` - 26 edges
-8. `prepare_reminder_jobs()` - 26 edges
+6. `OCRResult` - 26 edges
+7. `prepare_reminder_jobs()` - 26 edges
+8. `get_calendar_events()` - 26 edges
 9. `read_meter()` - 24 edges
 10. `get_cycle_state()` - 23 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `SimpleGroupAdmin` --uses--> `SimpleGroupForm`  [INFERRED]
-  readings/admin_ui.py → readings/admin_forms.py
+- `AuditFixTests` --uses--> `OCRResult`  [INFERRED]
+  readings/test_audit_fixes.py → readings/services/ocr.py
+- `LearningTests` --uses--> `OCRResult`  [INFERRED]
+  readings/test_ocr_learning.py → readings/services/ocr.py
+- `NodeAdminForm` --uses--> `Node`  [INFERRED]
+  readings/admin_forms.py → readings/models.py
 - `NodeAdmin` --uses--> `NodeAdminForm`  [INFERRED]
   readings/admin_ui.py → readings/admin_forms.py
-- `ReadingAdmin` --uses--> `ReadingAdminForm`  [INFERRED]
-  readings/admin_ui.py → readings/admin_forms.py
-- `ReadingScheduleAdmin` --uses--> `ScheduleAdminForm`  [INFERRED]
-  readings/admin_ui.py → readings/admin_forms.py
-- `ReadingAdmin` --uses--> `Reading`  [INFERRED]
-  readings/admin_ui.py → readings/models.py
+- `ReadingAdminForm` --uses--> `Reading`  [INFERRED]
+  readings/admin_forms.py → readings/models.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (38 total, 16 thin omitted)
+## Communities (44 total, 19 thin omitted)
 
 ### Community 0 - "run_telegram_bot.py"
-Cohesion: 0.13
-Nodes (46): DEFAULT_TYPE, active_chat_ids(), ask_reading_date(), authorized_nodes(), begin_node_selection(), callback(), cancel_pending_reading(), cancel_registration_markup() (+38 more)
+Cohesion: 0.12
+Nodes (50): DEFAULT_TYPE, active_chat_ids(), ask_reading_date(), authorized_nodes(), begin_node_selection(), callback(), cancel_pending_reading(), cancel_registration_markup() (+42 more)
 
 ### Community 1 - "Reading"
-Cohesion: 0.07
-Nodes (46): login_required, interface_required(), Meta, NodeAdminForm, ReadingAdminForm, ScheduleAdminForm, WebReadingForm, Command (+38 more)
+Cohesion: 0.06
+Nodes (47): login_required, interface_required(), notifications(), Meta, Node, Reading, ReadingSchedule, ReminderLog (+39 more)
 
 ### Community 2 - "prepare_reminder_jobs"
-Cohesion: 0.08
-Nodes (12): Command, BaseCommand, ReadingNotification, prepare_reminder_jobs(), Persist each successful delivery before attempting the next recipient., reminder_text(), send_reminder_jobs(), ConfirmedScheduleRegressionTests (+4 more)
+Cohesion: 0.06
+Nodes (14): Command, BaseCommand, prepare_reminder_jobs(), Persist each successful delivery before attempting the next recipient., reminder_text(), send_reminder_jobs(), TestCase, UpcomingGridTests (+6 more)
 
 ### Community 3 - "ocr.py"
 Cohesion: 0.06
-Nodes (50): _candidate_digit_sequence(), _candidate_effective_value(), _candidate_payload(), _candidate_raw_text(), choose_consistent_candidate(), _decimal_geometry(), detect_red_decimal(), DisplayRegion (+42 more)
+Nodes (51): patch, Command, BaseCommand, _candidate_digit_sequence(), _candidate_effective_value(), _candidate_payload(), _candidate_raw_text(), choose_consistent_candidate() (+43 more)
 
-### Community 5 - "get_cycle_state"
-Cohesion: 0.11
-Nodes (16): Path, Command, BaseCommand, apply_baseline(), baseline_plan(), _notes(), atomic, One-time reconciliation of the user-approved August 2026 starting point. (+8 more)
+### Community 5 - "apply_baseline"
+Cohesion: 0.19
+Nodes (11): Path, Command, BaseCommand, apply_baseline(), baseline_plan(), _notes(), atomic, Only confirmed August records of active nodes participate; July is untouched. (+3 more)
+
+### Community 7 - "RegistrationRulesTests"
+Cohesion: 0.17
+Nodes (4): get_registration_plan(), RegistrationPlan, TestCase, RegistrationRulesTests
 
 ### Community 8 - "tests.py"
 Cohesion: 0.07
@@ -103,48 +113,56 @@ Cohesion: 0.12
 Nodes (15): 1. Requisitos, 2. Preparación en PowerShell, 3. Crear el bot, 4. Cargar datos iniciales, 5. Ejecutar, 6. Recordatorios, Bot de lecturas eléctricas, Componentes gratuitos (+7 more)
 
 ### Community 10 - "build_profile"
-Cohesion: 0.09
-Nodes (15): Command, BaseCommand, Evaluación local sin red y exportación reutilizable de ejemplos confirmados., append_attempt(), build_profile(), meter_scope(), Aprendizaje local por medidor; nunca utiliza valores anteriores como predicción., Called only after an operator verifies the photo against its decimal label. (+7 more)
-
-### Community 23 - "ReadingAdmin"
-Cohesion: 0.08
-Nodes (12): display, FriendlyAdmin, NodeAdmin, atomic, ReadingAdmin, ReadingScheduleAdmin, ReminderLogAdmin, SimpleGroupAdmin (+4 more)
-
-### Community 33 - "SimpleAdminTests"
-Cohesion: 0.11
-Nodes (6): SimpleGroupForm, Command, atomic, BaseCommand, TestCase, SimpleAdminTests
-
-### Community 35 - "get_reading_notifications"
 Cohesion: 0.10
-Nodes (10): notifications(), get_calendar_events(), Return readings and the current obligation for every active node in a month., _task_state(), _task_status(), get_reading_notifications(), TestCase, UpcomingGridTests (+2 more)
+Nodes (15): Command, BaseCommand, Evaluación local sin red y exportación reutilizable de ejemplos confirmados., build_profile(), meter_scope(), Aprendizaje local por medidor; nunca utiliza valores anteriores como predicción., Called only after an operator verifies the photo against its decimal label., review_identity() (+7 more)
+
+### Community 23 - "admin_ui.py"
+Cohesion: 0.22
+Nodes (5): FriendlyAdmin, ReadingScheduleAdmin, ReminderLogAdmin, SimpleGroupAdmin, register
+
+### Community 34 - "admin_forms.py"
+Cohesion: 0.22
+Nodes (5): Meta, NodeAdminForm, ReadingAdminForm, ScheduleAdminForm, WebReadingForm
+
+### Community 35 - "ReadingAdmin"
+Cohesion: 0.21
+Nodes (3): display, atomic, ReadingAdmin
+
+### Community 36 - "SimpleGroupForm"
+Cohesion: 0.24
+Nodes (4): SimpleGroupForm, Command, atomic, BaseCommand
 
 ### Community 37 - "Auditoría del bot y almacenamiento — 07/09/2026"
 Cohesion: 0.12
 Nodes (16): 1. Telegram puede completar una programación anulada — alta, 2. Recordatorios invitan a registrar un seguimiento sin ventana — media, 3. La grilla puede mostrar un borrador anulado como dato de una tarea completada — media, 4. Las fotografías tienen una ruta directa sin autenticación — alta si el servidor es accesible por otras personas, 5. Verificar una foto web no basta para incorporarla al aprendizaje — media, 6. Un nodo nuevo puede no aparecer en la grilla anual — media, Actualización posterior: correcciones solicitadas, Aprendizaje y fotos (+8 more)
+
+### Community 39 - "SimpleUserAdmin"
+Cohesion: 0.33
+Nodes (3): SimpleUserAdmin, sync_staff(), UserAdmin
 
 ### Community 42 - "Revisión posterior a la Administración simplificada"
 Cohesion: 0.40
 Nodes (4): Comportamientos comprobados, Hallazgos reproducidos, Límites, Revisión posterior a la Administración simplificada
 
 ## Knowledge Gaps
-- **39 isolated node(s):** `Migration`, `Migration`, `Migration`, `Migration`, `Migration` (+34 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 185 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **16 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **39 isolated node(s):** `Componentes gratuitos`, `1. Requisitos`, `2. Preparación en PowerShell`, `Respaldo opcional con Cloudflare`, `OCR gratuito y aprendizaje por medidor` (+34 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 187 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **19 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Reading` connect `Reading` to `run_telegram_bot.py`, `SimpleAdminTests`, `prepare_reminder_jobs`, `get_reading_notifications`, `ocr.py`, `get_cycle_state`, `AnnualCycleTests`, `RegistrationRulesTests`, `tests.py`, `TelegramFlowTests`, `build_profile`, `WebRegistrationTests`, `ReadingAdmin`?**
-  _High betweenness centrality (0.220) - this node is a cross-community bridge._
-- **Why does `Node` connect `Reading` to `run_telegram_bot.py`, `SimpleAdminTests`, `prepare_reminder_jobs`, `get_reading_notifications`, `ocr.py`, `get_cycle_state`, `AnnualCycleTests`, `RegistrationRulesTests`, `tests.py`, `TelegramFlowTests`, `build_profile`, `WebRegistrationTests`?**
-  _High betweenness centrality (0.141) - this node is a cross-community bridge._
-- **Why does `ReadingSchedule` connect `Reading` to `run_telegram_bot.py`, `SimpleAdminTests`, `prepare_reminder_jobs`, `get_reading_notifications`, `ocr.py`, `get_cycle_state`, `AnnualCycleTests`, `RegistrationRulesTests`, `tests.py`, `build_profile`, `WebRegistrationTests`, `ReadingAdmin`?**
-  _High betweenness centrality (0.129) - this node is a cross-community bridge._
-- **Are the 41 inferred relationships involving `Reading` (e.g. with `ReadingAdminForm` and `ScheduleAdminForm`) actually correct?**
-  _`Reading` has 41 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 31 inferred relationships involving `ReadingSchedule` (e.g. with `ScheduleAdminForm` and `ReadingAdmin`) actually correct?**
-  _`ReadingSchedule` has 31 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 34 inferred relationships involving `Node` (e.g. with `NodeAdminForm` and `Command`) actually correct?**
-  _`Node` has 34 INFERRED edges - model-reasoned connections that need verification._
+- **Why does `Reading` connect `Reading` to `run_telegram_bot.py`, `SimpleAdminTests`, `admin_forms.py`, `ocr.py`, `ReadingAdmin`, `apply_baseline`, `prepare_reminder_jobs`, `AnnualCycleTests`, `tests.py`, `RegistrationRulesTests`, `build_profile`, `TelegramFlowTests`, `WebRegistrationTests`, `admin_ui.py`?**
+  _High betweenness centrality (0.202) - this node is a cross-community bridge._
+- **Why does `Node` connect `Reading` to `run_telegram_bot.py`, `SimpleAdminTests`, `admin_forms.py`, `prepare_reminder_jobs`, `TelegramFlowTests`, `apply_baseline`, `AnnualCycleTests`, `RegistrationRulesTests`, `tests.py`, `build_profile`, `WebRegistrationTests`, `admin_ui.py`?**
+  _High betweenness centrality (0.136) - this node is a cross-community bridge._
+- **Why does `ReadingSchedule` connect `Reading` to `run_telegram_bot.py`, `SimpleAdminTests`, `admin_forms.py`, `ReadingAdmin`, `prepare_reminder_jobs`, `apply_baseline`, `AnnualCycleTests`, `RegistrationRulesTests`, `tests.py`, `build_profile`, `WebRegistrationTests`, `admin_ui.py`?**
+  _High betweenness centrality (0.123) - this node is a cross-community bridge._
+- **Are the 38 inferred relationships involving `Reading` (e.g. with `ReadingAdminForm` and `ScheduleAdminForm`) actually correct?**
+  _`Reading` has 38 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 30 inferred relationships involving `ReadingSchedule` (e.g. with `ScheduleAdminForm` and `ReadingAdmin`) actually correct?**
+  _`ReadingSchedule` has 30 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 33 inferred relationships involving `Node` (e.g. with `NodeAdminForm` and `Command`) actually correct?**
+  _`Node` has 33 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 2 inferred relationships involving `TelegramFlowTests` (e.g. with `Node` and `Reading`) actually correct?**
   _`TelegramFlowTests` has 2 INFERRED edges - model-reasoned connections that need verification._

@@ -1,7 +1,7 @@
 # Graph Report - Bot_Corte_Programado  (2026-09-08)
 
 ## Corpus Check
-- 66 files · ~189,324 words
+- 66 files · ~189,351 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
