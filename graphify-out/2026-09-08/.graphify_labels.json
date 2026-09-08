@@ -32,14 +32,9 @@
   "30": "0007_reading_ocr_learning_verified.py",
   "31": "0008_exclude_historical_ocr_learning.py",
   "32": "0006_node_ocr_learning_generation_reading_ocr_attempts.py",
-  "33": "OCRResult",
-  "34": "UpcomingGridTests",
-  "35": "get_calendar_events",
-  "36": "AuditFixTests",
+  "33": "SimpleAdminTests",
+  "35": "get_reading_notifications",
   "37": "Auditoría del bot y almacenamiento — 07/09/2026",
   "38": "0009_alter_node_options.py",
-  "39": "OCRSelectionTests",
-  "40": "create_reading",
-  "41": "choose_consistent_candidate",
   "42": "Revisión posterior a la Administración simplificada"
 }

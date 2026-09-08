@@ -17,19 +17,6 @@
       "source_location": "L793"
     },
     {
-      "id": "readings_tests_telegramconversationtests",
-      "label": "TelegramConversationTests",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "run_telegram_bot.py",
-      "file_type": "code",
-      "norm_label": "telegramconversationtests",
-      "source_file": "readings/tests.py",
-      "source_location": "L735"
-    },
-    {
       "id": "readings_admin_forms_meta",
       "label": "Meta",
       "_callable": true,
@@ -106,19 +93,6 @@
       "norm_label": "command",
       "source_file": "readings/management/commands/benchmark_cloudflare_ocr.py",
       "source_location": "L9"
-    },
-    {
-      "id": "readings_management_commands_evaluate_ocr_command",
-      "label": "Command",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": "command",
-      "source_file": "readings/management/commands/evaluate_ocr.py",
-      "source_location": "L12"
     },
     {
       "id": "readings_models_meta",
@@ -238,6 +212,32 @@
       "source_location": "L21"
     },
     {
+      "id": "readings_management_commands_evaluate_ocr_command",
+      "label": "Command",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": "command",
+      "source_file": "readings/management/commands/evaluate_ocr.py",
+      "source_location": "L12"
+    },
+    {
+      "id": "readings_test_audit_fixes_auditfixtests",
+      "label": "AuditFixTests",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": "auditfixtests",
+      "source_file": "readings/test_audit_fixes.py",
+      "source_location": "L24"
+    },
+    {
       "id": "readings_test_ocr_learning_learningtests",
       "label": "LearningTests",
       "_callable": true,
@@ -248,7 +248,7 @@
       "file_type": "code",
       "norm_label": "learningtests",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L19"
+      "source_location": "L22"
     },
     {
       "id": "readings_test_web_registration_webregistrationtests",
@@ -511,30 +511,17 @@
       "source_location": "L163"
     },
     {
-      "id": "readings_management_commands_import_readings_excel_command",
-      "label": "Command",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "command",
-      "source_file": "readings/management/commands/import_readings_excel.py",
-      "source_location": "L50"
-    },
-    {
       "id": "readings_services_ocr_displayregion",
       "label": "DisplayRegion",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "displayregion",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L39"
+      "source_location": "L42"
     },
     {
       "id": "readings_services_ocr_ocrcandidate",
@@ -543,7 +530,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "ocrcandidate",
       "source_file": "readings/services/ocr.py",
@@ -556,7 +543,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "ocrresult",
       "source_file": "readings/services/ocr.py",
@@ -569,11 +556,11 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "ocrsafetytests",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L93"
+      "source_location": "L102"
     },
     {
       "id": "readings_tests_ocrselectiontests",
@@ -582,7 +569,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "ocrselectiontests",
       "source_file": "readings/tests.py",
@@ -665,19 +652,6 @@
       "norm_label": "simpleadmintests",
       "source_file": "readings/test_simple_admin.py",
       "source_location": "L9"
-    },
-    {
-      "id": "readings_test_audit_fixes_auditfixtests",
-      "label": "AuditFixTests",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": "auditfixtests",
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L24"
     },
     {
       "id": "readings_test_cycle_boundaries_upcominggridtests",
@@ -810,13 +784,26 @@
       "source_location": "L15"
     },
     {
+      "id": "readings_management_commands_import_readings_excel_command",
+      "label": "Command",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "command",
+      "source_file": "readings/management/commands/import_readings_excel.py",
+      "source_location": "L50"
+    },
+    {
       "id": "readings_tests_authorizednodestests",
       "label": "AuthorizedNodesTests",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": "authorizednodestests",
       "source_file": "readings/tests.py",
@@ -829,7 +816,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": "gridaccesstests",
       "source_file": "readings/tests.py",
@@ -842,11 +829,24 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": "managementstatuslabeltests",
       "source_file": "readings/tests.py",
       "source_location": "L709"
+    },
+    {
+      "id": "readings_tests_telegramconversationtests",
+      "label": "TelegramConversationTests",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "telegramconversationtests",
+      "source_file": "readings/tests.py",
+      "source_location": "L735"
     },
     {
       "id": "readings_management_commands_run_telegram_bot_active_chat_ids",
@@ -957,18 +957,6 @@
       "source_location": "L796"
     },
     {
-      "id": "readings_management_commands_run_telegram_bot_confirm_reading",
-      "label": "confirm_reading()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "run_telegram_bot.py",
-      "file_type": "code",
-      "norm_label": "confirm_reading()",
-      "source_file": "readings/management/commands/run_telegram_bot.py",
-      "source_location": "L300"
-    },
-    {
       "id": "readings_management_commands_run_telegram_bot_conversation_handler",
       "label": "conversation_handler()",
       "_callable": true,
@@ -1065,18 +1053,6 @@
       "source_location": "L721"
     },
     {
-      "id": "readings_management_commands_run_telegram_bot_find_best_node_name",
-      "label": "find_best_node_name()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "run_telegram_bot.py",
-      "file_type": "code",
-      "norm_label": "find_best_node_name()",
-      "source_file": "readings/management/commands/run_telegram_bot.py",
-      "source_location": "L62"
-    },
-    {
       "id": "readings_management_commands_run_telegram_bot_finish_reading",
       "label": "finish_reading()",
       "_callable": true,
@@ -1125,18 +1101,6 @@
       "source_location": "L260"
     },
     {
-      "id": "readings_management_commands_run_telegram_bot_is_conversation_active",
-      "label": "is_conversation_active()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "run_telegram_bot.py",
-      "file_type": "code",
-      "norm_label": "is_conversation_active()",
-      "source_file": "readings/management/commands/run_telegram_bot.py",
-      "source_location": "L111"
-    },
-    {
       "id": "readings_management_commands_run_telegram_bot_main_menu_markup",
       "label": "main_menu_markup()",
       "_callable": true,
@@ -1173,42 +1137,6 @@
       "source_location": "L346"
     },
     {
-      "id": "readings_management_commands_run_telegram_bot_normalize_node_name",
-      "label": "normalize_node_name()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "run_telegram_bot.py",
-      "file_type": "code",
-      "norm_label": "normalize_node_name()",
-      "source_file": "readings/management/commands/run_telegram_bot.py",
-      "source_location": "L57"
-    },
-    {
-      "id": "readings_management_commands_run_telegram_bot_parse_reading_date",
-      "label": "parse_reading_date()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "run_telegram_bot.py",
-      "file_type": "code",
-      "norm_label": "parse_reading_date()",
-      "source_file": "readings/management/commands/run_telegram_bot.py",
-      "source_location": "L85"
-    },
-    {
-      "id": "readings_management_commands_run_telegram_bot_parse_reading_value",
-      "label": "parse_reading_value()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "run_telegram_bot.py",
-      "file_type": "code",
-      "norm_label": "parse_reading_value()",
-      "source_file": "readings/management/commands/run_telegram_bot.py",
-      "source_location": "L95"
-    },
-    {
       "id": "readings_management_commands_run_telegram_bot_post_init",
       "label": "post_init()",
       "_callable": true,
@@ -1231,18 +1159,6 @@
       "norm_label": "post_stop()",
       "source_file": "readings/management/commands/run_telegram_bot.py",
       "source_location": "L779"
-    },
-    {
-      "id": "readings_management_commands_run_telegram_bot_prepare_pending_schedule",
-      "label": "prepare_pending_schedule()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "run_telegram_bot.py",
-      "file_type": "code",
-      "norm_label": "prepare_pending_schedule()",
-      "source_file": "readings/management/commands/run_telegram_bot.py",
-      "source_location": "L188"
     },
     {
       "id": "readings_management_commands_run_telegram_bot_previous_confirmed_value",
@@ -1425,102 +1341,6 @@
       "source_location": "L142"
     },
     {
-      "id": "readings_tests_telegramconversationtests_test_abandoned_flow_expires_and_does_not_pause_forever",
-      "label": ".test_abandoned_flow_expires_and_does_not_pause_forever()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "run_telegram_bot.py",
-      "file_type": "code",
-      "norm_label": ".test_abandoned_flow_expires_and_does_not_pause_forever()",
-      "source_file": "readings/tests.py",
-      "source_location": "L774"
-    },
-    {
-      "id": "readings_tests_telegramconversationtests_test_active_reading_flow_pauses_notifications_for_that_chat",
-      "label": ".test_active_reading_flow_pauses_notifications_for_that_chat()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "run_telegram_bot.py",
-      "file_type": "code",
-      "norm_label": ".test_active_reading_flow_pauses_notifications_for_that_chat()",
-      "source_file": "readings/tests.py",
-      "source_location": "L765"
-    },
-    {
-      "id": "readings_tests_telegramconversationtests_test_manual_reading_accepts_decimal_point_or_comma",
-      "label": ".test_manual_reading_accepts_decimal_point_or_comma()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "run_telegram_bot.py",
-      "file_type": "code",
-      "norm_label": ".test_manual_reading_accepts_decimal_point_or_comma()",
-      "source_file": "readings/tests.py",
-      "source_location": "L756"
-    },
-    {
-      "id": "readings_tests_telegramconversationtests_test_manual_reading_rejects_text_negative_and_excess_decimals",
-      "label": ".test_manual_reading_rejects_text_negative_and_excess_decimals()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "run_telegram_bot.py",
-      "file_type": "code",
-      "norm_label": ".test_manual_reading_rejects_text_negative_and_excess_decimals()",
-      "source_file": "readings/tests.py",
-      "source_location": "L760"
-    },
-    {
-      "id": "readings_tests_telegramconversationtests_test_node_search_ignores_accents_and_accepts_typing_errors",
-      "label": ".test_node_search_ignores_accents_and_accepts_typing_errors()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "run_telegram_bot.py",
-      "file_type": "code",
-      "norm_label": ".test_node_search_ignores_accents_and_accepts_typing_errors()",
-      "source_file": "readings/tests.py",
-      "source_location": "L736"
-    },
-    {
-      "id": "readings_tests_telegramconversationtests_test_reading_date_accepts_today_or_day_month_year",
-      "label": ".test_reading_date_accepts_today_or_day_month_year()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "run_telegram_bot.py",
-      "file_type": "code",
-      "norm_label": ".test_reading_date_accepts_today_or_day_month_year()",
-      "source_file": "readings/tests.py",
-      "source_location": "L745"
-    },
-    {
-      "id": "readings_tests_telegramconversationtests_test_reading_date_rejects_other_text_and_invalid_dates",
-      "label": ".test_reading_date_rejects_other_text_and_invalid_dates()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "run_telegram_bot.py",
-      "file_type": "code",
-      "norm_label": ".test_reading_date_rejects_other_text_and_invalid_dates()",
-      "source_file": "readings/tests.py",
-      "source_location": "L750"
-    },
-    {
-      "id": "readings_tests_telegramconversationtests_test_unknown_node_is_not_guessed",
-      "label": ".test_unknown_node_is_not_guessed()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "run_telegram_bot.py",
-      "file_type": "code",
-      "norm_label": ".test_unknown_node_is_not_guessed()",
-      "source_file": "readings/tests.py",
-      "source_location": "L741"
-    },
-    {
       "id": "readings_access_interface_required",
       "label": "interface_required()",
       "_callable": true,
@@ -1581,18 +1401,6 @@
       "source_location": "L97"
     },
     {
-      "id": "readings_admin_ui_readingadmin_verify_view",
-      "label": ".verify_view()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": ".verify_view()",
-      "source_file": "readings/admin_ui.py",
-      "source_location": "L117"
-    },
-    {
       "id": "readings_forms_webreadingform_clean_photo",
       "label": ".clean_photo()",
       "_callable": true,
@@ -1629,28 +1437,28 @@
       "source_location": "L12"
     },
     {
-      "id": "readings_management_commands_evaluate_ocr_command_add_arguments",
-      "label": ".add_arguments()",
+      "id": "readings_management_commands_run_telegram_bot_confirm_reading",
+      "label": "confirm_reading()",
       "_callable": true,
       "_origin": "ast",
       "community": 1,
       "community_name": "Reading",
       "file_type": "code",
-      "norm_label": ".add_arguments()",
-      "source_file": "readings/management/commands/evaluate_ocr.py",
-      "source_location": "L15"
+      "norm_label": "confirm_reading()",
+      "source_file": "readings/management/commands/run_telegram_bot.py",
+      "source_location": "L300"
     },
     {
-      "id": "readings_management_commands_evaluate_ocr_command_handle",
-      "label": ".handle()",
+      "id": "readings_management_commands_run_telegram_bot_prepare_pending_schedule",
+      "label": "prepare_pending_schedule()",
       "_callable": true,
       "_origin": "ast",
       "community": 1,
       "community_name": "Reading",
       "file_type": "code",
-      "norm_label": ".handle()",
-      "source_file": "readings/management/commands/evaluate_ocr.py",
-      "source_location": "L20"
+      "norm_label": "prepare_pending_schedule()",
+      "source_file": "readings/management/commands/run_telegram_bot.py",
+      "source_location": "L188"
     },
     {
       "id": "readings_models_node_str",
@@ -1821,66 +1629,6 @@
       "source_location": "L43"
     },
     {
-      "id": "readings_services_ocr_learning_append_attempt",
-      "label": "append_attempt()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": "append_attempt()",
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L49"
-    },
-    {
-      "id": "readings_services_ocr_learning_meter_scope",
-      "label": "meter_scope()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": "meter_scope()",
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L8"
-    },
-    {
-      "id": "readings_services_ocr_learning_review_identity",
-      "label": "review_identity()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": "review_identity()",
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L65"
-    },
-    {
-      "id": "readings_services_ocr_learning_review_token",
-      "label": "review_token()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": "review_token()",
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L75"
-    },
-    {
-      "id": "readings_services_ocr_learning_verify_for_learning",
-      "label": "verify_for_learning()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": "verify_for_learning()",
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L80"
-    },
-    {
       "id": "readings_services_registration_available_plan",
       "label": "available_plan()",
       "_callable": true,
@@ -1977,18 +1725,6 @@
       "source_location": "L28"
     },
     {
-      "id": "readings_test_cycle_boundaries_cycleboundarytests_test_late_monthly_reading_without_followup_window_waits_for_next_cycle",
-      "label": ".test_late_monthly_reading_without_followup_window_waits_for_next_cycle()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": ".test_late_monthly_reading_without_followup_window_waits_for_next_cycle()",
-      "source_file": "readings/test_cycle_boundaries.py",
-      "source_location": "L41"
-    },
-    {
       "id": "readings_test_cycle_boundaries_cycleboundarytests_test_window_includes_previous_month_year_and_leap_day",
       "label": ".test_window_includes_previous_month_year_and_leap_day()",
       "_callable": true,
@@ -1999,18 +1735,6 @@
       "norm_label": ".test_window_includes_previous_month_year_and_leap_day()",
       "source_file": "readings/test_cycle_boundaries.py",
       "source_location": "L22"
-    },
-    {
-      "id": "readings_test_registration_rules_registrationrulestests_test_incomplete_monthly_record_does_not_count_as_completed_reading",
-      "label": ".test_incomplete_monthly_record_does_not_count_as_completed_reading()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": ".test_incomplete_monthly_record_does_not_count_as_completed_reading()",
-      "source_file": "readings/test_registration_rules.py",
-      "source_location": "L154"
     },
     {
       "id": "readings_views_annual_grid",
@@ -2073,6 +1797,54 @@
       "source_location": "L38"
     },
     {
+      "id": "readings_admin_ui_readingadmin_verify_view",
+      "label": ".verify_view()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": ".verify_view()",
+      "source_file": "readings/admin_ui.py",
+      "source_location": "L117"
+    },
+    {
+      "id": "readings_management_commands_evaluate_ocr_command_add_arguments",
+      "label": ".add_arguments()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": ".add_arguments()",
+      "source_file": "readings/management/commands/evaluate_ocr.py",
+      "source_location": "L15"
+    },
+    {
+      "id": "readings_management_commands_evaluate_ocr_command_handle",
+      "label": ".handle()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": ".handle()",
+      "source_file": "readings/management/commands/evaluate_ocr.py",
+      "source_location": "L20"
+    },
+    {
+      "id": "readings_services_ocr_learning_append_attempt",
+      "label": "append_attempt()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": "append_attempt()",
+      "source_file": "readings/services/ocr_learning.py",
+      "source_location": "L61"
+    },
+    {
       "id": "readings_services_ocr_learning_build_profile",
       "label": "build_profile()",
       "_callable": true,
@@ -2082,7 +1854,175 @@
       "file_type": "code",
       "norm_label": "build_profile()",
       "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L17"
+      "source_location": "L19"
+    },
+    {
+      "id": "readings_services_ocr_learning_meter_scope",
+      "label": "meter_scope()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": "meter_scope()",
+      "source_file": "readings/services/ocr_learning.py",
+      "source_location": "L10"
+    },
+    {
+      "id": "readings_services_ocr_learning_review_identity",
+      "label": "review_identity()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": "review_identity()",
+      "source_file": "readings/services/ocr_learning.py",
+      "source_location": "L77"
+    },
+    {
+      "id": "readings_services_ocr_learning_review_token",
+      "label": "review_token()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": "review_token()",
+      "source_file": "readings/services/ocr_learning.py",
+      "source_location": "L87"
+    },
+    {
+      "id": "readings_services_ocr_learning_verify_for_learning",
+      "label": "verify_for_learning()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": "verify_for_learning()",
+      "source_file": "readings/services/ocr_learning.py",
+      "source_location": "L92"
+    },
+    {
+      "id": "readings_test_audit_fixes_auditfixtests_record",
+      "label": ".record()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": ".record()",
+      "source_file": "readings/test_audit_fixes.py",
+      "source_location": "L40"
+    },
+    {
+      "id": "readings_test_audit_fixes_auditfixtests_setup",
+      "label": ".setUp()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": ".setup()",
+      "source_file": "readings/test_audit_fixes.py",
+      "source_location": "L25"
+    },
+    {
+      "id": "readings_test_audit_fixes_auditfixtests_test_cancelled_schedule_cannot_start_or_finish_telegram",
+      "label": ".test_cancelled_schedule_cannot_start_or_finish_telegram()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": ".test_cancelled_schedule_cannot_start_or_finish_telegram()",
+      "source_file": "readings/test_audit_fixes.py",
+      "source_location": "L43"
+    },
+    {
+      "id": "readings_test_audit_fixes_auditfixtests_test_grid_prefers_confirmed_over_later_cancelled_attempt",
+      "label": ".test_grid_prefers_confirmed_over_later_cancelled_attempt()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": ".test_grid_prefers_confirmed_over_later_cancelled_attempt()",
+      "source_file": "readings/test_audit_fixes.py",
+      "source_location": "L62"
+    },
+    {
+      "id": "readings_test_audit_fixes_auditfixtests_test_learning_without_candidates_leaves_photo_unverified",
+      "label": ".test_learning_without_candidates_leaves_photo_unverified()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": ".test_learning_without_candidates_leaves_photo_unverified()",
+      "source_file": "readings/test_audit_fixes.py",
+      "source_location": "L121"
+    },
+    {
+      "id": "readings_test_audit_fixes_auditfixtests_test_new_active_node_appears_in_annual_grid",
+      "label": ".test_new_active_node_appears_in_annual_grid()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": ".test_new_active_node_appears_in_annual_grid()",
+      "source_file": "readings/test_audit_fixes.py",
+      "source_location": "L69"
+    },
+    {
+      "id": "readings_test_audit_fixes_auditfixtests_test_photo_requires_login_and_existing_reference_even_with_debug",
+      "label": ".test_photo_requires_login_and_existing_reference_even_with_debug()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": ".test_photo_requires_login_and_existing_reference_even_with_debug()",
+      "source_file": "readings/test_audit_fixes.py",
+      "source_location": "L75"
+    },
+    {
+      "id": "readings_test_audit_fixes_auditfixtests_test_review_rejects_changed_value_photo_and_missing_token",
+      "label": ".test_review_rejects_changed_value_photo_and_missing_token()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": ".test_review_rejects_changed_value_photo_and_missing_token()",
+      "source_file": "readings/test_audit_fixes.py",
+      "source_location": "L131"
+    },
+    {
+      "id": "readings_test_audit_fixes_auditfixtests_test_unavailable_followup_has_no_alert_and_consistent_projection",
+      "label": ".test_unavailable_followup_has_no_alert_and_consistent_projection()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": ".test_unavailable_followup_has_no_alert_and_consistent_projection()",
+      "source_file": "readings/test_audit_fixes.py",
+      "source_location": "L107"
+    },
+    {
+      "id": "readings_test_audit_fixes_auditfixtests_test_web_photo_verified_action_builds_local_profile_and_never_uses_cloud",
+      "label": ".test_web_photo_verified_action_builds_local_profile_and_never_uses_cloud()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": ".test_web_photo_verified_action_builds_local_profile_and_never_uses_cloud()",
+      "source_file": "readings/test_audit_fixes.py",
+      "source_location": "L88"
     },
     {
       "id": "readings_test_ocr_learning_learningtests_example",
@@ -2094,7 +2034,7 @@
       "file_type": "code",
       "norm_label": ".example()",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L24"
+      "source_location": "L27"
     },
     {
       "id": "readings_test_ocr_learning_learningtests_setup",
@@ -2106,7 +2046,7 @@
       "file_type": "code",
       "norm_label": ".setup()",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L20"
+      "source_location": "L23"
     },
     {
       "id": "readings_test_ocr_learning_learningtests_test_bot_keeps_failed_photo_and_candidates_for_manual_confirmation",
@@ -2118,7 +2058,19 @@
       "file_type": "code",
       "norm_label": ".test_bot_keeps_failed_photo_and_candidates_for_manual_confirmation()",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L73"
+      "source_location": "L82"
+    },
+    {
+      "id": "readings_test_ocr_learning_learningtests_test_display_format_can_be_configured_per_meter_without_affecting_others",
+      "label": ".test_display_format_can_be_configured_per_meter_without_affecting_others()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": ".test_display_format_can_be_configured_per_meter_without_affecting_others()",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L76"
     },
     {
       "id": "readings_test_ocr_learning_learningtests_test_evaluation_cannot_learn_current_or_future_labels",
@@ -2130,7 +2082,7 @@
       "file_type": "code",
       "norm_label": ".test_evaluation_cannot_learn_current_or_future_labels()",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L69"
+      "source_location": "L72"
     },
     {
       "id": "readings_test_ocr_learning_learningtests_test_excluded_historical_photo_never_teaches_even_if_marked_verified",
@@ -2142,7 +2094,7 @@
       "file_type": "code",
       "norm_label": ".test_excluded_historical_photo_never_teaches_even_if_marked_verified()",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L61"
+      "source_location": "L64"
     },
     {
       "id": "readings_test_ocr_learning_learningtests_test_manual_correction_teaches_failure_without_overwriting_prediction",
@@ -2154,7 +2106,7 @@
       "file_type": "code",
       "norm_label": ".test_manual_correction_teaches_failure_without_overwriting_prediction()",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L41"
+      "source_location": "L44"
     },
     {
       "id": "readings_test_ocr_learning_learningtests_test_meter_change_or_reset_excludes_old_examples",
@@ -2166,7 +2118,7 @@
       "file_type": "code",
       "norm_label": ".test_meter_change_or_reset_excludes_old_examples()",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L47"
+      "source_location": "L50"
     },
     {
       "id": "readings_test_ocr_learning_learningtests_test_only_confirmed_examples_count_and_duplicate_photos_vote_once",
@@ -2178,7 +2130,7 @@
       "file_type": "code",
       "norm_label": ".test_only_confirmed_examples_count_and_duplicate_photos_vote_once()",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L33"
+      "source_location": "L36"
     },
     {
       "id": "readings_test_ocr_learning_learningtests_test_unreviewed_historical_label_does_not_train",
@@ -2190,7 +2142,7 @@
       "file_type": "code",
       "norm_label": ".test_unreviewed_historical_label_does_not_train()",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L55"
+      "source_location": "L58"
     },
     {
       "id": "readings_test_web_registration_webregistrationtests_option",
@@ -2515,6 +2467,18 @@
       "norm_label": ".setup()",
       "source_file": "readings/test_regressions.py",
       "source_location": "L255"
+    },
+    {
+      "id": "readings_test_regressions_confirmedscheduleregressiontests_test_completed_filter_keeps_confirmed_rows_after_reminder_check",
+      "label": ".test_completed_filter_keeps_confirmed_rows_after_reminder_check()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "prepare_reminder_jobs",
+      "file_type": "code",
+      "norm_label": ".test_completed_filter_keeps_confirmed_rows_after_reminder_check()",
+      "source_file": "readings/test_regressions.py",
+      "source_location": "L322"
     },
     {
       "id": "readings_test_regressions_confirmedscheduleregressiontests_test_reminders_do_not_reopen_completed_monthly_rows",
@@ -3014,95 +2978,59 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".handle()",
       "source_file": "readings/management/commands/benchmark_cloudflare_ocr.py",
       "source_location": "L16"
     },
     {
-      "id": "readings_management_commands_import_readings_excel_command_add_arguments",
-      "label": ".add_arguments()",
+      "id": "readings_services_ocr_candidate_digit_sequence",
+      "label": "_candidate_digit_sequence()",
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
-      "norm_label": ".add_arguments()",
-      "source_file": "readings/management/commands/import_readings_excel.py",
-      "source_location": "L53"
+      "norm_label": "_candidate_digit_sequence()",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L79"
     },
     {
-      "id": "readings_management_commands_import_readings_excel_command_handle",
-      "label": ".handle()",
+      "id": "readings_services_ocr_candidate_effective_value",
+      "label": "_candidate_effective_value()",
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
-      "norm_label": ".handle()",
-      "source_file": "readings/management/commands/import_readings_excel.py",
-      "source_location": "L58"
+      "norm_label": "_candidate_effective_value()",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L83"
     },
     {
-      "id": "readings_management_commands_import_readings_excel_command_import_workbook",
-      "label": "._import_workbook()",
+      "id": "readings_services_ocr_candidate_payload",
+      "label": "_candidate_payload()",
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
-      "norm_label": "._import_workbook()",
-      "source_file": "readings/management/commands/import_readings_excel.py",
-      "source_location": "L66"
+      "norm_label": "_candidate_payload()",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L96"
     },
     {
-      "id": "readings_management_commands_import_readings_excel_normalize",
-      "label": "normalize()",
+      "id": "readings_services_ocr_candidate_raw_text",
+      "label": "_candidate_raw_text()",
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
-      "norm_label": "normalize()",
-      "source_file": "readings/management/commands/import_readings_excel.py",
-      "source_location": "L17"
-    },
-    {
-      "id": "readings_management_commands_import_readings_excel_parse_date",
-      "label": "parse_date()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "parse_date()",
-      "source_file": "readings/management/commands/import_readings_excel.py",
-      "source_location": "L30"
-    },
-    {
-      "id": "readings_management_commands_import_readings_excel_parse_day",
-      "label": "parse_day()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "parse_day()",
-      "source_file": "readings/management/commands/import_readings_excel.py",
-      "source_location": "L22"
-    },
-    {
-      "id": "readings_management_commands_import_readings_excel_parse_reading",
-      "label": "parse_reading()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "parse_reading()",
-      "source_file": "readings/management/commands/import_readings_excel.py",
-      "source_location": "L40"
+      "norm_label": "_candidate_raw_text()",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L75"
     },
     {
       "id": "readings_services_ocr_choose_consistent_candidate",
@@ -3110,11 +3038,23 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "choose_consistent_candidate()",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L529"
+      "source_location": "L651"
+    },
+    {
+      "id": "readings_services_ocr_decimal_geometry",
+      "label": "_decimal_geometry()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "ocr.py",
+      "file_type": "code",
+      "norm_label": "_decimal_geometry()",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L444"
     },
     {
       "id": "readings_services_ocr_detect_red_decimal",
@@ -3122,11 +3062,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "detect_red_decimal()",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L422"
+      "source_location": "L538"
     },
     {
       "id": "readings_services_ocr_extract_json_object",
@@ -3134,11 +3074,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "_extract_json_object()",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L636"
+      "source_location": "L811"
     },
     {
       "id": "readings_services_ocr_find_display_crop",
@@ -3146,11 +3086,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "find_display_crop()",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L77"
+      "source_location": "L145"
     },
     {
       "id": "readings_services_ocr_find_display_regions",
@@ -3158,11 +3098,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "find_display_regions()",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L175"
+      "source_location": "L243"
     },
     {
       "id": "readings_services_ocr_find_kba_display_crop",
@@ -3170,11 +3110,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "find_kba_display_crop()",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L105"
+      "source_location": "L173"
     },
     {
       "id": "readings_services_ocr_generate_display_variants",
@@ -3182,11 +3122,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "generate_display_variants()",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L275"
+      "source_location": "L343"
     },
     {
       "id": "readings_services_ocr_intersection_over_union",
@@ -3194,11 +3134,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "_intersection_over_union()",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L164"
+      "source_location": "L232"
     },
     {
       "id": "readings_services_ocr_learning_technique",
@@ -3206,11 +3146,23 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "technique()",
       "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L12"
+      "source_location": "L14"
+    },
+    {
+      "id": "readings_services_ocr_normalize_display_format",
+      "label": "_normalize_display_format()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "ocr.py",
+      "file_type": "code",
+      "norm_label": "_normalize_display_format()",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L48"
     },
     {
       "id": "readings_services_ocr_order_points",
@@ -3218,11 +3170,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "_order_points()",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L134"
+      "source_location": "L202"
     },
     {
       "id": "readings_services_ocr_parse_value",
@@ -3230,11 +3182,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "_parse_value()",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L45"
+      "source_location": "L113"
     },
     {
       "id": "readings_services_ocr_perspective_crop",
@@ -3242,11 +3194,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "_perspective_crop()",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L148"
+      "source_location": "L216"
     },
     {
       "id": "readings_services_ocr_rapid_candidates",
@@ -3254,11 +3206,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "_rapid_candidates()",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L485"
+      "source_location": "L601"
     },
     {
       "id": "readings_services_ocr_rapid_ocr_engine",
@@ -3266,11 +3218,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "_rapid_ocr_engine()",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L479"
+      "source_location": "L595"
     },
     {
       "id": "readings_services_ocr_read_meter",
@@ -3278,11 +3230,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "read_meter()",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L765"
+      "source_location": "L951"
     },
     {
       "id": "readings_services_ocr_read_meter_cloudflare",
@@ -3290,11 +3242,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "read_meter_cloudflare()",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L653"
+      "source_location": "L828"
     },
     {
       "id": "readings_services_ocr_read_meter_local",
@@ -3302,11 +3254,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "read_meter_local()",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L584"
+      "source_location": "L750"
     },
     {
       "id": "readings_services_ocr_recognize_seven_segment",
@@ -3314,11 +3266,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "recognize_seven_segment()",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L376"
+      "source_location": "L476"
     },
     {
       "id": "readings_services_ocr_segment_state",
@@ -3326,11 +3278,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "_segment_state()",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L347"
+      "source_location": "L415"
     },
     {
       "id": "readings_services_ocr_select_direct_recognition",
@@ -3338,11 +3290,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "select_direct_recognition()",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L309"
+      "source_location": "L377"
     },
     {
       "id": "readings_services_ocr_select_meter_value",
@@ -3350,11 +3302,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "select_meter_value()",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L55"
+      "source_location": "L123"
     },
     {
       "id": "readings_test_ocr_learning_ocrsafetytests_test_cloud_response_rejects_nonfinite_confidence_and_prompt_has_no_history",
@@ -3362,11 +3314,23 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_cloud_response_rejects_nonfinite_confidence_and_prompt_has_no_history()",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L152"
+      "source_location": "L229"
+    },
+    {
+      "id": "readings_test_ocr_learning_ocrsafetytests_test_configured_seven_segment_displays_preserve_decimal_and_leading_zeroes",
+      "label": ".test_configured_seven_segment_displays_preserve_decimal_and_leading_zeroes()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "ocr.py",
+      "file_type": "code",
+      "norm_label": ".test_configured_seven_segment_displays_preserve_decimal_and_leading_zeroes()",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L103"
     },
     {
       "id": "readings_test_ocr_learning_ocrsafetytests_test_crop_failure_retries_full_photo_but_quota_failure_does_not",
@@ -3374,11 +3338,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_crop_failure_retries_full_photo_but_quota_failure_does_not()",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L121"
+      "source_location": "L179"
     },
     {
       "id": "readings_test_ocr_learning_ocrsafetytests_test_disagreement_never_selects_a_guessed_reading",
@@ -3386,11 +3350,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_disagreement_never_selects_a_guessed_reading()",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L112"
+      "source_location": "L170"
     },
     {
       "id": "readings_test_ocr_learning_ocrsafetytests_test_equal_previous_reading_is_allowed",
@@ -3398,11 +3362,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_equal_previous_reading_is_allowed()",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L100"
+      "source_location": "L158"
     },
     {
       "id": "readings_test_ocr_learning_ocrsafetytests_test_evaluation_is_offline",
@@ -3410,11 +3374,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_evaluation_is_offline()",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L138"
+      "source_location": "L215"
     },
     {
       "id": "readings_test_ocr_learning_ocrsafetytests_test_failed_techniques_are_filtered_but_new_ones_remain_available",
@@ -3422,11 +3386,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_failed_techniques_are_filtered_but_new_ones_remain_available()",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L94"
+      "source_location": "L152"
     },
     {
       "id": "readings_test_ocr_learning_ocrsafetytests_test_free_plan_must_be_explicitly_confirmed",
@@ -3434,11 +3398,59 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_free_plan_must_be_explicitly_confirmed()",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L105"
+      "source_location": "L163"
+    },
+    {
+      "id": "readings_test_ocr_learning_ocrsafetytests_test_geometric_decimal_reconciles_seven_segment_and_rapidocr",
+      "label": ".test_geometric_decimal_reconciles_seven_segment_and_rapidocr()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "ocr.py",
+      "file_type": "code",
+      "norm_label": ".test_geometric_decimal_reconciles_seven_segment_and_rapidocr()",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L131"
+    },
+    {
+      "id": "readings_test_ocr_learning_ocrsafetytests_test_previous_value_and_display_format_reach_local_and_cloud_crop",
+      "label": ".test_previous_value_and_display_format_reach_local_and_cloud_crop()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "ocr.py",
+      "file_type": "code",
+      "norm_label": ".test_previous_value_and_display_format_reach_local_and_cloud_crop()",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L196"
+    },
+    {
+      "id": "readings_test_ocr_learning_ocrsafetytests_test_raw_display_text_drives_digit_count_and_keeps_leading_zeroes",
+      "label": ".test_raw_display_text_drives_digit_count_and_keeps_leading_zeroes()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "ocr.py",
+      "file_type": "code",
+      "norm_label": ".test_raw_display_text_drives_digit_count_and_keeps_leading_zeroes()",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L121"
+    },
+    {
+      "id": "readings_test_ocr_learning_ocrsafetytests_test_rejection_diagnostics_include_exact_reason_and_original_text",
+      "label": ".test_rejection_diagnostics_include_exact_reason_and_original_text()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "ocr.py",
+      "file_type": "code",
+      "norm_label": ".test_rejection_diagnostics_include_exact_reason_and_original_text()",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L143"
     },
     {
       "id": "readings_test_ocr_learning_ocrsafetytests_test_truncated_response_cannot_be_used_even_if_it_contains_a_number",
@@ -3446,11 +3458,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_truncated_response_cannot_be_used_even_if_it_contains_a_number()",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L165"
+      "source_location": "L242"
     },
     {
       "id": "readings_test_ocr_learning_ocrsafetytests_test_unlearned_high_confidence_cannot_bypass_cloudflare",
@@ -3458,23 +3470,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_unlearned_high_confidence_cannot_bypass_cloudflare()",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L145"
-    },
-    {
-      "id": "readings_tests_authorizednodestests_test_excel_helpers_handle_operational_values",
-      "label": ".test_excel_helpers_handle_operational_values()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": ".test_excel_helpers_handle_operational_values()",
-      "source_file": "readings/tests.py",
-      "source_location": "L486"
+      "source_location": "L222"
     },
     {
       "id": "readings_tests_ocrselectiontests_test_cloudflare_chat_model_embeds_image_in_user_message",
@@ -3482,7 +3482,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_cloudflare_chat_model_embeds_image_in_user_message()",
       "source_file": "readings/tests.py",
@@ -3494,7 +3494,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_cloudflare_is_only_used_after_local_ocr_fails()",
       "source_file": "readings/tests.py",
@@ -3506,7 +3506,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_consensus_rejects_value_that_does_not_exceed_previous_reading()",
       "source_file": "readings/tests.py",
@@ -3518,7 +3518,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_consensus_requests_review_when_decimal_variants_disagree()",
       "source_file": "readings/tests.py",
@@ -3530,7 +3530,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_contour_locator_finds_rectangular_display_without_text_anchor()",
       "source_file": "readings/tests.py",
@@ -3542,7 +3542,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_direct_display_recognition_preserves_decimal()",
       "source_file": "readings/tests.py",
@@ -3554,7 +3554,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_direct_recognition_prefers_complete_decimal_over_high_confidence_without_separator()",
       "source_file": "readings/tests.py",
@@ -3566,7 +3566,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_display_variants_include_contrast_threshold_inverse_and_reflection_reduction()",
       "source_file": "readings/tests.py",
@@ -3578,7 +3578,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_grid_value_hides_unused_decimal_zeroes()",
       "source_file": "readings/tests.py",
@@ -3590,7 +3590,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_local_result_prevents_external_request()",
       "source_file": "readings/tests.py",
@@ -3602,7 +3602,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_mechanical_meter_appends_detected_red_tenths_digit()",
       "source_file": "readings/tests.py",
@@ -3614,7 +3614,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_prefers_large_meter_display_and_preserves_decimal()",
       "source_file": "readings/tests.py",
@@ -3626,7 +3626,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_regular_meter_does_not_invent_red_decimal()",
       "source_file": "readings/tests.py",
@@ -3638,7 +3638,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_unapproved_cloudflare_model_does_not_make_a_request()",
       "source_file": "readings/tests.py",
@@ -3650,7 +3650,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_uses_kba_brand_to_crop_the_faint_lcd_above_it()",
       "source_file": "readings/tests.py",
@@ -3662,7 +3662,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": ".test_uses_kwh_label_to_crop_the_display_on_its_left()",
       "source_file": "readings/tests.py",
@@ -3921,112 +3921,16 @@
       "source_location": "L155"
     },
     {
-      "id": "readings_test_audit_fixes_auditfixtests_record",
-      "label": ".record()",
+      "id": "readings_test_cycle_boundaries_cycleboundarytests_test_late_monthly_reading_without_followup_window_waits_for_next_cycle",
+      "label": ".test_late_monthly_reading_without_followup_window_waits_for_next_cycle()",
       "_callable": true,
       "_origin": "ast",
       "community": 35,
       "community_name": "get_reading_notifications",
       "file_type": "code",
-      "norm_label": ".record()",
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L40"
-    },
-    {
-      "id": "readings_test_audit_fixes_auditfixtests_test_cancelled_schedule_cannot_start_or_finish_telegram",
-      "label": ".test_cancelled_schedule_cannot_start_or_finish_telegram()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_cancelled_schedule_cannot_start_or_finish_telegram()",
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L43"
-    },
-    {
-      "id": "readings_test_audit_fixes_auditfixtests_test_grid_prefers_confirmed_over_later_cancelled_attempt",
-      "label": ".test_grid_prefers_confirmed_over_later_cancelled_attempt()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_grid_prefers_confirmed_over_later_cancelled_attempt()",
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L62"
-    },
-    {
-      "id": "readings_test_audit_fixes_auditfixtests_test_learning_without_candidates_leaves_photo_unverified",
-      "label": ".test_learning_without_candidates_leaves_photo_unverified()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_learning_without_candidates_leaves_photo_unverified()",
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L121"
-    },
-    {
-      "id": "readings_test_audit_fixes_auditfixtests_test_new_active_node_appears_in_annual_grid",
-      "label": ".test_new_active_node_appears_in_annual_grid()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_new_active_node_appears_in_annual_grid()",
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L69"
-    },
-    {
-      "id": "readings_test_audit_fixes_auditfixtests_test_photo_requires_login_and_existing_reference_even_with_debug",
-      "label": ".test_photo_requires_login_and_existing_reference_even_with_debug()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_photo_requires_login_and_existing_reference_even_with_debug()",
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L75"
-    },
-    {
-      "id": "readings_test_audit_fixes_auditfixtests_test_review_rejects_changed_value_photo_and_missing_token",
-      "label": ".test_review_rejects_changed_value_photo_and_missing_token()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_review_rejects_changed_value_photo_and_missing_token()",
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L131"
-    },
-    {
-      "id": "readings_test_audit_fixes_auditfixtests_test_unavailable_followup_has_no_alert_and_consistent_projection",
-      "label": ".test_unavailable_followup_has_no_alert_and_consistent_projection()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_unavailable_followup_has_no_alert_and_consistent_projection()",
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L107"
-    },
-    {
-      "id": "readings_test_audit_fixes_auditfixtests_test_web_photo_verified_action_builds_local_profile_and_never_uses_cloud",
-      "label": ".test_web_photo_verified_action_builds_local_profile_and_never_uses_cloud()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_web_photo_verified_action_builds_local_profile_and_never_uses_cloud()",
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L88"
+      "norm_label": ".test_late_monthly_reading_without_followup_window_waits_for_next_cycle()",
+      "source_file": "readings/test_cycle_boundaries.py",
+      "source_location": "L41"
     },
     {
       "id": "readings_test_cycle_boundaries_upcominggridtests_grid",
@@ -4039,6 +3943,18 @@
       "norm_label": ".grid()",
       "source_file": "readings/test_cycle_boundaries.py",
       "source_location": "L88"
+    },
+    {
+      "id": "readings_test_cycle_boundaries_upcominggridtests_setup",
+      "label": ".setUp()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "get_reading_notifications",
+      "file_type": "code",
+      "norm_label": ".setup()",
+      "source_file": "readings/test_cycle_boundaries.py",
+      "source_location": "L69"
     },
     {
       "id": "readings_test_cycle_boundaries_upcominggridtests_test_countdown_advances_to_today_then_overdue",
@@ -4123,30 +4039,6 @@
       "norm_label": ".test_unregistered_old_monthly_row_is_closed_without_becoming_completed()",
       "source_file": "readings/test_cycle_boundaries.py",
       "source_location": "L151"
-    },
-    {
-      "id": "readings_test_regressions_readingcycleregressiontests_test_missing_august_reading_keeps_alert_until_september_ninth",
-      "label": ".test_missing_august_reading_keeps_alert_until_september_ninth()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_missing_august_reading_keeps_alert_until_september_ninth()",
-      "source_file": "readings/test_regressions.py",
-      "source_location": "L126"
-    },
-    {
-      "id": "readings_test_regressions_readingcycleregressiontests_test_overdue_alert_survives_year_change",
-      "label": ".test_overdue_alert_survives_year_change()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "get_reading_notifications",
-      "file_type": "code",
-      "norm_label": ".test_overdue_alert_survives_year_change()",
-      "source_file": "readings/test_regressions.py",
-      "source_location": "L138"
     },
     {
       "id": "readings_tests_calendartests_add_reading",
@@ -5049,6 +4941,30 @@
       "source_location": "L44"
     },
     {
+      "id": "readings_test_regressions_readingcycleregressiontests_test_missing_august_reading_keeps_alert_until_september_ninth",
+      "label": ".test_missing_august_reading_keeps_alert_until_september_ninth()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "get_cycle_state",
+      "file_type": "code",
+      "norm_label": ".test_missing_august_reading_keeps_alert_until_september_ninth()",
+      "source_file": "readings/test_regressions.py",
+      "source_location": "L126"
+    },
+    {
+      "id": "readings_test_regressions_readingcycleregressiontests_test_overdue_alert_survives_year_change",
+      "label": ".test_overdue_alert_survives_year_change()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "get_cycle_state",
+      "file_type": "code",
+      "norm_label": ".test_overdue_alert_survives_year_change()",
+      "source_file": "readings/test_regressions.py",
+      "source_location": "L138"
+    },
+    {
       "id": "readings_test_regressions_readingcycleregressiontests_test_september_eighth_registers_a_single_follow_up",
       "label": ".test_september_eighth_registers_a_single_follow_up()",
       "_callable": true,
@@ -5083,6 +4999,18 @@
       "norm_label": ".row()",
       "source_file": "readings/test_annual_cycles.py",
       "source_location": "L24"
+    },
+    {
+      "id": "readings_test_annual_cycles_annualcycletests_setup",
+      "label": ".setUp()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "AnnualCycleTests",
+      "file_type": "code",
+      "norm_label": ".setup()",
+      "source_file": "readings/test_annual_cycles.py",
+      "source_location": "L13"
     },
     {
       "id": "readings_test_annual_cycles_annualcycletests_test_ambiguous_parent_does_not_duplicate_followup_or_invent_pending",
@@ -5337,6 +5265,18 @@
       "source_location": "L53"
     },
     {
+      "id": "readings_test_registration_rules_registrationrulestests_test_incomplete_monthly_record_does_not_count_as_completed_reading",
+      "label": ".test_incomplete_monthly_record_does_not_count_as_completed_reading()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "RegistrationRulesTests",
+      "file_type": "code",
+      "norm_label": ".test_incomplete_monthly_record_does_not_count_as_completed_reading()",
+      "source_file": "readings/test_registration_rules.py",
+      "source_location": "L154"
+    },
+    {
       "id": "readings_test_registration_rules_registrationrulestests_test_old_follow_up_draft_reclassifies_when_new_window_opens",
       "label": ".test_old_follow_up_draft_reclassifies_when_new_window_opens()",
       "_callable": true,
@@ -5361,64 +5301,160 @@
       "source_location": "L109"
     },
     {
+      "id": "readings_management_commands_import_readings_excel_command_add_arguments",
+      "label": ".add_arguments()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": ".add_arguments()",
+      "source_file": "readings/management/commands/import_readings_excel.py",
+      "source_location": "L53"
+    },
+    {
+      "id": "readings_management_commands_import_readings_excel_command_handle",
+      "label": ".handle()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": ".handle()",
+      "source_file": "readings/management/commands/import_readings_excel.py",
+      "source_location": "L58"
+    },
+    {
+      "id": "readings_management_commands_import_readings_excel_command_import_workbook",
+      "label": "._import_workbook()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "._import_workbook()",
+      "source_file": "readings/management/commands/import_readings_excel.py",
+      "source_location": "L66"
+    },
+    {
+      "id": "readings_management_commands_import_readings_excel_normalize",
+      "label": "normalize()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "normalize()",
+      "source_file": "readings/management/commands/import_readings_excel.py",
+      "source_location": "L17"
+    },
+    {
+      "id": "readings_management_commands_import_readings_excel_parse_date",
+      "label": "parse_date()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "parse_date()",
+      "source_file": "readings/management/commands/import_readings_excel.py",
+      "source_location": "L30"
+    },
+    {
+      "id": "readings_management_commands_import_readings_excel_parse_day",
+      "label": "parse_day()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "parse_day()",
+      "source_file": "readings/management/commands/import_readings_excel.py",
+      "source_location": "L22"
+    },
+    {
+      "id": "readings_management_commands_import_readings_excel_parse_reading",
+      "label": "parse_reading()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "parse_reading()",
+      "source_file": "readings/management/commands/import_readings_excel.py",
+      "source_location": "L40"
+    },
+    {
+      "id": "readings_management_commands_run_telegram_bot_find_best_node_name",
+      "label": "find_best_node_name()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "find_best_node_name()",
+      "source_file": "readings/management/commands/run_telegram_bot.py",
+      "source_location": "L62"
+    },
+    {
+      "id": "readings_management_commands_run_telegram_bot_is_conversation_active",
+      "label": "is_conversation_active()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "is_conversation_active()",
+      "source_file": "readings/management/commands/run_telegram_bot.py",
+      "source_location": "L111"
+    },
+    {
+      "id": "readings_management_commands_run_telegram_bot_normalize_node_name",
+      "label": "normalize_node_name()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "normalize_node_name()",
+      "source_file": "readings/management/commands/run_telegram_bot.py",
+      "source_location": "L57"
+    },
+    {
+      "id": "readings_management_commands_run_telegram_bot_parse_reading_date",
+      "label": "parse_reading_date()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "parse_reading_date()",
+      "source_file": "readings/management/commands/run_telegram_bot.py",
+      "source_location": "L85"
+    },
+    {
+      "id": "readings_management_commands_run_telegram_bot_parse_reading_value",
+      "label": "parse_reading_value()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "parse_reading_value()",
+      "source_file": "readings/management/commands/run_telegram_bot.py",
+      "source_location": "L95"
+    },
+    {
       "id": "readings_test_access_helpers_create_interface_user",
       "label": "create_interface_user()",
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": "create_interface_user()",
       "source_file": "readings/test_access_helpers.py",
       "source_location": "L4"
-    },
-    {
-      "id": "readings_test_annual_cycles_annualcycletests_setup",
-      "label": ".setUp()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 8,
-      "community_name": "create_interface_user",
-      "file_type": "code",
-      "norm_label": ".setup()",
-      "source_file": "readings/test_annual_cycles.py",
-      "source_location": "L13"
-    },
-    {
-      "id": "readings_test_audit_fixes_auditfixtests_setup",
-      "label": ".setUp()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 8,
-      "community_name": "create_interface_user",
-      "file_type": "code",
-      "norm_label": ".setup()",
-      "source_file": "readings/test_audit_fixes.py",
-      "source_location": "L25"
-    },
-    {
-      "id": "readings_test_cycle_boundaries_upcominggridtests_setup",
-      "label": ".setUp()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 8,
-      "community_name": "create_interface_user",
-      "file_type": "code",
-      "norm_label": ".setup()",
-      "source_file": "readings/test_cycle_boundaries.py",
-      "source_location": "L69"
-    },
-    {
-      "id": "readings_test_regressions_confirmedscheduleregressiontests_test_completed_filter_keeps_confirmed_rows_after_reminder_check",
-      "label": ".test_completed_filter_keeps_confirmed_rows_after_reminder_check()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 8,
-      "community_name": "create_interface_user",
-      "file_type": "code",
-      "norm_label": ".test_completed_filter_keeps_confirmed_rows_after_reminder_check()",
-      "source_file": "readings/test_regressions.py",
-      "source_location": "L322"
     },
     {
       "id": "readings_test_web_registration_webregistrationtests_setup",
@@ -5426,7 +5462,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".setup()",
       "source_file": "readings/test_web_registration.py",
@@ -5438,7 +5474,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".test_annual_grid_accepts_a_valid_year_and_rejects_an_invalid_one()",
       "source_file": "readings/tests.py",
@@ -5450,7 +5486,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".test_annual_grid_shows_all_active_nodes()",
       "source_file": "readings/tests.py",
@@ -5462,11 +5498,23 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".test_authorized_list_has_33_unique_nodes()",
       "source_file": "readings/tests.py",
       "source_location": "L481"
+    },
+    {
+      "id": "readings_tests_authorizednodestests_test_excel_helpers_handle_operational_values",
+      "label": ".test_excel_helpers_handle_operational_values()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": ".test_excel_helpers_handle_operational_values()",
+      "source_file": "readings/tests.py",
+      "source_location": "L486"
     },
     {
       "id": "readings_tests_calendartests_setup",
@@ -5474,7 +5522,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".setup()",
       "source_file": "readings/tests.py",
@@ -5486,7 +5534,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".setup()",
       "source_file": "readings/tests.py",
@@ -5498,7 +5546,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".test_administrator_sees_admin_link()",
       "source_file": "readings/tests.py",
@@ -5510,7 +5558,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".test_anonymous_user_is_sent_to_regular_login()",
       "source_file": "readings/tests.py",
@@ -5522,7 +5570,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".test_consultation_user_can_only_see_grid()",
       "source_file": "readings/tests.py",
@@ -5534,7 +5582,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".test_follow_up_stops_counting_overdue_on_first_of_month_for_reading_day_three()",
       "source_file": "readings/tests.py",
@@ -5546,7 +5594,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".test_grid_distinguishes_monthly_and_follow_up_pending_statuses()",
       "source_file": "readings/tests.py",
@@ -5558,7 +5606,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".test_grid_filters_node_provider_and_status_separately()",
       "source_file": "readings/tests.py",
@@ -5570,7 +5618,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".test_grid_orders_rows_by_the_scheduled_reading_date()",
       "source_file": "readings/tests.py",
@@ -5582,7 +5630,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".test_grid_switches_from_follow_up_to_monthly_three_days_before_reading_day()",
       "source_file": "readings/tests.py",
@@ -5594,7 +5642,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".create_schedule()",
       "source_file": "readings/tests.py",
@@ -5606,7 +5654,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".test_follow_up_label_uses_follow_up_wording()",
       "source_file": "readings/tests.py",
@@ -5618,11 +5666,107 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": ".test_monthly_label_shows_days_remaining_today_and_overdue()",
       "source_file": "readings/tests.py",
       "source_location": "L716"
+    },
+    {
+      "id": "readings_tests_telegramconversationtests_test_abandoned_flow_expires_and_does_not_pause_forever",
+      "label": ".test_abandoned_flow_expires_and_does_not_pause_forever()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": ".test_abandoned_flow_expires_and_does_not_pause_forever()",
+      "source_file": "readings/tests.py",
+      "source_location": "L774"
+    },
+    {
+      "id": "readings_tests_telegramconversationtests_test_active_reading_flow_pauses_notifications_for_that_chat",
+      "label": ".test_active_reading_flow_pauses_notifications_for_that_chat()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": ".test_active_reading_flow_pauses_notifications_for_that_chat()",
+      "source_file": "readings/tests.py",
+      "source_location": "L765"
+    },
+    {
+      "id": "readings_tests_telegramconversationtests_test_manual_reading_accepts_decimal_point_or_comma",
+      "label": ".test_manual_reading_accepts_decimal_point_or_comma()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": ".test_manual_reading_accepts_decimal_point_or_comma()",
+      "source_file": "readings/tests.py",
+      "source_location": "L756"
+    },
+    {
+      "id": "readings_tests_telegramconversationtests_test_manual_reading_rejects_text_negative_and_excess_decimals",
+      "label": ".test_manual_reading_rejects_text_negative_and_excess_decimals()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": ".test_manual_reading_rejects_text_negative_and_excess_decimals()",
+      "source_file": "readings/tests.py",
+      "source_location": "L760"
+    },
+    {
+      "id": "readings_tests_telegramconversationtests_test_node_search_ignores_accents_and_accepts_typing_errors",
+      "label": ".test_node_search_ignores_accents_and_accepts_typing_errors()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": ".test_node_search_ignores_accents_and_accepts_typing_errors()",
+      "source_file": "readings/tests.py",
+      "source_location": "L736"
+    },
+    {
+      "id": "readings_tests_telegramconversationtests_test_reading_date_accepts_today_or_day_month_year",
+      "label": ".test_reading_date_accepts_today_or_day_month_year()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": ".test_reading_date_accepts_today_or_day_month_year()",
+      "source_file": "readings/tests.py",
+      "source_location": "L745"
+    },
+    {
+      "id": "readings_tests_telegramconversationtests_test_reading_date_rejects_other_text_and_invalid_dates",
+      "label": ".test_reading_date_rejects_other_text_and_invalid_dates()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": ".test_reading_date_rejects_other_text_and_invalid_dates()",
+      "source_file": "readings/tests.py",
+      "source_location": "L750"
+    },
+    {
+      "id": "readings_tests_telegramconversationtests_test_unknown_node_is_not_guessed",
+      "label": ".test_unknown_node_is_not_guessed()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": ".test_unknown_node_is_not_guessed()",
+      "source_file": "readings/tests.py",
+      "source_location": "L741"
     },
     {
       "id": "default_type",
@@ -5645,17 +5789,6 @@
       "norm_label": "run_telegram_bot.py",
       "source_file": "readings/management/commands/run_telegram_bot.py",
       "source_location": "L1"
-    },
-    {
-      "id": "readings_management_commands_run_telegram_bot_py_atomic",
-      "label": "atomic",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "run_telegram_bot.py",
-      "file_type": "code",
-      "norm_label": "atomic",
-      "source_file": "",
-      "source_location": ""
     },
     {
       "id": "readings_management_commands_run_telegram_bot_py_basecommand",
@@ -5812,24 +5945,13 @@
       "source_location": ""
     },
     {
-      "id": "readings_management_commands_evaluate_ocr",
-      "label": "evaluate_ocr.py",
+      "id": "readings_management_commands_run_telegram_bot_py_atomic",
+      "label": "atomic",
       "_origin": "ast",
       "community": 1,
       "community_name": "Reading",
       "file_type": "code",
-      "norm_label": "evaluate_ocr.py",
-      "source_file": "readings/management/commands/evaluate_ocr.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "readings_management_commands_evaluate_ocr_py_basecommand",
-      "label": "BaseCommand",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": "basecommand",
+      "norm_label": "atomic",
       "source_file": "",
       "source_location": ""
     },
@@ -5875,17 +5997,6 @@
       "file_type": "code",
       "norm_label": "notifications.py",
       "source_file": "readings/services/notifications.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "readings_services_ocr_learning",
-      "label": "ocr_learning.py",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": "ocr_learning.py",
-      "source_file": "readings/services/ocr_learning.py",
       "source_location": "L1"
     },
     {
@@ -5964,17 +6075,6 @@
       "norm_label": "test_cycle_boundaries.py",
       "source_file": "readings/test_cycle_boundaries.py",
       "source_location": "L1"
-    },
-    {
-      "id": "readings_test_cycle_boundaries_py_testcase",
-      "label": "TestCase",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "code",
-      "norm_label": "testcase",
-      "source_file": "",
-      "source_location": ""
     },
     {
       "id": "readings_test_registration_rules",
@@ -6065,17 +6165,6 @@
       "source_location": ""
     },
     {
-      "id": "readings_management_commands_evaluate_ocr_rationale_1",
-      "label": "Evaluaci\u00f3n local sin red y exportaci\u00f3n reutilizable de ejemplos confirmados.",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "rationale",
-      "norm_label": "evaluacion local sin red y exportacion reutilizable de ejemplos confirmados.",
-      "source_file": "readings/management/commands/evaluate_ocr.py",
-      "source_location": "L1"
-    },
-    {
       "id": "readings_services_annual_grid_rationale_1",
       "label": "Presentaci\u00f3n por ciclo sin modificar fechas ni reclasificar hist\u00f3ricos ambiguos.",
       "_origin": "ast",
@@ -6120,28 +6209,6 @@
       "source_location": "L56"
     },
     {
-      "id": "readings_services_ocr_learning_rationale_1",
-      "label": "Aprendizaje local por medidor; nunca utiliza valores anteriores como predicci\u00f3n.",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "rationale",
-      "norm_label": "aprendizaje local por medidor; nunca utiliza valores anteriores como prediccion.",
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "readings_services_ocr_learning_rationale_81",
-      "label": "Called only after an operator verifies the photo against its decimal label.",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "Reading",
-      "file_type": "rationale",
-      "norm_label": "called only after an operator verifies the photo against its decimal label.",
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L81"
-    },
-    {
       "id": "readings_services_registration_rationale_1",
       "label": "Eligibility for new bot registrations, without changing historical records.",
       "_origin": "ast",
@@ -6164,6 +6231,50 @@
       "source_location": "L1"
     },
     {
+      "id": "readings_management_commands_evaluate_ocr",
+      "label": "evaluate_ocr.py",
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": "evaluate_ocr.py",
+      "source_file": "readings/management/commands/evaluate_ocr.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "readings_management_commands_evaluate_ocr_py_basecommand",
+      "label": "BaseCommand",
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": "basecommand",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "readings_services_ocr_learning",
+      "label": "ocr_learning.py",
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": "ocr_learning.py",
+      "source_file": "readings/services/ocr_learning.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "readings_test_audit_fixes_py_testcase",
+      "label": "TestCase",
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "code",
+      "norm_label": "testcase",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "readings_test_ocr_learning_py_testcase",
       "label": "TestCase",
       "_origin": "ast",
@@ -6173,6 +6284,39 @@
       "norm_label": "testcase",
       "source_file": "",
       "source_location": ""
+    },
+    {
+      "id": "readings_management_commands_evaluate_ocr_rationale_1",
+      "label": "Evaluaci\u00f3n local sin red y exportaci\u00f3n reutilizable de ejemplos confirmados.",
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "rationale",
+      "norm_label": "evaluacion local sin red y exportacion reutilizable de ejemplos confirmados.",
+      "source_file": "readings/management/commands/evaluate_ocr.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "readings_services_ocr_learning_rationale_1",
+      "label": "Aprendizaje local por medidor; nunca utiliza valores anteriores como predicci\u00f3n.",
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "rationale",
+      "norm_label": "aprendizaje local por medidor; nunca utiliza valores anteriores como prediccion.",
+      "source_file": "readings/services/ocr_learning.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "readings_services_ocr_learning_rationale_93",
+      "label": "Called only after an operator verifies the photo against its decimal label.",
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "build_profile",
+      "file_type": "rationale",
+      "norm_label": "called only after an operator verifies the photo against its decimal label.",
+      "source_file": "readings/services/ocr_learning.py",
+      "source_location": "L93"
     },
     {
       "id": "readings_test_web_registration_py_testcase",
@@ -6496,55 +6640,11 @@
       "source_location": "L1"
     },
     {
-      "id": "readings_authorized_nodes",
-      "label": "authorized_nodes.py",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "authorized_nodes.py",
-      "source_file": "readings/authorized_nodes.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "readings_management_commands_import_readings_excel",
-      "label": "import_readings_excel.py",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "import_readings_excel.py",
-      "source_file": "readings/management/commands/import_readings_excel.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "readings_management_commands_import_readings_excel_py_atomic",
-      "label": "atomic",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "atomic",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "readings_management_commands_import_readings_excel_py_basecommand",
-      "label": "BaseCommand",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "basecommand",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
       "id": "readings_services_ocr",
       "label": "ocr.py",
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "ocr.py",
       "source_file": "readings/services/ocr.py",
@@ -6555,7 +6655,7 @@
       "label": "test_ocr_learning.py",
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "test_ocr_learning.py",
       "source_file": "readings/test_ocr_learning.py",
@@ -6566,29 +6666,18 @@
       "label": "patch",
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "patch",
       "source_file": "",
       "source_location": ""
     },
     {
-      "id": "readings_tests",
-      "label": "tests.py",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "code",
-      "norm_label": "tests.py",
-      "source_file": "readings/tests.py",
-      "source_location": "L1"
-    },
-    {
       "id": "readings_tests_py_patch",
       "label": "patch",
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "patch",
       "source_file": "",
@@ -6599,143 +6688,176 @@
       "label": "SimpleTestCase",
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "code",
       "norm_label": "simpletestcase",
       "source_file": "",
       "source_location": ""
     },
     {
-      "id": "readings_services_ocr_rationale_106",
-      "label": "Usa KBA como pista adicional para los visores tenues de ese fabricante.",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "rationale",
-      "norm_label": "usa kba como pista adicional para los visores tenues de ese fabricante.",
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L106"
-    },
-    {
-      "id": "readings_services_ocr_rationale_176",
-      "label": "Localiza visores rectangulares por contorno y rectifica su perspectiva.",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "rationale",
-      "norm_label": "localiza visores rectangulares por contorno y rectifica su perspectiva.",
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L176"
-    },
-    {
-      "id": "readings_services_ocr_rationale_276",
-      "label": "Genera variantes para LCD tenue, reflejos, segmentos claros y oscuros.",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "rationale",
-      "norm_label": "genera variantes para lcd tenue, reflejos, segmentos claros y oscuros.",
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L276"
-    },
-    {
-      "id": "readings_services_ocr_rationale_310",
-      "label": "Interpreta el reconocedor aplicado directamente al interior del visor.",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "rationale",
-      "norm_label": "interpreta el reconocedor aplicado directamente al interior del visor.",
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L310"
-    },
-    {
-      "id": "readings_services_ocr_rationale_377",
-      "label": "Reconocedor geom\u00e9trico espec\u00edfico para pantallas LCD de siete segmentos.",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "rationale",
-      "norm_label": "reconocedor geometrico especifico para pantallas lcd de siete segmentos.",
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L377"
-    },
-    {
-      "id": "readings_services_ocr_rationale_423",
-      "label": "Lee la rueda roja de d\u00e9cimas ubicada al final de algunos medidores mec\u00e1nicos.",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "rationale",
-      "norm_label": "lee la rueda roja de decimas ubicada al final de algunos medidores mecanicos.",
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L423"
-    },
-    {
-      "id": "readings_services_ocr_rationale_530",
-      "label": "Consenso del valor exacto, incluyendo su decimal, con experiencia del medidor.",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "rationale",
-      "norm_label": "consenso del valor exacto, incluyendo su decimal, con experiencia del medidor.",
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L530"
-    },
-    {
-      "id": "readings_services_ocr_rationale_56",
+      "id": "readings_services_ocr_rationale_124",
       "label": "Compatibilidad: selecciona el n\u00famero m\u00e1s grande de un resultado OCR completo.",
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "rationale",
       "norm_label": "compatibilidad: selecciona el numero mas grande de un resultado ocr completo.",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L56"
+      "source_location": "L124"
     },
     {
-      "id": "readings_services_ocr_rationale_585",
-      "label": "Ejecuta \u00fanicamente el reconocimiento local sobre el interior de los visores.",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "rationale",
-      "norm_label": "ejecuta unicamente el reconocimiento local sobre el interior de los visores.",
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L585"
-    },
-    {
-      "id": "readings_services_ocr_rationale_654",
-      "label": "Consulta Workers AI solo cuando est\u00e1n configuradas sus credenciales.",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "rationale",
-      "norm_label": "consulta workers ai solo cuando estan configuradas sus credenciales.",
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L654"
-    },
-    {
-      "id": "readings_services_ocr_rationale_766",
-      "label": "OCR local primero; Cloudflare solo act\u00faa como respaldo y luego queda el modo\u2026",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "tests.py",
-      "file_type": "rationale",
-      "norm_label": "ocr local primero; cloudflare solo actua como respaldo y luego queda el modo...",
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L766"
-    },
-    {
-      "id": "readings_services_ocr_rationale_78",
+      "id": "readings_services_ocr_rationale_146",
       "label": "Usa kWh como una pista adicional, pero ya no es el \u00fanico localizador.",
       "_origin": "ast",
       "community": 3,
-      "community_name": "tests.py",
+      "community_name": "ocr.py",
       "file_type": "rationale",
       "norm_label": "usa kwh como una pista adicional, pero ya no es el unico localizador.",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L78"
+      "source_location": "L146"
+    },
+    {
+      "id": "readings_services_ocr_rationale_174",
+      "label": "Usa KBA como pista adicional para los visores tenues de ese fabricante.",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "ocr.py",
+      "file_type": "rationale",
+      "norm_label": "usa kba como pista adicional para los visores tenues de ese fabricante.",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L174"
+    },
+    {
+      "id": "readings_services_ocr_rationale_244",
+      "label": "Localiza visores rectangulares por contorno y rectifica su perspectiva.",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "ocr.py",
+      "file_type": "rationale",
+      "norm_label": "localiza visores rectangulares por contorno y rectifica su perspectiva.",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L244"
+    },
+    {
+      "id": "readings_services_ocr_rationale_344",
+      "label": "Genera variantes para LCD tenue, reflejos, segmentos claros y oscuros.",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "ocr.py",
+      "file_type": "rationale",
+      "norm_label": "genera variantes para lcd tenue, reflejos, segmentos claros y oscuros.",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L344"
+    },
+    {
+      "id": "readings_services_ocr_rationale_378",
+      "label": "Interpreta el reconocedor aplicado directamente al interior del visor.",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "ocr.py",
+      "file_type": "rationale",
+      "norm_label": "interpreta el reconocedor aplicado directamente al interior del visor.",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L378"
+    },
+    {
+      "id": "readings_services_ocr_rationale_445",
+      "label": "Locate a compact decimal dot near the lower boundary between two digits.",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "ocr.py",
+      "file_type": "rationale",
+      "norm_label": "locate a compact decimal dot near the lower boundary between two digits.",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L445"
+    },
+    {
+      "id": "readings_services_ocr_rationale_477",
+      "label": "Reconocedor geom\u00e9trico espec\u00edfico para pantallas LCD de siete segmentos.",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "ocr.py",
+      "file_type": "rationale",
+      "norm_label": "reconocedor geometrico especifico para pantallas lcd de siete segmentos.",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L477"
+    },
+    {
+      "id": "readings_services_ocr_rationale_49",
+      "label": "Return (integer digits, decimal digits) for an optional display format.",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "ocr.py",
+      "file_type": "rationale",
+      "norm_label": "return (integer digits, decimal digits) for an optional display format.",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L49"
+    },
+    {
+      "id": "readings_services_ocr_rationale_539",
+      "label": "Lee la rueda roja de d\u00e9cimas ubicada al final de algunos medidores mec\u00e1nicos.",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "ocr.py",
+      "file_type": "rationale",
+      "norm_label": "lee la rueda roja de decimas ubicada al final de algunos medidores mecanicos.",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L539"
+    },
+    {
+      "id": "readings_services_ocr_rationale_652",
+      "label": "Consenso del valor exacto, incluyendo su decimal, con experiencia del medidor.",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "ocr.py",
+      "file_type": "rationale",
+      "norm_label": "consenso del valor exacto, incluyendo su decimal, con experiencia del medidor.",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L652"
+    },
+    {
+      "id": "readings_services_ocr_rationale_751",
+      "label": "Ejecuta \u00fanicamente el reconocimiento local sobre el interior de los visores.",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "ocr.py",
+      "file_type": "rationale",
+      "norm_label": "ejecuta unicamente el reconocimiento local sobre el interior de los visores.",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L751"
+    },
+    {
+      "id": "readings_services_ocr_rationale_829",
+      "label": "Consulta Workers AI solo cuando est\u00e1n configuradas sus credenciales.",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "ocr.py",
+      "file_type": "rationale",
+      "norm_label": "consulta workers ai solo cuando estan configuradas sus credenciales.",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L829"
+    },
+    {
+      "id": "readings_services_ocr_rationale_84",
+      "label": "Apply trusted decimal metadata without discarding the captured display text.",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "ocr.py",
+      "file_type": "rationale",
+      "norm_label": "apply trusted decimal metadata without discarding the captured display text.",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L84"
+    },
+    {
+      "id": "readings_services_ocr_rationale_955",
+      "label": "OCR local primero; Cloudflare solo act\u00faa como respaldo y luego queda el modo\u2026",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "ocr.py",
+      "file_type": "rationale",
+      "norm_label": "ocr local primero; cloudflare solo actua como respaldo y luego queda el modo...",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L955"
     },
     {
       "id": "readings_migrations_0007_reading_ocr_learning_verified",
@@ -6826,7 +6948,7 @@
       "source_location": "L1"
     },
     {
-      "id": "readings_test_audit_fixes_py_testcase",
+      "id": "readings_test_cycle_boundaries_py_testcase",
       "label": "TestCase",
       "_origin": "ast",
       "community": 35,
@@ -7277,11 +7399,66 @@
       "source_location": ""
     },
     {
+      "id": "readings_authorized_nodes",
+      "label": "authorized_nodes.py",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "authorized_nodes.py",
+      "source_file": "readings/authorized_nodes.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "readings_management_commands_import_readings_excel",
+      "label": "import_readings_excel.py",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "import_readings_excel.py",
+      "source_file": "readings/management/commands/import_readings_excel.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "readings_management_commands_import_readings_excel_py_atomic",
+      "label": "atomic",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "atomic",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "readings_management_commands_import_readings_excel_py_basecommand",
+      "label": "BaseCommand",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "basecommand",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "readings_tests",
+      "label": "tests.py",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "tests.py",
+      "file_type": "code",
+      "norm_label": "tests.py",
+      "source_file": "readings/tests.py",
+      "source_location": "L1"
+    },
+    {
       "id": "readings_tests_py_testcase",
       "label": "TestCase",
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "code",
       "norm_label": "testcase",
       "source_file": "",
@@ -7292,7 +7469,7 @@
       "label": "Explicit permissions for pre-existing tests of the operational screens.",
       "_origin": "ast",
       "community": 8,
-      "community_name": "create_interface_user",
+      "community_name": "tests.py",
       "file_type": "rationale",
       "norm_label": "explicit permissions for pre-existing tests of the operational screens.",
       "source_file": "readings/test_access_helpers.py",
@@ -7356,7 +7533,7 @@
       "node_kind": "heading",
       "norm_label": "4. cargar datos iniciales",
       "source_file": "README.md",
-      "source_location": "L124"
+      "source_location": "L129"
     },
     {
       "id": "readme_5_ejecutar",
@@ -7368,7 +7545,7 @@
       "node_kind": "heading",
       "norm_label": "5. ejecutar",
       "source_file": "README.md",
-      "source_location": "L172"
+      "source_location": "L177"
     },
     {
       "id": "readme_6_recordatorios",
@@ -7380,7 +7557,7 @@
       "node_kind": "heading",
       "norm_label": "6. recordatorios",
       "source_file": "README.md",
-      "source_location": "L229"
+      "source_location": "L234"
     },
     {
       "id": "readme_bot_de_lecturas_el\u00e9ctricas",
@@ -7416,7 +7593,7 @@
       "node_kind": "heading",
       "norm_label": "importar el excel operativo",
       "source_file": "README.md",
-      "source_location": "L137"
+      "source_location": "L142"
     },
     {
       "id": "readme_ocr_gratuito_y_aprendizaje_por_medidor",
@@ -7440,7 +7617,7 @@
       "node_kind": "heading",
       "norm_label": "punto de partida: agosto de 2026",
       "source_file": "README.md",
-      "source_location": "L147"
+      "source_location": "L152"
     },
     {
       "id": "readme_registro_manual_desde_la_web",
@@ -7452,7 +7629,7 @@
       "node_kind": "heading",
       "norm_label": "registro manual desde la web",
       "source_file": "README.md",
-      "source_location": "L174"
+      "source_location": "L179"
     },
     {
       "id": "readme_respaldo_opcional_con_cloudflare",
@@ -7476,7 +7653,7 @@
       "node_kind": "heading",
       "norm_label": "siguiente etapa",
       "source_file": "README.md",
-      "source_location": "L252"
+      "source_location": "L257"
     },
     {
       "id": "readme_usuarios_y_permisos",
@@ -7488,7 +7665,7 @@
       "node_kind": "heading",
       "norm_label": "usuarios y permisos",
       "source_file": "README.md",
-      "source_location": "L157"
+      "source_location": "L162"
     }
   ],
   "links": [
@@ -9161,6 +9338,90 @@
       "weight": 1.0
     },
     {
+      "source": "readings_services_ocr_candidate_digit_sequence",
+      "target": "readings_services_ocr_candidate_raw_text",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L80",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_candidate_effective_value",
+      "target": "readings_services_ocr_candidate_raw_text",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L85",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_candidate_effective_value",
+      "target": "readings_services_ocr_candidate_digit_sequence",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L87",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_candidate_effective_value",
+      "target": "readings_services_ocr_parse_value",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L90",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_candidate_payload",
+      "target": "readings_services_ocr_candidate_effective_value",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L98",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_candidate_payload",
+      "target": "readings_services_ocr_candidate_raw_text",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L99",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_choose_consistent_candidate",
+      "target": "readings_services_ocr_candidate_payload",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L657",
+      "weight": 1.0
+    },
+    {
       "source": "readings_services_ocr_choose_consistent_candidate",
       "target": "readings_services_ocr_learning_technique",
       "relation": "calls",
@@ -9169,7 +9430,31 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L537",
+      "source_location": "L661",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_choose_consistent_candidate",
+      "target": "readings_services_ocr_candidate_effective_value",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L666",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_choose_consistent_candidate",
+      "target": "readings_services_ocr_candidate_digit_sequence",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L675",
       "weight": 1.0
     },
     {
@@ -9181,7 +9466,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L575",
+      "source_location": "L718",
       "weight": 1.0
     },
     {
@@ -9193,7 +9478,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L475",
+      "source_location": "L591",
       "weight": 1.0
     },
     {
@@ -9205,7 +9490,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L211",
+      "source_location": "L279",
       "weight": 1.0
     },
     {
@@ -9217,7 +9502,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L214",
+      "source_location": "L282",
       "weight": 1.0
     },
     {
@@ -9229,7 +9514,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L237",
+      "source_location": "L305",
       "weight": 1.0
     },
     {
@@ -9241,7 +9526,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L239",
+      "source_location": "L307",
       "weight": 1.0
     },
     {
@@ -9253,7 +9538,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L240",
+      "source_location": "L308",
       "weight": 1.0
     },
     {
@@ -9265,7 +9550,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L250",
+      "source_location": "L318",
       "weight": 1.0
     },
     {
@@ -9277,7 +9562,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L57",
+      "source_location": "L69",
       "weight": 1.0
     },
     {
@@ -9289,7 +9574,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L28",
+      "source_location": "L30",
       "weight": 1.0
     },
     {
@@ -9301,7 +9586,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L38",
+      "source_location": "L40",
       "weight": 1.0
     },
     {
@@ -9313,7 +9598,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L72",
+      "source_location": "L84",
       "weight": 1.0
     },
     {
@@ -9325,31 +9610,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L77",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_services_ocr_learning_verify_for_learning",
-      "target": "readings_services_ocr_read_meter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L101",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_services_ocr_learning_verify_for_learning",
-      "target": "readings_services_ocr_learning_append_attempt",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L104",
+      "source_location": "L89",
       "weight": 1.0
     },
     {
@@ -9361,7 +9622,31 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L94",
+      "source_location": "L106",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_learning_verify_for_learning",
+      "target": "readings_services_ocr_read_meter",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/services/ocr_learning.py",
+      "source_location": "L113",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_learning_verify_for_learning",
+      "target": "readings_services_ocr_learning_append_attempt",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/services/ocr_learning.py",
+      "source_location": "L116",
       "weight": 1.0
     },
     {
@@ -9373,7 +9658,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L152",
+      "source_location": "L220",
       "weight": 1.0
     },
     {
@@ -9385,7 +9670,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L487",
+      "source_location": "L603",
       "weight": 1.0
     },
     {
@@ -9397,7 +9682,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L492",
+      "source_location": "L609",
       "weight": 1.0
     },
     {
@@ -9409,7 +9694,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L496",
+      "source_location": "L613",
       "weight": 1.0
     },
     {
@@ -9421,7 +9706,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L516",
+      "source_location": "L635",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_read_meter",
+      "target": "readings_services_ocr_normalize_display_format",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L956",
       "weight": 1.0
     },
     {
@@ -9433,7 +9730,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L768",
+      "source_location": "L958",
       "weight": 1.0
     },
     {
@@ -9445,7 +9742,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L773",
+      "source_location": "L968",
       "weight": 1.0
     },
     {
@@ -9457,7 +9754,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L786",
+      "source_location": "L981",
       "weight": 1.0
     },
     {
@@ -9469,7 +9766,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L804",
+      "source_location": "L993",
       "weight": 1.0
     },
     {
@@ -9481,7 +9778,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L664",
+      "source_location": "L839",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_read_meter_cloudflare",
+      "target": "readings_services_ocr_normalize_display_format",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L854",
       "weight": 1.0
     },
     {
@@ -9493,7 +9802,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L746",
+      "source_location": "L929",
       "weight": 1.0
     },
     {
@@ -9505,7 +9814,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L749",
+      "source_location": "L933",
       "weight": 1.0
     },
     {
@@ -9517,7 +9826,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L590",
+      "source_location": "L756",
       "weight": 1.0
     },
     {
@@ -9529,7 +9838,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L591",
+      "source_location": "L757",
       "weight": 1.0
     },
     {
@@ -9541,7 +9850,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L593",
+      "source_location": "L759",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_read_meter_local",
+      "target": "readings_services_ocr_normalize_display_format",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L760",
       "weight": 1.0
     },
     {
@@ -9553,7 +9874,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L596",
+      "source_location": "L763",
       "weight": 1.0
     },
     {
@@ -9565,7 +9886,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L600",
+      "source_location": "L768",
       "weight": 1.0
     },
     {
@@ -9577,7 +9898,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L610",
+      "source_location": "L778",
       "weight": 1.0
     },
     {
@@ -9589,7 +9910,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L617",
+      "source_location": "L786",
       "weight": 1.0
     },
     {
@@ -9601,7 +9922,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L618",
+      "source_location": "L787",
       "weight": 1.0
     },
     {
@@ -9613,7 +9934,31 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L619",
+      "source_location": "L788",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_read_meter_local",
+      "target": "readings_services_ocr_candidate_payload",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L803",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_recognize_seven_segment",
+      "target": "readings_services_ocr_normalize_display_format",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L495",
       "weight": 1.0
     },
     {
@@ -9625,7 +9970,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L405",
+      "source_location": "L507",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_recognize_seven_segment",
+      "target": "readings_services_ocr_decimal_geometry",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L517",
       "weight": 1.0
     },
     {
@@ -9637,7 +9994,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L419",
+      "source_location": "L532",
       "weight": 1.0
     },
     {
@@ -9649,7 +10006,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L312",
+      "source_location": "L380",
       "weight": 1.0
     },
     {
@@ -9661,7 +10018,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L318",
+      "source_location": "L386",
       "weight": 1.0
     },
     {
@@ -9673,7 +10030,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L58",
+      "source_location": "L126",
       "weight": 1.0
     },
     {
@@ -9685,7 +10042,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L63",
+      "source_location": "L131",
       "weight": 1.0
     },
     {
@@ -11053,7 +11410,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L29",
+      "source_location": "L32",
       "weight": 1.0
     },
     {
@@ -11065,7 +11422,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L78",
+      "source_location": "L87",
       "weight": 1.0
     },
     {
@@ -11077,7 +11434,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L88",
+      "source_location": "L97",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_ocr_learning_learningtests_test_display_format_can_be_configured_per_meter_without_affecting_others",
+      "target": "readings_services_ocr_learning_build_profile",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L78",
       "weight": 1.0
     },
     {
@@ -11089,7 +11458,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L70",
+      "source_location": "L73",
       "weight": 1.0
     },
     {
@@ -11101,24 +11470,12 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L71",
+      "source_location": "L74",
       "weight": 1.0
     },
     {
       "source": "readings_test_ocr_learning_learningtests_test_excluded_historical_photo_never_teaches_even_if_marked_verified",
       "target": "readings_test_ocr_learning_learningtests_example",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L62",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_test_ocr_learning_learningtests_test_excluded_historical_photo_never_teaches_even_if_marked_verified",
-      "target": "readings_services_ocr_learning_build_profile",
       "relation": "calls",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -11129,6 +11486,18 @@
       "weight": 1.0
     },
     {
+      "source": "readings_test_ocr_learning_learningtests_test_excluded_historical_photo_never_teaches_even_if_marked_verified",
+      "target": "readings_services_ocr_learning_build_profile",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L68",
+      "weight": 1.0
+    },
+    {
       "source": "readings_test_ocr_learning_learningtests_test_manual_correction_teaches_failure_without_overwriting_prediction",
       "target": "readings_test_ocr_learning_learningtests_example",
       "relation": "calls",
@@ -11137,7 +11506,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L42",
+      "source_location": "L45",
       "weight": 1.0
     },
     {
@@ -11149,7 +11518,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L43",
+      "source_location": "L46",
       "weight": 1.0
     },
     {
@@ -11161,7 +11530,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L48",
+      "source_location": "L51",
       "weight": 1.0
     },
     {
@@ -11173,24 +11542,12 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L50",
+      "source_location": "L53",
       "weight": 1.0
     },
     {
       "source": "readings_test_ocr_learning_learningtests_test_only_confirmed_examples_count_and_duplicate_photos_vote_once",
       "target": "readings_test_ocr_learning_learningtests_example",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L34",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_test_ocr_learning_learningtests_test_only_confirmed_examples_count_and_duplicate_photos_vote_once",
-      "target": "readings_services_ocr_learning_build_profile",
       "relation": "calls",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -11201,6 +11558,18 @@
       "weight": 1.0
     },
     {
+      "source": "readings_test_ocr_learning_learningtests_test_only_confirmed_examples_count_and_duplicate_photos_vote_once",
+      "target": "readings_services_ocr_learning_build_profile",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L40",
+      "weight": 1.0
+    },
+    {
       "source": "readings_test_ocr_learning_learningtests_test_unreviewed_historical_label_does_not_train",
       "target": "readings_test_ocr_learning_learningtests_example",
       "relation": "calls",
@@ -11209,7 +11578,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L56",
+      "source_location": "L59",
       "weight": 1.0
     },
     {
@@ -11221,7 +11590,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L59",
+      "source_location": "L62",
       "weight": 1.0
     },
     {
@@ -11233,7 +11602,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L160",
+      "source_location": "L237",
       "weight": 1.0
     },
     {
@@ -11245,7 +11614,31 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L161",
+      "source_location": "L238",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_ocr_learning_ocrsafetytests_test_configured_seven_segment_displays_preserve_decimal_and_leading_zeroes",
+      "target": "readings_test_ocr_learning_py_patch",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L112",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_ocr_learning_ocrsafetytests_test_configured_seven_segment_displays_preserve_decimal_and_leading_zeroes",
+      "target": "readings_services_ocr_recognize_seven_segment",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L115",
       "weight": 1.0
     },
     {
@@ -11257,7 +11650,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L124",
+      "source_location": "L182",
       "weight": 1.0
     },
     {
@@ -11269,7 +11662,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L126",
+      "source_location": "L184",
       "weight": 1.0
     },
     {
@@ -11281,7 +11674,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L129",
+      "source_location": "L187",
       "weight": 1.0
     },
     {
@@ -11293,7 +11686,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L113",
+      "source_location": "L171",
       "weight": 1.0
     },
     {
@@ -11305,7 +11698,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L117",
+      "source_location": "L175",
       "weight": 1.0
     },
     {
@@ -11317,7 +11710,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L101",
+      "source_location": "L159",
       "weight": 1.0
     },
     {
@@ -11329,7 +11722,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L102",
+      "source_location": "L160",
       "weight": 1.0
     },
     {
@@ -11341,7 +11734,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L139",
+      "source_location": "L216",
       "weight": 1.0
     },
     {
@@ -11353,7 +11746,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L140",
+      "source_location": "L217",
       "weight": 1.0
     },
     {
@@ -11365,7 +11758,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L95",
+      "source_location": "L153",
       "weight": 1.0
     },
     {
@@ -11377,7 +11770,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L97",
+      "source_location": "L155",
       "weight": 1.0
     },
     {
@@ -11389,7 +11782,115 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L107",
+      "source_location": "L165",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_ocr_learning_ocrsafetytests_test_geometric_decimal_reconciles_seven_segment_and_rapidocr",
+      "target": "readings_services_ocr_ocrcandidate",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L133",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_ocr_learning_ocrsafetytests_test_geometric_decimal_reconciles_seven_segment_and_rapidocr",
+      "target": "readings_services_ocr_choose_consistent_candidate",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L139",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_ocr_learning_ocrsafetytests_test_previous_value_and_display_format_reach_local_and_cloud_crop",
+      "target": "readings_services_ocr_displayregion",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L199",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_ocr_learning_ocrsafetytests_test_previous_value_and_display_format_reach_local_and_cloud_crop",
+      "target": "readings_services_ocr_ocrresult",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L199",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_ocr_learning_ocrsafetytests_test_previous_value_and_display_format_reach_local_and_cloud_crop",
+      "target": "readings_services_ocr_read_meter",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L203",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_ocr_learning_ocrsafetytests_test_raw_display_text_drives_digit_count_and_keeps_leading_zeroes",
+      "target": "readings_services_ocr_ocrcandidate",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L123",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_ocr_learning_ocrsafetytests_test_raw_display_text_drives_digit_count_and_keeps_leading_zeroes",
+      "target": "readings_services_ocr_choose_consistent_candidate",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L128",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_ocr_learning_ocrsafetytests_test_rejection_diagnostics_include_exact_reason_and_original_text",
+      "target": "readings_services_ocr_choose_consistent_candidate",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L144",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_ocr_learning_ocrsafetytests_test_rejection_diagnostics_include_exact_reason_and_original_text",
+      "target": "readings_services_ocr_ocrcandidate",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L145",
       "weight": 1.0
     },
     {
@@ -11401,7 +11902,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L175",
+      "source_location": "L252",
       "weight": 1.0
     },
     {
@@ -11413,7 +11914,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L176",
+      "source_location": "L253",
       "weight": 1.0
     },
     {
@@ -11425,7 +11926,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L146",
+      "source_location": "L223",
       "weight": 1.0
     },
     {
@@ -11437,7 +11938,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L148",
+      "source_location": "L225",
       "weight": 1.0
     },
     {
@@ -14833,7 +15334,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L120",
+      "source_location": "L178",
       "weight": 1.0
     },
     {
@@ -14845,7 +15346,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L111",
+      "source_location": "L169",
       "weight": 1.0
     },
     {
@@ -14857,7 +15358,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L137",
+      "source_location": "L214",
       "weight": 1.0
     },
     {
@@ -14869,7 +15370,19 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L104",
+      "source_location": "L162",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_ocr_learning_ocrsafetytests_test_previous_value_and_display_format_reach_local_and_cloud_crop",
+      "target": "readings_test_ocr_learning_py_patch",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "decorator",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L195",
       "weight": 1.0
     },
     {
@@ -14881,7 +15394,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L144",
+      "source_location": "L221",
       "weight": 1.0
     },
     {
@@ -15697,7 +16210,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L536",
+      "source_location": "L660",
       "weight": 1.0
     },
     {
@@ -15709,7 +16222,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L5",
+      "source_location": "L7",
       "weight": 1.0
     },
     {
@@ -15721,7 +16234,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L84",
+      "source_location": "L96",
       "weight": 1.0
     },
     {
@@ -16410,6 +16923,18 @@
     },
     {
       "source": "readings_test_ocr_learning",
+      "target": "readings_services_ocr_recognize_seven_segment",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_ocr_learning",
       "target": "readings_services_ocr_learning_build_profile",
       "relation": "imports",
       "_origin": "ast",
@@ -16417,7 +16942,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L16",
+      "source_location": "L19",
       "weight": 1.0
     },
     {
@@ -16429,7 +16954,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L16",
+      "source_location": "L19",
       "weight": 1.0
     },
     {
@@ -17665,7 +18190,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L5",
+      "source_location": "L7",
       "weight": 1.0
     },
     {
@@ -18013,7 +18538,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L16",
+      "source_location": "L19",
       "weight": 1.0
     },
     {
@@ -18529,7 +19054,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L765",
+      "source_location": "L951",
       "weight": 1.0
     },
     {
@@ -18541,7 +19066,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "readings/services/ocr.py",
-      "source_location": "L584",
+      "source_location": "L750",
       "weight": 1.0
     },
     {
@@ -18589,7 +19114,7 @@
       "confidence_score": 1.0,
       "context": "submodule_import",
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L74",
+      "source_location": "L83",
       "weight": 1.0
     },
     {
@@ -20171,13 +20696,46 @@
     },
     {
       "source": "readings_services_ocr",
+      "target": "readings_services_ocr_parse_value",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L113",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr",
+      "target": "readings_services_ocr_select_meter_value",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L123",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr",
+      "target": "readings_services_ocr_find_display_crop",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L145",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr",
       "target": "readings_services_ocr_find_kba_display_crop",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr.py",
-      "source_location": "L105",
+      "source_location": "L173",
       "weight": 1.0
     },
     {
@@ -20188,7 +20746,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr.py",
-      "source_location": "L134",
+      "source_location": "L202",
       "weight": 1.0
     },
     {
@@ -20199,29 +20757,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr.py",
-      "source_location": "L148",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_services_ocr",
-      "target": "readings_services_ocr_intersection_over_union",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L164",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_services_ocr",
-      "target": "readings_services_ocr_find_display_regions",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L175",
+      "source_location": "L216",
       "weight": 1.0
     },
     {
@@ -20237,24 +20773,24 @@
     },
     {
       "source": "readings_services_ocr",
-      "target": "readings_services_ocr_generate_display_variants",
+      "target": "readings_services_ocr_intersection_over_union",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr.py",
-      "source_location": "L275",
+      "source_location": "L232",
       "weight": 1.0
     },
     {
       "source": "readings_services_ocr",
-      "target": "readings_services_ocr_select_direct_recognition",
+      "target": "readings_services_ocr_find_display_regions",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr.py",
-      "source_location": "L309",
+      "source_location": "L243",
       "weight": 1.0
     },
     {
@@ -20270,24 +20806,35 @@
     },
     {
       "source": "readings_services_ocr",
+      "target": "readings_services_ocr_generate_display_variants",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L343",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr",
+      "target": "readings_services_ocr_select_direct_recognition",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L377",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr",
       "target": "readings_services_ocr_segment_state",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr.py",
-      "source_location": "L347",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_services_ocr",
-      "target": "readings_services_ocr_recognize_seven_segment",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L376",
+      "source_location": "L415",
       "weight": 1.0
     },
     {
@@ -20298,7 +20845,40 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr.py",
-      "source_location": "L39",
+      "source_location": "L42",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr",
+      "target": "readings_services_ocr_decimal_geometry",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L444",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr",
+      "target": "readings_services_ocr_recognize_seven_segment",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L476",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr",
+      "target": "readings_services_ocr_normalize_display_format",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L48",
       "weight": 1.0
     },
     {
@@ -20309,18 +20889,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr.py",
-      "source_location": "L422",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_services_ocr",
-      "target": "readings_services_ocr_parse_value",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L45",
+      "source_location": "L538",
       "weight": 1.0
     },
     {
@@ -20331,7 +20900,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr.py",
-      "source_location": "L479",
+      "source_location": "L595",
       "weight": 1.0
     },
     {
@@ -20342,7 +20911,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr.py",
-      "source_location": "L485",
+      "source_location": "L601",
       "weight": 1.0
     },
     {
@@ -20353,18 +20922,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr.py",
-      "source_location": "L529",
+      "source_location": "L651",
       "weight": 1.0
     },
     {
       "source": "readings_services_ocr",
-      "target": "readings_services_ocr_select_meter_value",
+      "target": "readings_services_ocr_candidate_raw_text",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr.py",
-      "source_location": "L55",
+      "source_location": "L75",
       "weight": 1.0
     },
     {
@@ -20375,7 +20944,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr.py",
-      "source_location": "L584",
+      "source_location": "L750",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr",
+      "target": "readings_services_ocr_candidate_digit_sequence",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L79",
       "weight": 1.0
     },
     {
@@ -20386,7 +20966,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr.py",
-      "source_location": "L636",
+      "source_location": "L811",
       "weight": 1.0
     },
     {
@@ -20397,7 +20977,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr.py",
-      "source_location": "L653",
+      "source_location": "L828",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr",
+      "target": "readings_services_ocr_candidate_effective_value",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L83",
       "weight": 1.0
     },
     {
@@ -20408,73 +20999,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr.py",
-      "source_location": "L765",
+      "source_location": "L951",
       "weight": 1.0
     },
     {
       "source": "readings_services_ocr",
-      "target": "readings_services_ocr_find_display_crop",
+      "target": "readings_services_ocr_candidate_payload",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr.py",
-      "source_location": "L77",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_services_ocr_learning",
-      "target": "readings_services_ocr_learning_technique",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L12",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_services_ocr_learning",
-      "target": "readings_services_ocr_learning_build_profile",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L17",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_services_ocr_learning",
-      "target": "readings_services_ocr_learning_append_attempt",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L49",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_services_ocr_learning",
-      "target": "readings_services_ocr_learning_review_identity",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L65",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_services_ocr_learning",
-      "target": "readings_services_ocr_learning_review_token",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L75",
+      "source_location": "L96",
       "weight": 1.0
     },
     {
@@ -20485,7 +21021,62 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L8",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_learning",
+      "target": "readings_services_ocr_learning_technique",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr_learning.py",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_learning",
+      "target": "readings_services_ocr_learning_build_profile",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr_learning.py",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_learning",
+      "target": "readings_services_ocr_learning_append_attempt",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr_learning.py",
+      "source_location": "L61",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_learning",
+      "target": "readings_services_ocr_learning_review_identity",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr_learning.py",
+      "source_location": "L77",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_learning",
+      "target": "readings_services_ocr_learning_review_token",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr_learning.py",
+      "source_location": "L87",
       "weight": 1.0
     },
     {
@@ -20496,7 +21087,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L80",
+      "source_location": "L92",
       "weight": 1.0
     },
     {
@@ -20688,24 +21279,24 @@
     },
     {
       "source": "readings_test_ocr_learning",
-      "target": "readings_test_ocr_learning_learningtests",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L19",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_test_ocr_learning",
       "target": "readings_test_ocr_learning_ocrsafetytests",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L93",
+      "source_location": "L102",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_ocr_learning",
+      "target": "readings_test_ocr_learning_learningtests",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L22",
       "weight": 1.0
     },
     {
@@ -20980,7 +21571,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L137",
+      "source_location": "L142",
       "weight": 1.0
     },
     {
@@ -20991,7 +21582,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L147",
+      "source_location": "L152",
       "weight": 1.0
     },
     {
@@ -21002,7 +21593,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L174",
+      "source_location": "L179",
       "weight": 1.0
     },
     {
@@ -21013,18 +21604,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L124",
-      "weight": 1.0
-    },
-    {
-      "source": "readme_bot_de_lecturas_el\u00e9ctricas",
-      "target": "readme_usuarios_y_permisos",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": "L157",
+      "source_location": "L129",
       "weight": 1.0
     },
     {
@@ -21040,13 +21620,24 @@
     },
     {
       "source": "readme_bot_de_lecturas_el\u00e9ctricas",
+      "target": "readme_usuarios_y_permisos",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L162",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_bot_de_lecturas_el\u00e9ctricas",
       "target": "readme_5_ejecutar",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L172",
+      "source_location": "L177",
       "weight": 1.0
     },
     {
@@ -21068,7 +21659,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L229",
+      "source_location": "L234",
       "weight": 1.0
     },
     {
@@ -21079,7 +21670,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L252",
+      "source_location": "L257",
       "weight": 1.0
     },
     {
@@ -21321,7 +21912,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L19",
+      "source_location": "L22",
       "weight": 1.0
     },
     {
@@ -21332,7 +21923,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L93",
+      "source_location": "L102",
       "weight": 1.0
     },
     {
@@ -22641,7 +23232,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L20",
+      "source_location": "L23",
       "weight": 1.0
     },
     {
@@ -22652,7 +23243,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L24",
+      "source_location": "L27",
       "weight": 1.0
     },
     {
@@ -22663,7 +23254,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L33",
+      "source_location": "L36",
       "weight": 1.0
     },
     {
@@ -22674,7 +23265,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L41",
+      "source_location": "L44",
       "weight": 1.0
     },
     {
@@ -22685,7 +23276,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L47",
+      "source_location": "L50",
       "weight": 1.0
     },
     {
@@ -22696,7 +23287,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L55",
+      "source_location": "L58",
       "weight": 1.0
     },
     {
@@ -22707,7 +23298,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L61",
+      "source_location": "L64",
       "weight": 1.0
     },
     {
@@ -22718,7 +23309,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L69",
+      "source_location": "L72",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_ocr_learning_learningtests",
+      "target": "readings_test_ocr_learning_learningtests_test_display_format_can_be_configured_per_meter_without_affecting_others",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L76",
       "weight": 1.0
     },
     {
@@ -22729,45 +23331,23 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L73",
+      "source_location": "L82",
       "weight": 1.0
     },
     {
       "source": "readings_test_ocr_learning_ocrsafetytests",
-      "target": "readings_test_ocr_learning_ocrsafetytests_test_equal_previous_reading_is_allowed",
+      "target": "readings_test_ocr_learning_ocrsafetytests_test_configured_seven_segment_displays_preserve_decimal_and_leading_zeroes",
       "relation": "method",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L100",
+      "source_location": "L103",
       "weight": 1.0
     },
     {
       "source": "readings_test_ocr_learning_ocrsafetytests",
-      "target": "readings_test_ocr_learning_ocrsafetytests_test_free_plan_must_be_explicitly_confirmed",
-      "relation": "method",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L105",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_test_ocr_learning_ocrsafetytests",
-      "target": "readings_test_ocr_learning_ocrsafetytests_test_disagreement_never_selects_a_guessed_reading",
-      "relation": "method",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L112",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_test_ocr_learning_ocrsafetytests",
-      "target": "readings_test_ocr_learning_ocrsafetytests_test_crop_failure_retries_full_photo_but_quota_failure_does_not",
+      "target": "readings_test_ocr_learning_ocrsafetytests_test_raw_display_text_drives_digit_count_and_keeps_leading_zeroes",
       "relation": "method",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -22778,46 +23358,24 @@
     },
     {
       "source": "readings_test_ocr_learning_ocrsafetytests",
-      "target": "readings_test_ocr_learning_ocrsafetytests_test_evaluation_is_offline",
+      "target": "readings_test_ocr_learning_ocrsafetytests_test_geometric_decimal_reconciles_seven_segment_and_rapidocr",
       "relation": "method",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L138",
+      "source_location": "L131",
       "weight": 1.0
     },
     {
       "source": "readings_test_ocr_learning_ocrsafetytests",
-      "target": "readings_test_ocr_learning_ocrsafetytests_test_unlearned_high_confidence_cannot_bypass_cloudflare",
+      "target": "readings_test_ocr_learning_ocrsafetytests_test_rejection_diagnostics_include_exact_reason_and_original_text",
       "relation": "method",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L145",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_test_ocr_learning_ocrsafetytests",
-      "target": "readings_test_ocr_learning_ocrsafetytests_test_cloud_response_rejects_nonfinite_confidence_and_prompt_has_no_history",
-      "relation": "method",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L152",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_test_ocr_learning_ocrsafetytests",
-      "target": "readings_test_ocr_learning_ocrsafetytests_test_truncated_response_cannot_be_used_even_if_it_contains_a_number",
-      "relation": "method",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L165",
+      "source_location": "L143",
       "weight": 1.0
     },
     {
@@ -22828,7 +23386,106 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L94",
+      "source_location": "L152",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_ocr_learning_ocrsafetytests",
+      "target": "readings_test_ocr_learning_ocrsafetytests_test_equal_previous_reading_is_allowed",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L158",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_ocr_learning_ocrsafetytests",
+      "target": "readings_test_ocr_learning_ocrsafetytests_test_free_plan_must_be_explicitly_confirmed",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L163",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_ocr_learning_ocrsafetytests",
+      "target": "readings_test_ocr_learning_ocrsafetytests_test_disagreement_never_selects_a_guessed_reading",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L170",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_ocr_learning_ocrsafetytests",
+      "target": "readings_test_ocr_learning_ocrsafetytests_test_crop_failure_retries_full_photo_but_quota_failure_does_not",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L179",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_ocr_learning_ocrsafetytests",
+      "target": "readings_test_ocr_learning_ocrsafetytests_test_previous_value_and_display_format_reach_local_and_cloud_crop",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L196",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_ocr_learning_ocrsafetytests",
+      "target": "readings_test_ocr_learning_ocrsafetytests_test_evaluation_is_offline",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L215",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_ocr_learning_ocrsafetytests",
+      "target": "readings_test_ocr_learning_ocrsafetytests_test_unlearned_high_confidence_cannot_bypass_cloudflare",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L222",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_ocr_learning_ocrsafetytests",
+      "target": "readings_test_ocr_learning_ocrsafetytests_test_cloud_response_rejects_nonfinite_confidence_and_prompt_has_no_history",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L229",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_test_ocr_learning_ocrsafetytests",
+      "target": "readings_test_ocr_learning_ocrsafetytests_test_truncated_response_cannot_be_used_even_if_it_contains_a_number",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L242",
       "weight": 1.0
     },
     {
@@ -24746,146 +25403,179 @@
       "weight": 1.0
     },
     {
-      "source": "readings_services_ocr_learning_rationale_81",
+      "source": "readings_services_ocr_learning_rationale_93",
       "target": "readings_services_ocr_learning_verify_for_learning",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L81",
+      "source_location": "L93",
       "weight": 1.0
     },
     {
-      "source": "readings_services_ocr_rationale_106",
-      "target": "readings_services_ocr_find_kba_display_crop",
-      "relation": "rationale_for",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L106",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_services_ocr_rationale_176",
-      "target": "readings_services_ocr_find_display_regions",
-      "relation": "rationale_for",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L176",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_services_ocr_rationale_276",
-      "target": "readings_services_ocr_generate_display_variants",
-      "relation": "rationale_for",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L276",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_services_ocr_rationale_310",
-      "target": "readings_services_ocr_select_direct_recognition",
-      "relation": "rationale_for",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L310",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_services_ocr_rationale_377",
-      "target": "readings_services_ocr_recognize_seven_segment",
-      "relation": "rationale_for",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L377",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_services_ocr_rationale_423",
-      "target": "readings_services_ocr_detect_red_decimal",
-      "relation": "rationale_for",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L423",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_services_ocr_rationale_530",
-      "target": "readings_services_ocr_choose_consistent_candidate",
-      "relation": "rationale_for",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L530",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_services_ocr_rationale_56",
+      "source": "readings_services_ocr_rationale_124",
       "target": "readings_services_ocr_select_meter_value",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr.py",
-      "source_location": "L56",
+      "source_location": "L124",
       "weight": 1.0
     },
     {
-      "source": "readings_services_ocr_rationale_585",
-      "target": "readings_services_ocr_read_meter_local",
-      "relation": "rationale_for",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L585",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_services_ocr_rationale_654",
-      "target": "readings_services_ocr_read_meter_cloudflare",
-      "relation": "rationale_for",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L654",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_services_ocr_rationale_766",
-      "target": "readings_services_ocr_read_meter",
-      "relation": "rationale_for",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "readings/services/ocr.py",
-      "source_location": "L766",
-      "weight": 1.0
-    },
-    {
-      "source": "readings_services_ocr_rationale_78",
+      "source": "readings_services_ocr_rationale_146",
       "target": "readings_services_ocr_find_display_crop",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "readings/services/ocr.py",
-      "source_location": "L78",
+      "source_location": "L146",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_rationale_174",
+      "target": "readings_services_ocr_find_kba_display_crop",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L174",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_rationale_244",
+      "target": "readings_services_ocr_find_display_regions",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L244",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_rationale_344",
+      "target": "readings_services_ocr_generate_display_variants",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L344",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_rationale_378",
+      "target": "readings_services_ocr_select_direct_recognition",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L378",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_rationale_445",
+      "target": "readings_services_ocr_decimal_geometry",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L445",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_rationale_477",
+      "target": "readings_services_ocr_recognize_seven_segment",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L477",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_rationale_49",
+      "target": "readings_services_ocr_normalize_display_format",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L49",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_rationale_539",
+      "target": "readings_services_ocr_detect_red_decimal",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L539",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_rationale_652",
+      "target": "readings_services_ocr_choose_consistent_candidate",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L652",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_rationale_751",
+      "target": "readings_services_ocr_read_meter_local",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L751",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_rationale_829",
+      "target": "readings_services_ocr_read_meter_cloudflare",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L829",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_rationale_84",
+      "target": "readings_services_ocr_candidate_effective_value",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L84",
+      "weight": 1.0
+    },
+    {
+      "source": "readings_services_ocr_rationale_955",
+      "target": "readings_services_ocr_read_meter",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "readings/services/ocr.py",
+      "source_location": "L955",
       "weight": 1.0
     },
     {
@@ -25073,7 +25763,7 @@
       "confidence_score": 0.85,
       "context": "argument",
       "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L55",
+      "source_location": "L67",
       "weight": 1.0
     },
     {
@@ -25085,7 +25775,7 @@
       "confidence_score": 0.85,
       "context": "argument",
       "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L70",
+      "source_location": "L82",
       "weight": 1.0
     },
     {
@@ -25688,7 +26378,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L18",
+      "source_location": "L20",
       "weight": 0.8
     },
     {
@@ -25699,7 +26389,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "readings/services/ocr_learning.py",
-      "source_location": "L87",
+      "source_location": "L99",
       "weight": 0.8
     },
     {
@@ -25963,7 +26653,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L21",
+      "source_location": "L24",
       "weight": 0.8
     },
     {
@@ -25974,7 +26664,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L22",
+      "source_location": "L25",
       "weight": 0.8
     },
     {
@@ -25985,7 +26675,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L24",
+      "source_location": "L27",
       "weight": 0.8
     },
     {
@@ -25996,29 +26686,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L78",
-      "weight": 0.8
-    },
-    {
-      "source": "readings_test_ocr_learning_ocrsafetytests",
-      "target": "readings_services_ocr_ocrresult",
-      "relation": "uses",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.95,
-      "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L113",
-      "weight": 0.8
-    },
-    {
-      "source": "readings_test_ocr_learning_ocrsafetytests",
-      "target": "readings_services_ocr_displayregion",
-      "relation": "uses",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.95,
-      "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L126",
+      "source_location": "L87",
       "weight": 0.8
     },
     {
@@ -26029,7 +26697,29 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "readings/test_ocr_learning.py",
-      "source_location": "L95",
+      "source_location": "L123",
+      "weight": 0.8
+    },
+    {
+      "source": "readings_test_ocr_learning_ocrsafetytests",
+      "target": "readings_services_ocr_ocrresult",
+      "relation": "uses",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L171",
+      "weight": 0.8
+    },
+    {
+      "source": "readings_test_ocr_learning_ocrsafetytests",
+      "target": "readings_services_ocr_displayregion",
+      "relation": "uses",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "readings/test_ocr_learning.py",
+      "source_location": "L184",
       "weight": 0.8
     },
     {
@@ -26562,5 +27252,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "f7fe136c1bdd9715a4cf7d6669b85c1f1e6bfa7d"
+  "built_at_commit": "4bca40563c4324f78cfa8d7cadd68fec3a89b360"
 }

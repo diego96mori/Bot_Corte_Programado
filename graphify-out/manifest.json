@@ -168,9 +168,9 @@
     "semantic_hash": ""
   },
   "readings/services/ocr.py": {
-    "mtime": 1788873681.3807683,
-    "seen": 1788874644.9217129,
-    "ast_hash": "e19b109b90b61469b773acf18b5ba343",
+    "mtime": 1788892935.169149,
+    "seen": 1788892962.360093,
+    "ast_hash": "ed4e27180bb316406b057c35502042b3",
     "semantic_hash": ""
   },
   "readings/services/registration.py": {
@@ -252,9 +252,9 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1788873681.2907217,
-    "seen": 1788874644.9217129,
-    "ast_hash": "002057bfb88fd129d0d2af3c8791382d",
+    "mtime": 1788892882.4935317,
+    "seen": 1788892918.2224038,
+    "ast_hash": "842c0f905fdaac93526504e279fff918",
     "semantic_hash": ""
   },
   "requirements.txt": {
@@ -330,15 +330,15 @@
     "semantic_hash": ""
   },
   "readings/services/ocr_learning.py": {
-    "mtime": 1788873681.3807683,
-    "seen": 1788874644.9217129,
-    "ast_hash": "7dffbd72cc67314bc82ed56514a94f0f",
+    "mtime": 1788892858.8539128,
+    "seen": 1788892918.2224038,
+    "ast_hash": "7d96d2e944b40b96a460cf16319f02e8",
     "semantic_hash": ""
   },
   "readings/test_ocr_learning.py": {
-    "mtime": 1788873681.390132,
-    "seen": 1788874644.9217129,
-    "ast_hash": "154a94b59b6a2d06e369e4451641b63f",
+    "mtime": 1788892859.8938243,
+    "seen": 1788892918.2224038,
+    "ast_hash": "e9aae099c1784c422e45c1340c9bb02b",
     "semantic_hash": ""
   },
   "readings/migrations/0007_reading_ocr_learning_verified.py": {
@@ -468,8 +468,8 @@
     "semantic_hash": ""
   },
   "architecture.html": {
-    "mtime": 1788880478.5754838,
-    "seen": 1788880493.3937736,
+    "mtime": 1788891248.7237792,
+    "seen": 1788892918.2224038,
     "ast_hash": "1a2c14b84a100f63d2c2dacd9af74dad",
     "semantic_hash": ""
   },

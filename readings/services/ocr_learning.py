@@ -1,6 +1,8 @@
 """Aprendizaje local por medidor; nunca utiliza valores anteriores como predicción."""
 from collections import defaultdict
 from decimal import Decimal
+import json
+import os
 
 from readings.models import Reading
 
@@ -43,7 +45,17 @@ def build_profile(node, before=None):
             scores[key][1] += 1
             # Una técnica que también produjo otro número es ambigua.
             scores[key][0] += int(values == {reading.confirmed_value})
-    return {"scope": meter_scope(node), "examples": examples, "techniques": dict(scores)}
+    profile = {"scope": meter_scope(node), "examples": examples, "techniques": dict(scores)}
+    try:
+        configured_formats = json.loads(os.getenv("OCR_DISPLAY_FORMATS", "{}"))
+    except (TypeError, json.JSONDecodeError):
+        configured_formats = {}
+    if isinstance(configured_formats, dict):
+        for key in (meter_scope(node), node.code, node.meter_number.strip()):
+            if key and key in configured_formats:
+                profile["display_format"] = configured_formats[key]
+                break
+    return profile
 
 
 def append_attempt(reading, result, node):

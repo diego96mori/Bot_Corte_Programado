@@ -12,7 +12,10 @@ from django.test import TestCase, SimpleTestCase
 from django.utils import timezone
 
 from readings.models import Node, Reading, ReadingSchedule
-from readings.services.ocr import OCRCandidate, OCRResult, DisplayRegion, choose_consistent_candidate, read_meter, read_meter_cloudflare
+from readings.services.ocr import (
+    OCRCandidate, OCRResult, DisplayRegion, choose_consistent_candidate,
+    read_meter, read_meter_cloudflare, recognize_seven_segment,
+)
 from readings.services.ocr_learning import build_profile, meter_scope
 
 
@@ -70,6 +73,12 @@ class LearningTests(TestCase):
         row = self.example("a")
         self.assertEqual(build_profile(self.node, before=row.confirmed_at)["examples"], 0)
 
+    def test_display_format_can_be_configured_per_meter_without_affecting_others(self):
+        with patch.dict(os.environ, {"OCR_DISPLAY_FORMATS": '{"TEST":"6+1"}'}):
+            self.assertEqual(build_profile(self.node)["display_format"], "6+1")
+            other = Node.objects.create(code="OTHER", name="Other", meter_number="B")
+            self.assertNotIn("display_format", build_profile(other))
+
     def test_bot_keeps_failed_photo_and_candidates_for_manual_confirmation(self):
         from readings.management.commands import run_telegram_bot as bot
         self.node.reading_day = timezone.localdate().day
@@ -91,6 +100,55 @@ class LearningTests(TestCase):
 
 
 class OCRSafetyTests(SimpleTestCase):
+    def test_configured_seven_segment_displays_preserve_decimal_and_leading_zeroes(self):
+        for text in ("123195.5", "070130.4", "055892.9"):
+            digits = text.replace(".", "")
+            binary = np.zeros((80, 350), np.uint8)
+            binary[0, :] = 255
+            binary[-1, :] = 255
+            binary[:, 0] = 255
+            binary[:, -1] = 255
+            decoded = [(digit, .95) for digit in digits]
+            with patch("readings.services.ocr._segment_state", side_effect=decoded), patch(
+                "readings.services.ocr._decimal_geometry", return_value=(6, (0, 0, 2, 2))
+            ):
+                candidate = recognize_seven_segment(binary, display_format="6+1")
+            self.assertIsNotNone(candidate)
+            self.assertEqual(candidate.raw_text, text)
+            self.assertEqual(candidate.value, Decimal(text))
+            self.assertTrue(candidate.decimal_geometry)
+
+    def test_raw_display_text_drives_digit_count_and_keeps_leading_zeroes(self):
+        candidates = [
+            OCRCandidate(Decimal("70130.4"), .82, "rapidocr", "visor-0:gris", "070130.4"),
+            OCRCandidate(Decimal("70130.4"), .81, "rapidocr", "visor-0:otsu", "070130.4"),
+            OCRCandidate(Decimal("999999"), .99, "rapidocr", "visor-1:gris", "999999"),
+            OCRCandidate(Decimal("999999"), .98, "rapidocr", "visor-1:otsu", "999999"),
+        ]
+        selected = choose_consistent_candidate(candidates)
+        self.assertEqual(selected.value, Decimal("70130.4"))
+
+    def test_geometric_decimal_reconciles_seven_segment_and_rapidocr(self):
+        candidates = [
+            OCRCandidate(
+                Decimal("701304"), .92, "siete-segmentos", "visor-0:otsu",
+                "701304", decimal_places=1, decimal_geometry=True,
+            ),
+            OCRCandidate(Decimal("70130.4"), .90, "rapidocr", "visor-0:gris", "70130.4"),
+        ]
+        selected = choose_consistent_candidate(candidates)
+        self.assertEqual(selected.value, Decimal("70130.4"))
+        self.assertTrue(all(item["accepted"] for item in selected.details["candidate_evaluation"]))
+
+    def test_rejection_diagnostics_include_exact_reason_and_original_text(self):
+        selected = choose_consistent_candidate([
+            OCRCandidate(Decimal("999"), .99, "rapidocr", "gris", "000999"),
+            OCRCandidate(Decimal("999"), .98, "rapidocr", "otsu", "000999"),
+        ], previous_value=Decimal("1000"))
+        self.assertIsNone(selected.value)
+        self.assertEqual(selected.details["candidate_evaluation"][0]["raw_text"], "000999")
+        self.assertIn("menor", selected.details["candidate_evaluation"][0]["reason"])
+
     def test_failed_techniques_are_filtered_but_new_ones_remain_available(self):
         candidates = [OCRCandidate(Decimal("123"), .98, "rapidocr", "visor-0:gris"),
                       OCRCandidate(Decimal("123"), .98, "rapidocr", "visor-0:otsu")]
@@ -132,6 +190,25 @@ class OCRSafetyTests(SimpleTestCase):
         cloud.return_value = OCRResult(None, "CLOUDFLARE: servicio no disponible", None)
         read_meter("x.jpg", profile=profile)
         cloud.assert_called_once()
+
+    @patch("readings.services.ocr.read_meter_cloudflare")
+    @patch("readings.services.ocr.read_meter_local")
+    def test_previous_value_and_display_format_reach_local_and_cloud_crop(self, local, cloud):
+        image = np.zeros((100, 200, 3), np.uint8)
+        crop = image[:50]
+        local.return_value = (OCRResult(None, "LOCAL", None), [DisplayRegion(crop, 3.2, "contorno-perspectiva")], image)
+        cloud.return_value = OCRResult(Decimal("123195.5"), "CLOUD", .9, "cloudflare")
+        previous = Decimal("123000")
+
+        result = read_meter("x.jpg", previous_value=previous, display_format="6+1")
+
+        self.assertEqual(result.value, Decimal("123195.5"))
+        local.assert_called_once_with(
+            "x.jpg", previous_value=previous, profile=None, display_format=(6, 1),
+        )
+        cloud.assert_called_once_with(
+            crop, previous_value=previous, display_format=(6, 1),
+        )
 
     @patch("readings.services.ocr.read_meter_cloudflare")
     @patch("readings.services.ocr.read_meter_local")

@@ -51,6 +51,11 @@ Gemma 4 recibe la fotografía como entrada visual y devuelve la lectura en JSON.
 
 ### OCR gratuito y aprendizaje por medidor
 
+Para visores con un formato fijo se puede configurar `OCR_DISPLAY_FORMATS` en `.env`
+como un objeto JSON indexado por código de nodo, número de medidor o alcance interno.
+Por ejemplo, `{"SUM-123456":"6+1"}` conserva seis enteros, un decimal y los ceros
+iniciales únicamente para ese medidor; los demás continúan con detección automática.
+
 El reconocimiento local no utiliza una API de pago. El respaldo externo solo permite
 `@cf/google/gemma-4-26b-a4b-it` y exige `CLOUDFLARE_FREE_PLAN_CONFIRMED=True`.
 Activar esta opción únicamente con Workers **Free**, que bloquea solicitudes al agotar

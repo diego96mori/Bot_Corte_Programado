@@ -33,6 +33,9 @@ class OCRCandidate:
     confidence: float
     method: str
     variant: str
+    raw_text: str = ""
+    decimal_places: int | None = None
+    decimal_geometry: bool = False
 
 
 @dataclass
@@ -40,6 +43,71 @@ class DisplayRegion:
     image: object
     score: float
     label: str
+
+
+def _normalize_display_format(display_format):
+    """Return (integer digits, decimal digits) for an optional display format."""
+    if display_format is None:
+        return None
+    if isinstance(display_format, str):
+        match = re.fullmatch(r"\s*(\d{1,2})\s*(?:\+|[.,])\s*(\d)\s*", display_format)
+        if not match:
+            return None
+        integer_digits, decimal_digits = map(int, match.groups())
+    elif isinstance(display_format, dict):
+        try:
+            integer_digits = int(display_format["integer_digits"])
+            decimal_digits = int(display_format["decimal_digits"])
+        except (KeyError, TypeError, ValueError):
+            return None
+    elif isinstance(display_format, (tuple, list)) and len(display_format) == 2:
+        try:
+            integer_digits, decimal_digits = map(int, display_format)
+        except (TypeError, ValueError):
+            return None
+    else:
+        return None
+    if integer_digits < 1 or not 0 <= decimal_digits <= 3 or not 4 <= integer_digits + decimal_digits <= 10:
+        return None
+    return integer_digits, decimal_digits
+
+
+def _candidate_raw_text(candidate):
+    return (candidate.raw_text or format(candidate.value, "f")).strip()
+
+
+def _candidate_digit_sequence(candidate):
+    return "".join(character for character in _candidate_raw_text(candidate) if character.isdigit())
+
+
+def _candidate_effective_value(candidate):
+    """Apply trusted decimal metadata without discarding the captured display text."""
+    raw_text = _candidate_raw_text(candidate)
+    if candidate.decimal_places and "." not in raw_text and "," not in raw_text:
+        digits = _candidate_digit_sequence(candidate)
+        if len(digits) > candidate.decimal_places:
+            raw_text = f"{digits[:-candidate.decimal_places]}.{digits[-candidate.decimal_places:]}"
+            parsed = _parse_value(raw_text)
+            if parsed is not None:
+                return parsed
+    return candidate.value
+
+
+def _candidate_payload(candidate, reason=None, accepted=None):
+    payload = {
+        "value": str(_candidate_effective_value(candidate)),
+        "raw_text": _candidate_raw_text(candidate),
+        "confidence": candidate.confidence,
+        "method": candidate.method,
+        "variant": candidate.variant,
+        "decimal_places": candidate.decimal_places,
+        "decimal_geometry": candidate.decimal_geometry,
+    }
+    if accepted is not None:
+        payload["accepted"] = accepted
+    if reason:
+        payload["reason"] = reason
+    return payload
 
 
 def _parse_value(text):
@@ -373,7 +441,39 @@ def _segment_state(cell):
     return digit, 1.0 - (distance / 7.0)
 
 
-def recognize_seven_segment(binary):
+def _decimal_geometry(mask, digit_count, expected_after=None):
+    """Locate a compact decimal dot near the lower boundary between two digits."""
+    import cv2
+
+    height, width = mask.shape[:2]
+    cell_width = width / float(digit_count)
+    components, _labels, stats, centroids = cv2.connectedComponentsWithStats(mask, connectivity=8)
+    dots = []
+    for index in range(1, components):
+        left, top, component_width, component_height, area = stats[index]
+        center_x, center_y = centroids[index]
+        if not (
+            max(2, cell_width * 0.015) <= area <= cell_width * height * 0.10
+            and component_width <= cell_width * 0.42
+            and component_height <= height * 0.24
+            and center_y >= height * 0.68
+        ):
+            continue
+        after = min(digit_count - 1, max(1, int(round(center_x / cell_width))))
+        boundary_distance = abs(center_x - (after * cell_width)) / max(1.0, cell_width)
+        if boundary_distance > 0.34:
+            continue
+        expected_penalty = abs(after - expected_after) if expected_after is not None else 0
+        dots.append((expected_penalty, boundary_distance, -area, after, (left, top, component_width, component_height)))
+    if not dots:
+        return None
+    _expected, _distance, _area, after, box = min(dots)
+    if expected_after is not None and after != expected_after:
+        return None
+    return after, box
+
+
+def recognize_seven_segment(binary, display_format=None):
     """Reconocedor geométrico específico para pantallas LCD de siete segmentos."""
     import cv2
 
@@ -392,7 +492,9 @@ def recognize_seven_segment(binary):
         return None
     mask = mask[y:y + height, x:x + width]
     possibilities = []
-    for count in range(4, 11):
+    normalized_format = _normalize_display_format(display_format)
+    counts = [sum(normalized_format)] if normalized_format else range(4, 11)
+    for count in counts:
         cell_width = mask.shape[1] / float(count)
         if not 0.28 <= cell_width / mask.shape[0] <= 1.05:
             continue
@@ -410,13 +512,27 @@ def recognize_seven_segment(binary):
             digits.append(digit)
             confidences.append(confidence)
         if valid:
-            possibilities.append((sum(confidences) / len(confidences), "".join(digits)))
+            digit_text = "".join(digits)
+            expected_after = normalized_format[0] if normalized_format and normalized_format[1] else None
+            geometry = _decimal_geometry(mask, count, expected_after)
+            decimal_after = geometry[0] if geometry else expected_after
+            decimal_places = count - decimal_after if decimal_after is not None else None
+            text = digit_text
+            if decimal_after is not None:
+                text = f"{digit_text[:decimal_after]}.{digit_text[decimal_after:]}"
+            possibilities.append((sum(confidences) / len(confidences), text, decimal_places, geometry is not None))
     if not possibilities:
         return None
-    confidence, text = max(possibilities, key=lambda item: (item[0], len(item[1])))
+    confidence, text, decimal_places, decimal_geometry = max(
+        possibilities,
+        key=lambda item: (item[0], item[3], len(item[1])),
+    )
     if confidence < 0.80:
         return None
-    return OCRCandidate(Decimal(text), confidence, "siete-segmentos", "binaria")
+    return OCRCandidate(
+        Decimal(text), confidence, "siete-segmentos", "binaria", text,
+        decimal_places=decimal_places, decimal_geometry=decimal_geometry,
+    )
 
 
 def detect_red_decimal(image, result, base_result, engine) -> OCRResult | None:
@@ -482,18 +598,19 @@ def _rapid_ocr_engine():
     return RapidOCR()
 
 
-def _rapid_candidates(engine, region, region_index):
+def _rapid_candidates(engine, region, region_index, display_format=None):
     candidates = []
     for variant_name, variant in generate_display_variants(region.image):
         recognized, _ = engine(variant, use_det=False, use_cls=False)
         for item in recognized or []:
             if not isinstance(item, (list, tuple)) or len(item) < 2:
                 continue
-            value = _parse_value(item[0])
+            raw_text = str(item[0]).strip()
+            value = _parse_value(raw_text)
             confidence = float(item[1])
             if value is not None and confidence >= 0.58:
                 candidates.append(
-                    OCRCandidate(value, confidence, "rapidocr", f"visor-{region_index}:{variant_name}")
+                    OCRCandidate(value, confidence, "rapidocr", f"visor-{region_index}:{variant_name}", raw_text)
                 )
         if (
             region.label in {"caja-numerica-del-visor", "ancla-kWh", "ancla-KBA"}
@@ -501,7 +618,8 @@ def _rapid_candidates(engine, region, region_index):
         ):
             detected, _ = engine(variant)
             for _box, text, confidence in detected or []:
-                value = _parse_value(text)
+                raw_text = str(text).strip()
+                value = _parse_value(raw_text)
                 confidence = float(confidence)
                 if value is not None and confidence >= 0.58:
                     candidates.append(
@@ -510,10 +628,11 @@ def _rapid_candidates(engine, region, region_index):
                             confidence,
                             "rapidocr-deteccion",
                             f"visor-{region_index}:{variant_name}-detectado",
+                            raw_text,
                         )
                     )
         if "adaptativo" in variant_name or "otsu" in variant_name:
-            seven_segment = recognize_seven_segment(variant)
+            seven_segment = recognize_seven_segment(variant, display_format=display_format)
             if seven_segment is not None:
                 candidates.append(
                     OCRCandidate(
@@ -521,6 +640,9 @@ def _rapid_candidates(engine, region, region_index):
                         seven_segment.confidence,
                         seven_segment.method,
                         f"visor-{region_index}:{variant_name}",
+                        seven_segment.raw_text,
+                        seven_segment.decimal_places,
+                        seven_segment.decimal_geometry,
                     )
                 )
     return candidates
@@ -529,19 +651,31 @@ def _rapid_candidates(engine, region, region_index):
 def choose_consistent_candidate(candidates, previous_value=None, profile=None):
     """Consenso del valor exacto, incluyendo su decimal, con experiencia del medidor."""
     grouped = defaultdict(list)
+    rejected = []
     for candidate in candidates:
         if not math.isfinite(candidate.confidence):
+            rejected.append(_candidate_payload(candidate, "confianza no finita", False))
             continue
         if profile:
             from .ocr_learning import technique
             key = technique({"method": candidate.method, "variant": candidate.variant})
             wins, total = profile.get("techniques", {}).get(key, (0, 0))
             if total >= 3 and wins / total < 0.5:
+                rejected.append(_candidate_payload(candidate, "técnica descartada por historial del medidor", False))
                 continue
-        grouped[candidate.value].append(candidate)
+        effective_value = _candidate_effective_value(candidate)
+        if previous_value is not None and effective_value < Decimal(previous_value):
+            rejected.append(_candidate_payload(candidate, "lectura menor que la lectura anterior", False))
+            continue
+        grouped[effective_value].append(candidate)
+    trusted_decimals = defaultdict(set)
+    for value, items in grouped.items():
+        for item in items:
+            if item.decimal_geometry or item.decimal_places is not None:
+                trusted_decimals[_candidate_digit_sequence(item)].add(value)
     ranked = []
     for value, items in grouped.items():
-        digits = "".join(str(d) for d in value.as_tuple().digits)
+        digit_count = max((len(_candidate_digit_sequence(item)) for item in items), default=0)
         variants = {item.variant for item in items}
         methods = {item.method for item in items}
         maximum = max(item.confidence for item in items)
@@ -554,34 +688,66 @@ def choose_consistent_candidate(candidates, previous_value=None, profile=None):
             or average < 0.62
             or "rapidocr" not in methods
         ):
+            reason = "consenso insuficiente: requiere dos variantes, RapidOCR y confianza mínima"
+            rejected.extend(_candidate_payload(item, reason, False) for item in items)
             continue
         # Otro decimal para los mismos dígitos obliga a segunda opinión.
-        sequence = lambda number: "".join(str(d) for d in number.as_tuple().digits)
-        if any(other != value and sequence(other) == sequence(value) for other in grouped):
-            continue
-        if previous_value is not None and value < Decimal(previous_value):
+        sequences = {_candidate_digit_sequence(item) for item in items}
+        conflicting_values = {
+            other_value for other_value, other_items in grouped.items()
+            if other_value != value and sequences & {_candidate_digit_sequence(item) for item in other_items}
+        }
+        trusted_for_sequence = set().union(*(trusted_decimals[sequence] for sequence in sequences))
+        if conflicting_values and trusted_for_sequence != {value}:
+            rejected.extend(
+                _candidate_payload(item, "posición decimal conflictiva sin evidencia geométrica única", False)
+                for item in items
+            )
             continue
         # Una lectura completa de 6 o 7 dígitos es preferible a un fragmento
         # repetido muchas veces dentro de un recorte parcial.
-        score = (len(digits) * 1.25) + min(len(variants), 4) + (len(methods) * 0.5) + average
+        score = (digit_count * 1.25) + min(len(variants), 4) + (len(methods) * 0.5) + average
         if profile:
             from .ocr_learning import technique
             history = [profile.get("techniques", {}).get(technique({"method": item.method, "variant": item.variant}), (0, 0)) for item in items]
             reliable = [wins / total for wins, total in history if total >= 3]
             if reliable:
                 score += 0.5 * (sum(reliable) / len(reliable))
-        ranked.append((score, value, average, len(variants), methods))
+        ranked.append((score, value, average, len(variants), methods, items))
     if not ranked:
-        return OCRResult(None, "LOCAL: sin consenso suficiente", None)
+        return OCRResult(
+            None, "LOCAL: sin consenso suficiente", None,
+            details={"candidate_evaluation": rejected},
+        )
     ranked.sort(reverse=True, key=lambda item: item[0])
     if len(ranked) > 1 and ranked[0][0] - ranked[1][0] < 0.35:
-        return OCRResult(None, "LOCAL: resultados ambiguos entre variantes", None)
-    _score, value, confidence, votes, methods = ranked[0]
+        for ranked_item in ranked[:2]:
+            rejected.extend(
+                _candidate_payload(item, "empate de ranking entre resultados", False)
+                for item in ranked_item[5]
+            )
+        return OCRResult(
+            None, "LOCAL: resultados ambiguos entre variantes", None,
+            details={"candidate_evaluation": rejected},
+        )
+    _score, value, confidence, votes, methods, winning_items = ranked[0]
+    for ranked_item in ranked[1:]:
+        rejected.extend(
+            _candidate_payload(item, "superado por un candidato mejor respaldado", False)
+            for item in ranked_item[5]
+        )
+    accepted = [
+        _candidate_payload(item, "aceptado por consenso y ranking", True)
+        for item in winning_items
+    ]
     raw = f"LOCAL: {value} confirmado por {votes} variantes ({', '.join(sorted(methods))})"
-    return OCRResult(value, raw, confidence, "local")
+    return OCRResult(
+        value, raw, confidence, "local",
+        {"candidate_evaluation": [*accepted, *rejected]},
+    )
 
 
-def read_meter_local(image_path: str | Path, previous_value=None, profile=None):
+def read_meter_local(image_path: str | Path, previous_value=None, profile=None, display_format=None):
     """Ejecuta únicamente el reconocimiento local sobre el interior de los visores."""
     import cv2
 
@@ -591,20 +757,22 @@ def read_meter_local(image_path: str | Path, previous_value=None, profile=None):
     engine = _rapid_ocr_engine()
     full_result, _ = engine(image)
     regions = find_display_regions(image, full_result)
+    display_format = _normalize_display_format(display_format or (profile or {}).get("display_format"))
     candidates = []
     for index, region in enumerate(regions):
-        candidates.extend(_rapid_candidates(engine, region, index))
+        candidates.extend(_rapid_candidates(engine, region, index, display_format=display_format))
     numeric_detections = []
     for index, item in enumerate(full_result or []):
         box, text, confidence = item
-        value = _parse_value(text)
+        raw_text = str(text).strip()
+        value = _parse_value(raw_text)
         if value is None:
             continue
         box_height = max(point[1] for point in box) - min(point[1] for point in box)
         box_width = max(point[0] for point in box) - min(point[0] for point in box)
-        numeric_detections.append((box_height, box_width, index, value, float(confidence)))
+        numeric_detections.append((box_height, box_width, index, value, float(confidence), raw_text))
     maximum_height = max((item[0] for item in numeric_detections), default=0)
-    for box_height, box_width, index, value, confidence in numeric_detections:
+    for box_height, box_width, index, value, confidence, raw_text in numeric_detections:
         if box_height >= maximum_height * 0.72 and box_width >= 70 and confidence >= 0.58:
             candidates.append(
                 OCRCandidate(
@@ -612,6 +780,7 @@ def read_meter_local(image_path: str | Path, previous_value=None, profile=None):
                     confidence,
                     "rapidocr-deteccion",
                     f"visor-detectado-original-{index}",
+                    raw_text,
                 )
             )
     local = choose_consistent_candidate(candidates, previous_value, profile)
@@ -624,11 +793,17 @@ def read_meter_local(image_path: str | Path, previous_value=None, profile=None):
             local = mechanical
     local = replace(local, details={
         "version": OCR_VERSION, "profile_examples": (profile or {}).get("examples", 0),
+        "display_format": ({"integer_digits": display_format[0], "decimal_digits": display_format[1]} if display_format else None),
+        "regions": [
+            {"label": region.label, "score": region.score,
+             "width": int(region.image.shape[1]), "height": int(region.image.shape[0])}
+            for region in regions
+        ],
         "candidates": [
-            {"value": str(c.value), "confidence": c.confidence,
-             "method": c.method, "variant": c.variant}
+            _candidate_payload(c)
             for c in candidates if math.isfinite(c.confidence)
         ],
+        "candidate_evaluation": local.details.get("candidate_evaluation", []),
     })
     return local, regions, image
 
@@ -650,7 +825,7 @@ def _extract_json_object(value):
             return None
 
 
-def read_meter_cloudflare(image, previous_value=None):
+def read_meter_cloudflare(image, previous_value=None, display_format=None):
     """Consulta Workers AI solo cuando están configuradas sus credenciales."""
     import cv2
 
@@ -676,11 +851,19 @@ def read_meter_cloudflare(image, previous_value=None):
     if not encoded_ok:
         return OCRResult(None, "CLOUDFLARE: no se pudo preparar el visor", None, "manual")
     data_url = "data:image/jpeg;base64," + base64.b64encode(encoded.tobytes()).decode("ascii")
+    normalized_format = _normalize_display_format(display_format)
+    format_instruction = ""
+    if normalized_format:
+        integer_digits, decimal_digits = normalized_format
+        format_instruction = (
+            f" El visor configurado usa {integer_digits} dígitos enteros y "
+            f"{decimal_digits} decimales; conserva también los ceros iniciales."
+        )
     prompt = (
         "Observa exclusivamente los dígitos dentro del visor del medidor eléctrico. "
         "Ignora marcas, números de serie, fechas, coordenadas y etiquetas impresas. "
         "Conserva el punto decimal visible. Si no puedes leerlo con seguridad, devuelve reading null."
-        " Devuelve únicamente JSON."
+        f"{format_instruction} Devuelve únicamente JSON."
     )
     payload = {
             "messages": [
@@ -746,7 +929,8 @@ def read_meter_cloudflare(image, previous_value=None):
     parsed = _extract_json_object(response_content)
     if not isinstance(parsed, dict):
         return OCRResult(None, "CLOUDFLARE: respuesta sin lectura válida", None, "manual")
-    value = _parse_value(parsed.get("reading"))
+    original_reading = str(parsed.get("reading") or "").strip()
+    value = _parse_value(original_reading)
     try:
         confidence = float(parsed.get("confidence", 0))
     except (TypeError, ValueError):
@@ -755,17 +939,28 @@ def read_meter_cloudflare(image, previous_value=None):
         return OCRResult(None, "CLOUDFLARE: lectura insegura", None, "manual")
     if previous_value is not None and value < Decimal(previous_value):
         return OCRResult(
-            None, f"CLOUDFLARE: lectura {value} menor que la anterior", None, "manual"
+            None, f"CLOUDFLARE: lectura {value} menor que la anterior", None, "manual",
+            {"raw_text": original_reading},
         )
     return OCRResult(
-        value, f"CLOUDFLARE: visor reconocido como {value}", confidence, "cloudflare"
+        value, f"CLOUDFLARE: visor reconocido como {value}", confidence, "cloudflare",
+        {"raw_text": original_reading},
     )
 
 
-def read_meter(image_path: str | Path, previous_value=None, profile=None, allow_cloudflare=True) -> OCRResult:
+def read_meter(
+    image_path: str | Path, previous_value=None, profile=None,
+    allow_cloudflare=True, display_format=None,
+) -> OCRResult:
     """OCR local primero; Cloudflare solo actúa como respaldo y luego queda el modo manual."""
+    display_format = _normalize_display_format(display_format or (profile or {}).get("display_format"))
     try:
-        local, regions, image = read_meter_local(image_path, profile=profile)
+        local, regions, image = read_meter_local(
+            image_path,
+            previous_value=previous_value,
+            profile=profile,
+            display_format=display_format,
+        )
     except Exception:
         logger.exception("Falló el reconocimiento local")
         import cv2
@@ -790,29 +985,36 @@ def read_meter(image_path: str | Path, previous_value=None, profile=None, allow_
         return finish(local)
     if not allow_cloudflare:
         return finish(local)
-    # Solo se usa un recorte cuando la caja numérica identifica el visor con
-    # precisión. Las anclas kWh pueden quedar debajo del LCD; en ese caso el
-    # modelo visual recibe la foto completa para localizarlo correctamente.
-    precise_region = next(
-        (region for region in regions if region.label == "caja-numerica-del-visor"),
-        None,
-    )
-    # Una caja numérica también puede pertenecer a una serie impresa: sin
-    # experiencia comprobada del medidor, conservar todo el contexto visual.
-    used_crop = precise_region is not None and calibrated
+    # Una región con geometría o ancla suficientemente fuerte se consulta antes
+    # que la foto completa, incluso durante la calibración inicial del medidor.
+    precise_region = next((region for region in regions if region.score >= 3.0), None)
+    used_crop = precise_region is not None
     external_image = precise_region.image if used_crop else image
-    cloudflare = read_meter_cloudflare(external_image)
+    cloudflare = read_meter_cloudflare(
+        external_image, previous_value=previous_value, display_format=display_format,
+    )
     details["cloudflare"] = [{
         "model": os.getenv("CLOUDFLARE_VISION_MODEL", "@cf/google/gemma-4-26b-a4b-it"),
         "input": "crop" if used_crop else "full",
+        "method": "cloudflare", "variant": "crop" if used_crop else "full",
+        "raw_text": cloudflare.details.get("raw_text", ""),
         "value": str(cloudflare.value) if cloudflare.value is not None else None,
         "confidence": cloudflare.confidence, "reason": cloudflare.raw_text,
     }]
     # Retry only a visual failure on a crop, never an HTTP/quota/configuration failure.
-    if used_crop and cloudflare.value is None and cloudflare.raw_text == "CLOUDFLARE: lectura insegura":
-        cloudflare = read_meter_cloudflare(image)
+    retryable_crop_failure = cloudflare.raw_text in {
+        "CLOUDFLARE: lectura insegura",
+        "CLOUDFLARE: respuesta sin lectura válida",
+        "CLOUDFLARE: no hay visor para analizar",
+    }
+    if used_crop and cloudflare.value is None and retryable_crop_failure:
+        cloudflare = read_meter_cloudflare(
+            image, previous_value=previous_value, display_format=display_format,
+        )
         details["cloudflare"].append({
             "model": details["cloudflare"][0]["model"], "input": "full",
+            "method": "cloudflare", "variant": "full",
+            "raw_text": cloudflare.details.get("raw_text", ""),
             "value": str(cloudflare.value) if cloudflare.value is not None else None,
             "confidence": cloudflare.confidence, "reason": cloudflare.raw_text,
         })
