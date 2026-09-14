@@ -168,9 +168,9 @@
     "semantic_hash": ""
   },
   "readings/services/ocr.py": {
-    "mtime": 1789393740.2979975,
-    "seen": 1789393808.7316594,
-    "ast_hash": "735c3fb0c0ad90110bbb154acacf3a87",
+    "mtime": 1789393238.5678258,
+    "seen": 1789393347.3820534,
+    "ast_hash": "73e5c387ce121815ef680daa7e2a636c",
     "semantic_hash": ""
   },
   "readings/services/registration.py": {
@@ -336,9 +336,9 @@
     "semantic_hash": ""
   },
   "readings/test_ocr_learning.py": {
-    "mtime": 1789393770.78796,
-    "seen": 1789393808.7316594,
-    "ast_hash": "1327ac91fdb11eac555219777220394b",
+    "mtime": 1789393269.3333194,
+    "seen": 1789393347.3820534,
+    "ast_hash": "252fc0f79d1f575729d821daa510b406",
     "semantic_hash": ""
   },
   "readings/migrations/0007_reading_ocr_learning_verified.py": {

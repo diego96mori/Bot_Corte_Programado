@@ -15,7 +15,7 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 NUMBER_PATTERN = re.compile(r"^\s*([0-9]{1,12}(?:[.,][0-9]{1,3})?)\s*$")
-OCR_VERSION = "2.0"
+OCR_VERSION = "2.2"
 
 
 @dataclass(frozen=True)
@@ -336,6 +336,30 @@ def find_display_regions(image, full_ocr=None, limit=6):
         crop = image[top:bottom, left:right]
         if crop.size:
             found.append(DisplayRegion(crop, 3.9, "caja-numerica-del-visor"))
+    # The detector can locate LCD digits while transcribing them as letters.
+    # Recover that entire box beside kWh instead of cropping left of the unit,
+    # which truncates displays whose unit is printed below the final digits.
+    for anchor_box, anchor_text, _ in full_ocr or []:
+        if re.sub(r"[^a-z]", "", str(anchor_text).lower()) != "kwh":
+            continue
+        ax1 = min(p[0] for p in anchor_box)
+        ax2 = max(p[0] for p in anchor_box)
+        ay1 = min(p[1] for p in anchor_box)
+        ay2 = max(p[1] for p in anchor_box)
+        ah = max(8, ay2 - ay1)
+        for box, _text, _confidence in full_ocr or []:
+            x1, x2 = min(p[0] for p in box), max(p[0] for p in box)
+            y1, y2 = min(p[1] for p in box), max(p[1] for p in box)
+            bh, bw = y2 - y1, x2 - x1
+            if not (bh >= 1.5 * ah and 3 <= bw / max(1, bh) <= 10):
+                continue
+            if not (x1 < ax1 and ax1 - ah <= x2 <= ax2 + 2 * ah and abs(y2 - ay1) <= 1.5 * ah):
+                continue
+            pad = max(5, int(bh * .15))
+            crop = image[max(0, int(y1)-pad):min(height, int(y2)+pad),
+                         max(0, int(x1)-pad):min(width, int(x2)+pad)]
+            if crop.size:
+                found.append(DisplayRegion(crop, 4.1, "caja-texto-junto-kWh"))
     found.sort(key=lambda region: region.score, reverse=True)
     return found[:limit]
 
@@ -648,6 +672,21 @@ def _rapid_candidates(engine, region, region_index, display_format=None):
     return candidates
 
 
+def _apply_display_format(candidate, display_format):
+    """Apply an explicitly configured format, never infer it from past values."""
+    normalized = _normalize_display_format(display_format)
+    if normalized is None:
+        return candidate
+    integer_digits, decimal_digits = normalized
+    raw = _candidate_raw_text(candidate)
+    if len(_candidate_digit_sequence(candidate)) != integer_digits + decimal_digits:
+        return None
+    if "." in raw or "," in raw:
+        if len(re.split(r"[.,]", raw)[-1]) != decimal_digits:
+            return None
+    return replace(candidate, decimal_places=decimal_digits)
+
+
 def choose_consistent_candidate(candidates, previous_value=None, profile=None):
     """Consenso del valor exacto, incluyendo su decimal, con experiencia del medidor."""
     grouped = defaultdict(list)
@@ -673,8 +712,39 @@ def choose_consistent_candidate(candidates, previous_value=None, profile=None):
         for item in items:
             if item.decimal_geometry or item.decimal_places is not None:
                 trusted_decimals[_candidate_digit_sequence(item)].add(value)
+    # Repeated explicit decimal readings can resolve variants that merely lost
+    # the separator. Never resolve competing explicit decimal positions this way.
+    decimal_votes = defaultdict(set)
+    explicit_values = defaultdict(set)
+    for value, items in grouped.items():
+        for item in items:
+            raw = _candidate_raw_text(item)
+            sequence = _candidate_digit_sequence(item)
+            if "." in raw or "," in raw:
+                explicit_values[sequence].add(value)
+                if item.method == "rapidocr" and item.confidence >= .97:
+                    region, _, variant = item.variant.partition(":")
+                    decimal_votes[(sequence, value, region)].add(variant)
+    for (sequence, value, _region), variants in decimal_votes.items():
+        if len(variants) >= 3 and explicit_values[sequence] == {value}:
+            trusted_decimals[sequence].add(value)
     ranked = []
     for value, items in grouped.items():
+        # A crop missing the final decimal digit must not outrank the complete
+        # display corroborated in three high-confidence variants.
+        if all(
+            any(
+                len(votes) >= 3 and explicit_values[sequence] == {complete_value}
+                and complete_value != value
+                and _candidate_digit_sequence(item) != sequence
+                and ("." in _candidate_raw_text(item) or "," in _candidate_raw_text(item))
+                and any(_candidate_raw_text(full).replace(",", ".").startswith(
+                    _candidate_raw_text(item).replace(",", ".")) for full in grouped[complete_value])
+                for (sequence, complete_value, _region), votes in decimal_votes.items()
+            ) for item in items
+        ):
+            rejected.extend(_candidate_payload(item, "recorte parcial de una lectura decimal completa", False) for item in items)
+            continue
         digit_count = max((len(_candidate_digit_sequence(item)) for item in items), default=0)
         variants = {item.variant for item in items}
         methods = {item.method for item in items}
@@ -686,7 +756,7 @@ def choose_consistent_candidate(candidates, previous_value=None, profile=None):
             len(variants) < 2
             or maximum < 0.68
             or average < 0.62
-            or "rapidocr" not in methods
+            or not methods.intersection({"rapidocr", "rapidocr-deteccion"})
         ):
             reason = "consenso insuficiente: requiere dos variantes, RapidOCR y confianza mínima"
             rejected.extend(_candidate_payload(item, reason, False) for item in items)
@@ -783,6 +853,16 @@ def read_meter_local(image_path: str | Path, previous_value=None, profile=None, 
                     raw_text,
                 )
             )
+    format_rejections = []
+    if display_format:
+        formatted = []
+        for candidate in candidates:
+            adjusted = _apply_display_format(candidate, display_format)
+            if adjusted is None:
+                format_rejections.append(_candidate_payload(candidate, "no coincide con el formato configurado del visor", False))
+            else:
+                formatted.append(adjusted)
+        candidates = formatted
     local = choose_consistent_candidate(candidates, previous_value, profile)
     full_selection = select_meter_value(full_result)
     mechanical = detect_red_decimal(image, full_result, full_selection, engine)
@@ -803,7 +883,7 @@ def read_meter_local(image_path: str | Path, previous_value=None, profile=None, 
             _candidate_payload(c)
             for c in candidates if math.isfinite(c.confidence)
         ],
-        "candidate_evaluation": local.details.get("candidate_evaluation", []),
+        "candidate_evaluation": [*local.details.get("candidate_evaluation", []), *format_rejections],
     })
     return local, regions, image
 
@@ -984,6 +1064,32 @@ def read_meter(
     if calibrated and (local.confidence or 0) >= 0.85:
         return finish(local)
     if not allow_cloudflare:
+        return finish(local)
+    # A verified display format plus strong, explicit consensus is sufficient
+    # for an operator proposal even before three learning examples exist.
+    accepted = [item for item in local.details.get("candidate_evaluation", []) if item.get("accepted")]
+    # A complete detected box beside the unit can provide its own decimal
+    # evidence. Require three highly confident variants with a visible separator.
+    strong_variants = set()
+    region_details = local.details.get("regions", [])
+    for item in accepted:
+        match = re.fullmatch(r"visor-(\d+):(.+)", item.get("variant", ""))
+        if not match:
+            continue
+        index = int(match.group(1))
+        raw = item.get("raw_text", "")
+        if (index < len(region_details) and region_details[index]["label"] == "caja-texto-junto-kWh"
+            and item.get("method") == "rapidocr" and item.get("confidence", 0) >= .97
+            and re.fullmatch(r"\d{4,8}[.,]\d{1,3}", raw)
+            and _parse_value(raw) == local.value):
+            strong_variants.add(match.group(2))
+    if local.value is not None and len(strong_variants) >= 3:
+        return finish(local)
+    if (
+        display_format and local.value is not None and (local.confidence or 0) >= 0.85
+        and len({item["variant"] for item in accepted}) >= 2
+        and all(item.get("decimal_places") == display_format[1] for item in accepted)
+    ):
         return finish(local)
     # Una región con geometría o ancla suficientemente fuerte se consulta antes
     # que la foto completa, incluso durante la calibración inicial del medidor.

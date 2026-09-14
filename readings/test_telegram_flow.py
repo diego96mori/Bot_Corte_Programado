@@ -208,6 +208,51 @@ class TelegramFlowTests(TestCase):
         self.assertEqual(reading.confirmed_value, Decimal("100.5"))
         self.assertEqual(Reading.objects.count(), 1)
 
+    def test_ambiguous_options_require_selection_confirmation_and_date(self):
+        self.select_node()
+        reading, _ = async_to_sync(bot.create_manual_reading)(self.node.id, Decimal("100"), self.user, 1)
+        reading.detected_value = None
+        reading.source = Reading.Source.TELEGRAM
+        reading.ocr_attempts = [{"candidates": [
+            {"value": value, "raw_text": value, "confidence": .9,
+             "method": "rapidocr", "variant": variant}
+            for value, variant in [("1234.5", "gris"), ("12345", "clahe"), ("1234.50", "otsu")]
+        ]}]
+        reading.save()
+        with patch.object(bot, "create_reading", new=AsyncMock(return_value=(reading, None))):
+            self.photo()
+        self.state(bot.OCR_FAILED)
+        self.assertEqual(self.context.user_data["ocr_options"], [Decimal("1234.5"), Decimal("12345")])
+        old_token = self.context.user_data["prompt_token"]
+        self.click(f"reading:option:{reading.id}:99")
+        self.state(bot.OCR_FAILED)
+        self.click(f"reading:option:{reading.id}:0", token=old_token)
+        self.state(bot.OCR_FAILED)
+        self.click(f"reading:option:{reading.id}:0")
+        self.state(bot.CONFIRM_MANUAL_VALUE)
+        self.assertIn("LECTURA SELECCIONADA", self.last_text())
+        reading.refresh_from_db()
+        self.assertIsNone(reading.confirmed_value)
+        self.click(f"reading:manual:confirm:{reading.id}")
+        self.state(bot.CHOOSE_DATE)
+        self.click("date:today")
+        reading.refresh_from_db()
+        self.assertEqual(reading.confirmed_value, Decimal("1234.5"))
+        self.assertIsNone(reading.detected_value)
+        self.assertEqual(len(reading.ocr_attempts[0]["candidates"]), 3)
+
+    def test_options_are_limited_and_exclude_invalid_or_disallowed_candidates(self):
+        valid = [{"value": str(1234 + index), "method": "rapidocr", "confidence": .9,
+                  "variant": "gris"} for index in range(5)]
+        invalid = [
+            {"value": "9999", "method": "rapidocr", "confidence": float("nan")},
+            {"value": "8888", "method": "siete-segmentos", "confidence": .99},
+            {"value": "7777", "method": "rapidocr", "confidence": .99, "reason": "lectura menor que la lectura anterior"},
+            {"value": "6666", "method": "rapidocr", "confidence": .99, "reason": "recorte parcial de una lectura decimal completa"},
+        ]
+        row = SimpleNamespace(ocr_attempts=[{"candidate_evaluation": valid + invalid}])
+        self.assertEqual(bot.ocr_options(row), [Decimal("1234"), Decimal("1235"), Decimal("1236")])
+
     def test_successful_ocr_confirmation_repeats_and_cannot_receive_another_photo(self):
         self.select_node()
         reading, _ = async_to_sync(bot.create_manual_reading)(self.node.id, Decimal("100.25"), self.user, 1)

@@ -15,6 +15,7 @@ from readings.models import Node, Reading, ReadingSchedule
 from readings.services.ocr import (
     OCRCandidate, OCRResult, DisplayRegion, choose_consistent_candidate,
     read_meter, read_meter_cloudflare, recognize_seven_segment,
+    _apply_display_format,
 )
 from readings.services.ocr_learning import build_profile, meter_scope
 
@@ -100,6 +101,78 @@ class LearningTests(TestCase):
 
 
 class OCRSafetyTests(SimpleTestCase):
+    def palmeras_candidates(self):
+        return [
+            *[OCRCandidate(Decimal("43504.71"), .99, "rapidocr", "visor-0:" + name, "043504.71")
+              for name in ("gris", "clahe", "sin-reflejo")],
+            *[OCRCandidate(Decimal("4350471"), .99, "rapidocr", "visor-0:" + name, "04350471")
+              for name in ("adaptativo", "adaptativo-invertido")],
+            *[OCRCandidate(Decimal("43504.7"), .99, "rapidocr", "visor-4:" + name, "043504.7")
+              for name in ("gris", "clahe", "otsu", "otsu-invertido")],
+        ]
+
+    def test_complete_decimal_beats_truncated_crop_and_missing_separator(self):
+        result = choose_consistent_candidate(self.palmeras_candidates())
+        self.assertEqual(result.value, Decimal("43504.71"))
+        self.assertTrue(any("recorte parcial" in item["reason"]
+                            for item in result.details["candidate_evaluation"]))
+
+    def test_explicit_competing_decimal_is_not_resolved_by_missing_separator_rule(self):
+        candidates = self.palmeras_candidates()[:5]
+        candidates.append(OCRCandidate(Decimal("4350.471"), .99, "rapidocr", "visor-0:otsu", "04350.471"))
+        self.assertIsNone(choose_consistent_candidate(candidates).value)
+
+    @patch("readings.services.ocr.read_meter_cloudflare")
+    @patch("readings.services.ocr.read_meter_local")
+    def test_full_box_decimal_consensus_proposes_without_meter_configuration(self, local, cloud):
+        result = choose_consistent_candidate(self.palmeras_candidates())
+        result.details["regions"] = [{"label": "caja-texto-junto-kWh"}]
+        local.return_value = (result, [], None)
+        self.assertEqual(read_meter("x.jpg").value, Decimal("43504.71"))
+        cloud.assert_not_called()
+
+    def test_unreadable_text_box_above_unit_is_kept_complete(self):
+        from readings.services.ocr import find_display_regions
+        image = np.zeros((600, 650, 3), dtype=np.uint8)
+        detections = [
+            ([[319,465],[589,459],[590,512],[320,518]], "Lh05Eh0", .82),
+            ([[548,510],[582,510],[582,528],[548,528]], "kWh", .94),
+        ]
+        regions = find_display_regions(image, detections)
+        self.assertEqual(regions[0].label, "caja-texto-junto-kWh")
+        self.assertGreaterEqual(regions[0].image.shape[1], 271)
+
+    def test_configured_format_reconciles_missing_decimal_without_changing_digits(self):
+        candidates = [
+            OCRCandidate(Decimal("1689.8"), .95, "rapidocr", "gris", "01689.8"),
+            OCRCandidate(Decimal("16898"), .98, "rapidocr", "clahe", "016898"),
+        ]
+        formatted = [_apply_display_format(c, "5+1") for c in candidates]
+        self.assertEqual(choose_consistent_candidate(formatted).value, Decimal("1689.8"))
+        self.assertEqual(formatted[1].raw_text, "016898")
+        for raw in ("16898", "0168.98", "202011105679"):
+            candidate = OCRCandidate(Decimal(raw), .99, "rapidocr", "gris", raw)
+            self.assertIsNone(_apply_display_format(candidate, "5+1"))
+
+    def test_detection_mode_counts_as_rapidocr_but_still_needs_consensus(self):
+        candidates = [OCRCandidate(Decimal("26335.3"), .94, "rapidocr-deteccion", name)
+                      for name in ("visor-0:gris-detectado", "visor-detectado-original-1")]
+        self.assertEqual(choose_consistent_candidate(candidates).value, Decimal("26335.3"))
+        self.assertIsNone(choose_consistent_candidate(candidates[:1]).value)
+
+    @patch("readings.services.ocr.read_meter_cloudflare")
+    @patch("readings.services.ocr.read_meter_local")
+    def test_verified_format_and_strong_consensus_work_without_cloud(self, local, cloud):
+        accepted = [{"accepted": True, "variant": name, "decimal_places": 1}
+                    for name in ("gris", "clahe")]
+        local.return_value = (OCRResult(Decimal("1689.8"), "LOCAL", .95,
+                                       details={"candidate_evaluation": accepted}), [], None)
+        self.assertEqual(read_meter("x.jpg", display_format="5+1").value, Decimal("1689.8"))
+        cloud.assert_not_called()
+        cloud.return_value = OCRResult(None, "CLOUDFLARE: no configurado", None)
+        self.assertIsNone(read_meter("x.jpg").value)
+        cloud.assert_called_once()
+
     def test_configured_seven_segment_displays_preserve_decimal_and_leading_zeroes(self):
         for text in ("123195.5", "070130.4", "055892.9"):
             digits = text.replace(".", "")

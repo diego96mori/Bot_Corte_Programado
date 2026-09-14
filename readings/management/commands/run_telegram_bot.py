@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import math
 import re
 import secrets
 import tempfile
@@ -350,6 +351,38 @@ def node_selection_markup():
     ])
 
 
+def ocr_options(reading):
+    """Offer observed OCR alternatives, never invented values or prior readings."""
+    if not reading.ocr_attempts:
+        return []
+    attempt = reading.ocr_attempts[-1]
+    candidates = attempt.get("candidate_evaluation") or attempt.get("candidates", [])
+    grouped = {}
+    for item in candidates:
+        if item.get("method") not in {"rapidocr", "rapidocr-deteccion", "cloudflare"}:
+            continue
+        reason = item.get("reason", "")
+        if any(part in reason for part in ("menor", "formato configurado", "historial", "recorte parcial")):
+            continue
+        value = parse_reading_value(str(item.get("value", "")))
+        try:
+            confidence = float(item.get("confidence", 0))
+        except (TypeError, ValueError):
+            continue
+        raw = str(item.get("raw_text") or item.get("value", ""))
+        if value is None or not math.isfinite(confidence) or not .68 <= confidence <= 1:
+            continue
+        if not 4 <= sum(c.isdigit() for c in raw) <= 10:
+            continue
+        entry = grouped.setdefault(value, {"variants": set(), "confidence": 0})
+        entry["variants"].add(item.get("variant", ""))
+        entry["confidence"] = max(entry["confidence"], confidence)
+    ranked = sorted(grouped, key=lambda value: (
+        min(len(grouped[value]["variants"]), 4), grouped[value]["confidence"],
+    ), reverse=True)
+    return ranked[:3]
+
+
 def current_prompt(data):
     """One source for the initial question and every retry of that question."""
     state = data.get(STATE, MAIN_MENU)
@@ -379,6 +412,21 @@ def current_prompt(data):
             ]]),
         )
     if state == OCR_FAILED:
+        options = data.get("ocr_options", [])
+        if options:
+            return (
+                f"🔎 REVISA LA LECTURA\n\n🏢 Nodo: {node_name}\n\n"
+                "Encontré posibles lecturas, pero no pude confirmar cuál es correcta. "
+                "Compara con la foto, revisa los decimales y selecciona el número exacto. "
+                "Si ninguno coincide, ingrésalo manualmente.",
+                cancel_registration_markup([
+                    *[[InlineKeyboardButton(f"{format_reading_value(value)} kWh",
+                                            callback_data=f"reading:option:{reading_id}:{index}")]
+                      for index, value in enumerate(options)],
+                    [InlineKeyboardButton("⌨️ Ninguna: ingresar lectura manual",
+                                          callback_data=f"reading:correct:{reading_id}")],
+                ]),
+            )
         return (
             f"⚠️ NO SE PUDO RECONOCER LA LECTURA\n\n🏢 Nodo: {node_name}\n\n"
             "No se obtuvo un resultado suficientemente seguro. "
@@ -397,7 +445,7 @@ def current_prompt(data):
         )
     if state == CONFIRM_MANUAL_VALUE:
         return (
-            "⌨️ LECTURA INGRESADA MANUALMENTE\n\n"
+            ("🔎 LECTURA SELECCIONADA\n\n" if data.get("ocr_option_selected") else "⌨️ LECTURA INGRESADA MANUALMENTE\n\n") +
             f"⚡ Lectura: {format_reading_value(data['display_value'])}\n\n¿El número es correcto?",
             cancel_registration_markup([
                 [InlineKeyboardButton("✅ Sí, continuar", callback_data=f"reading:manual:confirm:{reading_id}")],
@@ -538,7 +586,8 @@ async def select_node(message, context, node_id, telegram_user_id):
     context.user_data["registration_explanation"] = plan.explanation
     pending = await get_pending_node_reading(node.id, message.chat.id, telegram_user_id)
     if pending:
-        context.user_data.update({"reading_id": pending.id, "display_value": pending.detected_value})
+        context.user_data.update({"reading_id": pending.id, "display_value": pending.detected_value,
+                                  "ocr_options": ocr_options(pending)})
         context.user_data[STATE] = (
             OCR_FAILED if pending.detected_value is None else
             CONFIRM_MANUAL_VALUE if pending.source == Reading.Source.MANUAL else CONFIRM_READING
@@ -617,6 +666,7 @@ async def receive_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
             context.user_data["reading_id"] = reading.id
             context.user_data.pop("corrected_value", None)
         context.user_data.update({STATE: CONFIRM_MANUAL_VALUE, "display_value": value})
+        context.user_data.pop("ocr_option_selected", None)
         await repeat_prompt(update.message, context)
         return
     if state == WAIT_DATE:
@@ -648,7 +698,9 @@ async def receive_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await status.edit_text(error)
         await repeat_prompt(update.message, context)
         return
-    context.user_data.update({"reading_id": reading.id, "display_value": reading.detected_value})
+    context.user_data.update({"reading_id": reading.id, "display_value": reading.detected_value,
+                              "ocr_options": ocr_options(reading)})
+    context.user_data.pop("ocr_option_selected", None)
     if reading.detected_value is None:
         context.user_data[STATE] = OCR_FAILED
     else:
@@ -705,6 +757,12 @@ async def callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await select_node(query.message, context, int(action.rsplit(":", 1)[1]), update.effective_user.id)
     elif action == "reading:manual:start":
         context.user_data[STATE] = WAIT_MANUAL_VALUE
+        await repeat_prompt(query.message, context)
+    elif action.startswith("reading:option:"):
+        # Membership in the current keyboard and its nonce were checked above.
+        value = context.user_data["ocr_options"][int(action.rsplit(":", 1)[1])]
+        context.user_data.update({"corrected_value": value, "display_value": value,
+                                  "ocr_option_selected": True, STATE: CONFIRM_MANUAL_VALUE})
         await repeat_prompt(query.message, context)
     elif action.startswith(("reading:manual:confirm:", "reading:confirm:")):
         await ask_reading_date(query.message, context)
